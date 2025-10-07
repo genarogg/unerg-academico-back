@@ -6,26 +6,79 @@ const schemas = /* GraphQL */ `
 
 type Usuario {
   id: Int!
-  name: String!
-  email: String!
+  correo: String!
   rol: Rol!
-  token: String!
+  createdAt: Date!
+  updatedAt: Date!
+  DatosPersonales: [DatosPersonales]
+  Bitacora: [Bitacora]
+  token: String
 }
+
+type Bitacora {
+  id: Int!
+  usuarioId: Int!
+  accion: String!
+  type: AccionesBitacora!
+  ip: String!
+  hora: Date!
+  fecha: Date!
+  mensaje: String
+}
+
+type DatosPersonales {
+  id: Int!
+  usuarioId: Int!
+  direccionId: Int
+  primerNombre: String!
+  segundoNombre: String
+  tercerNombre: String
+  primerApellido: String!
+  segundoApellido: String
+  sexo: Sex!
+  fechaNacimiento: Date!
+  numeroCedula: String!
+  numeroBancario: String
+  telefono: String
+  direccion: Direccion
+  Expediente: [Expediente]
+}
+
+type Direccion {
+  id: Int!
+  zonaUrbanizacionId: Int!
+  calle: String!
+  numeroCasa: String!
+  zonaUrbanizacion: ZonaUrbanizacion!
+}
+
+type ZonaUrbanizacion {
+  id: Int!
+  estadoPaisId: Int!
+  codigoPostal: Int!
+  zona: String!
+  estadoPais: EstadoPais!
+}
+
+type EstadoPais {
+  id: Int!
+  estado: String!
+}
+
+type Expediente {
+  id: Int!
+  datosPersonalesId: Int!
+}
+
+##############################################
+# Tipos de respuesta y metadatos
+##############################################
 
 type Meta {
   total: Int
   page: Int
   limit: Int
 }
-
-##############################################
-# Tipos de datos paginados
-##############################################
-
-
-##############################################
-# Tipos de response
-##############################################
 
 type UsuarioResponse {
   type: String
@@ -53,8 +106,59 @@ input PDFDataInput {
   data: String!
 }
 
+input DatosPersonalesInput {
+  primerNombre: String!
+  segundoNombre: String
+  tercerNombre: String
+  primerApellido: String!
+  segundoApellido: String
+  sexo: Sex!
+  fechaNacimiento: Date!
+  numeroCedula: String!
+  numeroBancario: String
+  telefono: String
+  direccionId: Int
+}
+
+input DireccionInput {
+  zonaUrbanizacionId: Int!
+  calle: String!
+  numeroCasa: String!
+}
+
+input ZonaUrbanizacionInput {
+  estadoPaisId: Int!
+  codigoPostal: Int!
+  zona: String!
+}
+
+input EstadoPaisInput {
+  estado: String!
+}
+
 ##############################################
-# Scalar
+# Enums
+##############################################
+
+enum Rol {
+  SUPER
+  ADMIN
+  AREA
+  DOCENTE
+}
+
+enum AccionesBitacora {
+  LOGIN
+  ERROR
+}
+
+enum Sex {
+  HOMBRE
+  MUJER
+}
+
+##############################################
+# Scalars
 ##############################################
 
 scalar Upload
@@ -85,11 +189,20 @@ type Mutation {
     email: String!, 
     password: String!, 
     captchaToken: String
-    ): UsuarioResponse!
+  ): UsuarioResponse!
 
   resetPassword(email: String!): NotificacionResponse!
 
   resetPassWithToken(token: String!, nuevaContrasena: String!): UsuarioResponse!
+
+  ##############################################
+  # Nuevas Mutations para entidades del modelo
+  ##############################################
+
+  # crearDatosPersonales(data: DatosPersonalesInput!, usuarioId: Int!): UsuarioResponse!
+  # crearDireccion(data: DireccionInput!): NotificacionResponse!
+  # crearZonaUrbanizacion(data: ZonaUrbanizacionInput!): NotificacionResponse!
+  # crearEstadoPais(data: EstadoPaisInput!): NotificacionResponse!
 }
 `;
 

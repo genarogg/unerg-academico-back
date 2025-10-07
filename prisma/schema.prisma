@@ -9,14 +9,14 @@ datasource db {
 }
 
 model Usuario {
-  id       Int        @id @default(autoincrement())
-  name     String
-  email    String     @unique
-  password String
-  Bitacora Bitacora[]
-  rol      Rol        @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              Int               @id @default(autoincrement())
+  password        String
+  correo          String
+  Bitacora        Bitacora[]
+  rol             Rol               @default(DOCENTE)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  DatosPersonales DatosPersonales[]
 }
 
 model Bitacora {
@@ -31,21 +31,68 @@ model Bitacora {
   mensaje   String?
 }
 
+model DatosPersonales {
+  id              Int          @id @default(autoincrement())
+  usuarioId       Int
+  usuario         Usuario      @relation(fields: [usuarioId], references: [id])
+  direccionId     Int?
+  direccion       Direccion?   @relation(fields: [direccionId], references: [id])
+  primerNombre    String
+  segundoNombre   String?
+  tercerNombre    String?
+  primerApellido  String
+  segundoApellido String?
+  sexo            Sex
+  fechaNacimiento DateTime
+  numeroCedula    String
+  numeroBancario  String?
+  telefono        String?
+  Expediente      Expediente[]
+}
+
+model Direccion {
+  id                 Int               @id @default(autoincrement())
+  zonaUrbanizacionId Int
+  zonaUrbanizacion   ZonaUrbanizacion  @relation(fields: [zonaUrbanizacionId], references: [id])
+  calle              String
+  numeroCasa         String
+  DatosPersonales    DatosPersonales[]
+}
+
+model ZonaUrbanizacion {
+  id           Int         @id @default(autoincrement())
+  estadoPaisId Int
+  estadoPais   EstadoPais  @relation(fields: [estadoPaisId], references: [id])
+  codigoPostal Int
+  zona         String
+  Direccion    Direccion[]
+}
+
+model EstadoPais {
+  id               Int                @id @default(autoincrement())
+  estado           String
+  ZonaUrbanizacion ZonaUrbanizacion[]
+}
+
+model Expediente {
+  id                Int             @id @default(autoincrement())
+  datosPersonalesId Int
+  datosPersonales   DatosPersonales @relation(fields: [datosPersonalesId], references: [id])
+}
+
 enum AccionesBitacora {
   LOGIN
-  CREATE_ADMIN
-  CREATE_USER
-  UPDATE_ADMIN
-  UPDATE_USER
-  DELETE_ADMIN
-  DELETE_USER
-  VIEW
   ERROR
 }
 
 enum Rol {
+  SUPER
   ADMIN
-  USER
-  ASISTENTE
-  CLIENTE
+  AREA
+  DOCENTE
+}
+
+enum Sex {
+  HOMBRE
+  MUJER
 }
