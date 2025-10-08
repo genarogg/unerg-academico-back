@@ -20,7 +20,7 @@ interface RegisterUsuarioArgs {
 }
 
 const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
-    const { email, password, cedula, rol, token, captchaToken } = args;
+    const { email, password, cedula, rol: rolaAsignado, token, captchaToken } = args;
 
     // Validar campos mínimos
     if (!email || !password || !cedula) {
@@ -59,34 +59,32 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
             return errorResponse({ message: "El correo ya está registrado" });
         }
 
-        // Rol asignado por defecto
-        let rolAsignado: Rol = Rol.DOCENTE;
+        const { SUPER, ADMIN, AREA, DOCENTE, } = Rol
+
+        let rolAsignado: Rol = DOCENTE;
 
         // Si hay token, verificar permisos para asignar rol
-        if (token) {
-            const usuarioAutenticado = await verificarToken(token);
+        if (token && rolaAsignado) {
+            const { isAuthenticated, rol: rolUser } = await verificarToken(token);
 
-            if (!usuarioAutenticado?.id) {
+            if (!isAuthenticated) {
                 return errorResponse({ message: "Token inválido o expirado" });
             }
 
-            if (rol) {
-                const rolValido = Object.values(Rol).includes(rol);
-                if (!rolValido) {
-                    return errorResponse({ message: "Rol inválido" });
+            if (rolUser === SUPER) {
+                // Puede asignar cualquier rol
+                rolAsignado = rolaAsignado;
+            } else if (rolUser === ADMIN) {
+                // Puede asignar ADMIN, DOCENTE o AREA
+                const rolesPermitidos: Rol[] = [ADMIN, DOCENTE, AREA];
+                if (rolesPermitidos.includes(rolaAsignado)) {
+                    rolAsignado = rolaAsignado;
+                } else {
+                    return errorResponse({ message: "No tiene permisos para asignar este rol" });
                 }
-
-                const esAdmin =
-                    usuarioAutenticado.rol === Rol.ADMIN ||
-                    usuarioAutenticado.rol === Rol.SUPER;
-
-                if (!esAdmin) {
-                    return errorResponse({
-                        message: "No tienes permisos para asignar roles personalizados",
-                    });
-                }
-
-                rolAsignado = rol;
+            } else {
+                // Otros roles (AREA, DOCENTE, etc.) no pueden asignar roles
+                return errorResponse({ message: "No tiene permisos para asignar roles" });
             }
         }
 
@@ -103,23 +101,28 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
         });
 
         // Registrar acción en bitácora (opcional, puede eliminarse si lo deseas)
-        await crearBitacora({
+
+        crearBitacora({
             usuarioId: nuevoUsuario.id,
             accion: `Registro de nuevo usuario (${rolAsignado})`,
-            type: AccionesBitacora.LOGIN,
+            type: AccionesBitacora.REGISTRAR_USUARIO,
         });
 
         // Generar token de sesión
         const tokenGenerado = generarToken({ id: nuevoUsuario.id });
 
-        return successResponse({
-            message: "Usuario registrado correctamente",
-            data: {
+        const data = {
+            usuario: {
                 id: nuevoUsuario.id,
                 email: nuevoUsuario.email,
                 rol: nuevoUsuario.rol,
                 token: tokenGenerado,
-            },
+            }
+        }
+
+        return successResponse({
+            message: "Usuario registrado correctamente",
+            data
         });
     } catch (error) {
         console.error("Error en el registro:", error);

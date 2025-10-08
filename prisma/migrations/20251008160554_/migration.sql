@@ -2,7 +2,7 @@
 CREATE TABLE "Usuario" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "password" TEXT NOT NULL,
-    "correo" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "rol" TEXT NOT NULL DEFAULT 'DOCENTE',
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
@@ -70,3 +70,18 @@ CREATE TABLE "Expediente" (
     "datosPersonalesId" INTEGER NOT NULL,
     CONSTRAINT "Expediente_datosPersonalesId_fkey" FOREIGN KEY ("datosPersonalesId") REFERENCES "DatosPersonales" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+-- CreateTable
+CREATE TABLE "CedulaAutorizada" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "cedula" INTEGER NOT NULL,
+    "estatus" TEXT NOT NULL DEFAULT 'ACTIVO',
+    "usuarioId" INTEGER NOT NULL,
+    CONSTRAINT "CedulaAutorizada_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Usuario_email_key" ON "Usuario"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "CedulaAutorizada_cedula_key" ON "CedulaAutorizada"("cedula");

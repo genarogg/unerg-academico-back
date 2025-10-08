@@ -23,16 +23,13 @@ const loginUsuario = async (_: unknown, args: LoginUsuarioArgs) => {
         return errorResponse({ message: "Email y contraseña son obligatorios" });
     }
 
-    // Validar reCAPTCHA solo en entorno de producción
-    if (process.env.NODE_ENV === "production") {
-        if (!captchaToken) {
-            return errorResponse({ message: "Captcha requerido" });
-        }
+    // Validar reCAPTCHA solo en producción
+    if (captchaToken) {
+        const captchaValidado = await validarCapchat(captchaToken)
 
-        const captchaValido = await validarCapchat(captchaToken);
+        if (!captchaValidado) {
 
-        if (!captchaValido) {
-            return errorResponse({ message: "Captcha inválido" });
+            return errorResponse({ message: 'Error al validar captcha' });
         }
     }
 
@@ -62,15 +59,18 @@ const loginUsuario = async (_: unknown, args: LoginUsuarioArgs) => {
             type: AccionesBitacora.LOGIN
         });
 
-        return successResponse({
-            message: "Inicio de sesión exitoso",
-            data: {
+        const data = {
+            usuario : {
                 id: usuario.id,
-                name: usuario.name,
                 email: usuario.email,
                 rol: usuario.rol,
                 token
-            }
+            },
+        }
+
+        return successResponse({
+            message: "Inicio de sesión exitoso",
+            data
         });
     } catch (error) {
         console.error("Error en el login:", error);

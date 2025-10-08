@@ -9,14 +9,15 @@ datasource db {
 }
 
 model Usuario {
-  id              Int               @id @default(autoincrement())
-  password        String
-  email           String            @unique
-  rol             Rol               @default(DOCENTE)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  Bitacora        Bitacora[]
-  DatosPersonales DatosPersonales[]
+  id               Int                @id @default(autoincrement())
+  password         String
+  email            String             @unique
+  rol              Rol                @default(DOCENTE)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  Bitacora         Bitacora[]
+  DatosPersonales  DatosPersonales[]
+  CedulaAutorizada CedulaAutorizada[]
 }
 
 model Bitacora {
@@ -81,9 +82,11 @@ model Expediente {
 }
 
 model CedulaAutorizada {
-  id      Int                    @id @default(autoincrement())
-  cedula  Int                    @unique
-  estatus CedulaAutorizadaStatus @default(ACTIVO)
+  id        Int                    @id @default(autoincrement())
+  cedula    Int                    @unique
+  estatus   CedulaAutorizadaStatus @default(ACTIVO)
+  usuarioId Int
+  usuario   Usuario                @relation(fields: [usuarioId], references: [id])
 }
 
 enum CedulaAutorizadaStatus {
@@ -93,6 +96,8 @@ enum CedulaAutorizadaStatus {
 
 enum AccionesBitacora {
   LOGIN
+  REGISTRAR_USUARIO
+  CHANGE_PASSWORD_EMAIL
   ERROR
 }
 

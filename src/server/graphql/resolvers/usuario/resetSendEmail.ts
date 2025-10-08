@@ -5,7 +5,6 @@ const resetPassword = async (_: unknown, { email }: { email: string }) => {
     try {
         const usuario = await prisma.usuario.findUnique({ where: { email } });
 
-
         if (!usuario) {
             return errorResponse({ message: 'Usuario no encontrado' });
         }

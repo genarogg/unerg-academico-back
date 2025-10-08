@@ -8,11 +8,11 @@ type Usuario {
   id: Int!
   email: String!
   rol: Rol!
+  token: String
   createdAt: Date!
   updatedAt: Date!
   DatosPersonales: [DatosPersonales]
   Bitacora: [Bitacora]
-  token: String
 }
 
 type Bitacora {
@@ -156,11 +156,11 @@ type Query {
 
 type Mutation {
   registerUsuario(
-    token: String
-    name: String!
     email: String!
     password: String!
+    cedula: Int!
     captchaToken: String
+    token: String
     rol: Rol
   ): UsuarioResponse!
 

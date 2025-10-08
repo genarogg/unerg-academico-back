@@ -48,6 +48,7 @@ const registerPlugins = async () => {
 }
 
 import tack from "./src/server/tasks"
+import seed from 'src/server/seed';
 import router from 'src/server/routers';
 
 
@@ -68,6 +69,7 @@ import router from 'src/server/routers';
 
     /* ejecutar tareas programadas */
     tack()
+    seed()
 
     table.push(
       ['Servidor', colors.green(`http://localhost:${PORT}`)],

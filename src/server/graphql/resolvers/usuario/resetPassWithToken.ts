@@ -41,9 +41,9 @@ const resetPassWithToken = async (_: unknown, { token, nuevaContrasena }: resetP
         // Crear una entrada en la bitácora
         crearBitacora({
             usuarioId: usuarioId,
-            accion: `Cambio de contraseña`,
+            accion: `Cambio de email por email`,
             mensaje: `El usuario ${usuarioActualizado.email} cambió su contraseña`,
-            type: AccionesBitacora.CREATE_USER,
+            type: AccionesBitacora.CHANGE_PASSWORD_EMAIL,
         });
 
         console.log(usuarioId)
@@ -58,6 +58,7 @@ const resetPassWithToken = async (_: unknown, { token, nuevaContrasena }: resetP
             }
         });
     } catch (error: any) {
+        console.error('Error al actualizar la contraseña:', error);
         return errorResponse({ message: error.message });
     }
 };

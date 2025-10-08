@@ -1,4 +1,4 @@
-import registerUsuario from "./register";
+import registerUsuario from "./registerUsuario";
 import loginUsuario from "./loginUsuario";
 import resetPassword from "./resetSendEmail";
 import resetPassWithToken from "./resetPassWithToken";

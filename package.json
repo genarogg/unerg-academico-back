@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx -r tsconfig-paths/register index.ts",
+    "dev": "npx prisma generate && tsx -r tsconfig-paths/register index.ts",
     "dex": "bun --hot index.ts",
     "start": "node dist/index.js",
     "devs": "npm run prisma && npm run dev",
