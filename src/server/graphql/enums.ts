@@ -1,4 +1,4 @@
-import { Rol, AccionesBitacora } from '@prisma/client';
+import { Rol, AccionesBitacora, Sex } from '@prisma/client';
 
 const createEnumString = (enumObj: object) => {
     const keys = Object.keys(enumObj);
@@ -15,7 +15,9 @@ const enums = /* GraphQL */`
     enum AccionesBitacora {
         ${createEnumString(AccionesBitacora)}
     }
-   
+     enum Sex {
+        ${createEnumString(Sex)}
+    }
 `;
 
 export default enums;

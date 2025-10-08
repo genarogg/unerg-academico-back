@@ -6,52 +6,67 @@ import {
     prisma,
     verificarToken,
     generarToken,
-    validarCapchat
+    validarCapchat,
 } from "src/server/functions";
-import { AccionesBitacora, Rol } from "@prisma/client";
+import { AccionesBitacora, Rol, CedulaAutorizadaStatus } from "@prisma/client";
 
 interface RegisterUsuarioArgs {
-    token?: string;
-    name: string;
     email: string;
     password: string;
+    cedula: number;
+    token?: string;
     rol?: Rol;
     captchaToken?: string;
 }
 
 const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
-    const { token, name, email, password, rol, captchaToken } = args;
+    const { email, password, cedula, rol, token, captchaToken } = args;
 
-    if (!name || !email || !password) {
-        return errorResponse({ message: "Todos los campos son obligatorios" });
+    // Validar campos mínimos
+    if (!email || !password || !cedula) {
+        return errorResponse({ message: "Faltan campos obligatorios" });
     }
 
-    // Validar reCAPTCHA solo en entorno de producción
-    if (process.env.NODE_ENV === "production") {
-        if (!captchaToken) {
-            return errorResponse({ message: "Captcha requerido" });
-        }
+    // Validar reCAPTCHA solo en producción
+    if (captchaToken) {
+        const captchaValidado = await validarCapchat(captchaToken)
 
-        const captchaValido = await validarCapchat(captchaToken);
+        if (!captchaValidado) {
 
-        if (!captchaValido) {
-            return errorResponse({ message: "Captcha inválido" });
+            return errorResponse({ message: 'Error al validar captcha' });
         }
     }
 
     try {
-        const existe = await prisma.usuario.findUnique({ where: { email } });
 
+        // verificar si la cedula esta autorizada
+        const cedulaAutorizada = await prisma.cedulaAutorizada.findUnique({
+            where: { cedula },
+            select: { estatus: true },
+        });
+
+        if (!cedulaAutorizada) {
+            return errorResponse({ message: "Cedula no autorizada" });
+        }
+
+        if (cedulaAutorizada.estatus === CedulaAutorizadaStatus.INACTIVO) {
+            return errorResponse({ message: "Cedula no autorizada" });
+        }
+
+        // Verificar si el correo ya existe
+        const existe = await prisma.usuario.findUnique({ where: { email } });
         if (existe) {
             return errorResponse({ message: "El correo ya está registrado" });
         }
 
-        let rolAsignado: Rol = Rol.USER;
+        // Rol asignado por defecto
+        let rolAsignado: Rol = Rol.DOCENTE;
 
+        // Si hay token, verificar permisos para asignar rol
         if (token) {
             const usuarioAutenticado = await verificarToken(token);
 
-            if (!usuarioAutenticado.id) {
+            if (!usuarioAutenticado?.id) {
                 return errorResponse({ message: "Token inválido o expirado" });
             }
 
@@ -61,23 +76,13 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
                     return errorResponse({ message: "Rol inválido" });
                 }
 
-                const esAdmin = usuarioAutenticado.rol === Rol.ADMIN;
-                const esAsistente = usuarioAutenticado.rol === Rol.ASISTENTE;
+                const esAdmin =
+                    usuarioAutenticado.rol === Rol.ADMIN ||
+                    usuarioAutenticado.rol === Rol.SUPER;
 
-                // Definir roles permitidos para asistente
-                const rolesPermitidosAsistente: Rol[] = [Rol.USER, Rol.CLIENTE];
-
-                // Si es ASISTENTE, solo puede registrar USER o CLIENTE
-                if (esAsistente && !rolesPermitidosAsistente.includes(rol)) {
+                if (!esAdmin) {
                     return errorResponse({
-                        message: "No tienes permisos para asignar este rol",
-                    });
-                }
-
-                // Si no es ADMIN ni ASISTENTE, no puede asignar roles
-                if (!esAdmin && !esAsistente) {
-                    return errorResponse({
-                        message: "No tienes permisos para registrar usuarios con rol",
+                        message: "No tienes permisos para asignar roles personalizados",
                     });
                 }
 
@@ -85,31 +90,32 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
             }
         }
 
+        // Encriptar contraseña
         const hashedPassword = await encriptarContrasena({ password });
 
+        // Crear usuario en la base de datos
         const nuevoUsuario = await prisma.usuario.create({
             data: {
-                name,
                 email,
                 password: hashedPassword,
                 rol: rolAsignado,
             },
         });
 
+        // Registrar acción en bitácora (opcional, puede eliminarse si lo deseas)
         await crearBitacora({
             usuarioId: nuevoUsuario.id,
-            accion: `registro de usuario con rol ${rolAsignado}`,
-            type: AccionesBitacora.CREATE_USER,
+            accion: `Registro de nuevo usuario (${rolAsignado})`,
+            type: AccionesBitacora.LOGIN,
         });
 
-        // Generar token para el nuevo usuario
+        // Generar token de sesión
         const tokenGenerado = generarToken({ id: nuevoUsuario.id });
 
         return successResponse({
             message: "Usuario registrado correctamente",
             data: {
                 id: nuevoUsuario.id,
-                name: nuevoUsuario.name,
                 email: nuevoUsuario.email,
                 rol: nuevoUsuario.rol,
                 token: tokenGenerado,

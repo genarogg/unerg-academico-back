@@ -6,7 +6,7 @@ const schemas = /* GraphQL */ `
 
 type Usuario {
   id: Int!
-  correo: String!
+  email: String!
   rol: Rol!
   createdAt: Date!
   updatedAt: Date!
@@ -134,27 +134,6 @@ input ZonaUrbanizacionInput {
 
 input EstadoPaisInput {
   estado: String!
-}
-
-##############################################
-# Enums
-##############################################
-
-enum Rol {
-  SUPER
-  ADMIN
-  AREA
-  DOCENTE
-}
-
-enum AccionesBitacora {
-  LOGIN
-  ERROR
-}
-
-enum Sex {
-  HOMBRE
-  MUJER
 }
 
 ##############################################
