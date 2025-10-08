@@ -37,24 +37,33 @@ const resetPassWithToken = async (_: unknown, { token, nuevaContrasena }: resetP
             data: { password: hashedPassword }
         });
 
+        const datosPersonales = await prisma.datosPersonales.findUnique({
+            where: { usuarioId: Number(usuarioId) },
+            select: {
+                primerNombre: true,
+                primerApellido: true,
+            }
+        })
+
 
         // Crear una entrada en la bitácora
         crearBitacora({
             usuarioId: usuarioId,
-            accion: `Cambio de email por email`,
+            accion: `Cambio de contraseña por email`,
             mensaje: `El usuario ${usuarioActualizado.email} cambió su contraseña`,
             type: AccionesBitacora.CHANGE_PASSWORD_EMAIL,
         });
 
-        console.log(usuarioId)
 
-        const tokenInit = generarToken({ id: Number(usuarioId) });
+
+        const newToken = generarToken({ id: Number(usuarioId) });
 
         return successResponse({
             message: 'Contraseña actualizada exitosamente',
             data: {
                 ...usuarioActualizado,
-                token: tokenInit
+                token: newToken,
+                datosPersonales
             }
         });
     } catch (error: any) {

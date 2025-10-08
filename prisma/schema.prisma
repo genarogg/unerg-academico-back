@@ -34,7 +34,7 @@ model Bitacora {
 
 model DatosPersonales {
   id              Int          @id @default(autoincrement())
-  usuarioId       Int
+  usuarioId       Int          @unique
   usuario         Usuario      @relation(fields: [usuarioId], references: [id])
   direccionId     Int?
   direccion       Direccion?   @relation(fields: [direccionId], references: [id])

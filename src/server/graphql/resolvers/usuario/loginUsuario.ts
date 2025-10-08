@@ -51,6 +51,15 @@ const loginUsuario = async (_: unknown, args: LoginUsuarioArgs) => {
             return errorResponse({ message: "Credenciales incorrectas" });
         }
 
+
+        const datosPersonales = await prisma.datosPersonales.findUnique({
+            where: { usuarioId: usuario.id },
+            select: {
+                primerNombre: true,
+                primerApellido: true,
+            }
+        })
+
         const token = generarToken({ id: usuario.id });
 
         await crearBitacora({
@@ -60,12 +69,9 @@ const loginUsuario = async (_: unknown, args: LoginUsuarioArgs) => {
         });
 
         const data = {
-            usuario : {
-                id: usuario.id,
-                email: usuario.email,
-                rol: usuario.rol,
-                token
-            },
+            ...usuario,
+            token,
+            datosPersonales
         }
 
         return successResponse({

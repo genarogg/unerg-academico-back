@@ -113,15 +113,13 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
 
         const data = {
             usuario: {
-                id: nuevoUsuario.id,
-                email: nuevoUsuario.email,
-                rol: nuevoUsuario.rol,
+                ...nuevoUsuario,
                 token: tokenGenerado,
-            }
+            },
         }
 
         return successResponse({
-            message: "Usuario registrado correctamente",
+            message: "Usuario registrado",
             data
         });
     } catch (error) {
