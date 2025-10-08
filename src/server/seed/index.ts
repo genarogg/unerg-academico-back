@@ -1,7 +1,7 @@
 import { prisma, log } from "src/server/functions";
 import seedUsers from "./seedUsers";
 import seedCedulasAutorizadas from "./seedCedulasAutorizadas"
-
+import seedZonasUrbanizaciones from "./seedZonasUrbanizaciones"
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -22,7 +22,10 @@ const seed = async () => {
 
         await seedCedulasAutorizadas()
         await delay(1000);
-        
+
+        await seedZonasUrbanizaciones()
+        await delay(1000);
+
         log.info("Usuarios creados exitosamente.");
     } catch (error) {
         console.error("Error al sembrar la base de datos:", error);

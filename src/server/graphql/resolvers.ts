@@ -1,4 +1,4 @@
-import demoResolvers from "./resolvers/demo";
+import demoResolvers from "./resolvers/datosPersonales";
 import pdfResolverResolvers from "./resolvers/pdf"
 import usuarioResolver from "./resolvers/usuario";
 

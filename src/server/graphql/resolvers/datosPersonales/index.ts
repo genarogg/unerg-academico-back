@@ -1,4 +1,4 @@
-import hello from "./hello";
+import hello from "../demo/hello";
 
 const resolvers = {
     Query: {

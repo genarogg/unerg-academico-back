@@ -84,4 +84,7 @@ CREATE TABLE "CedulaAutorizada" (
 CREATE UNIQUE INDEX "Usuario_email_key" ON "Usuario"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "DatosPersonales_usuarioId_key" ON "DatosPersonales"("usuarioId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "CedulaAutorizada_cedula_key" ON "CedulaAutorizada"("cedula");
