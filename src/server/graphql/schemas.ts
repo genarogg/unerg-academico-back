@@ -136,6 +136,7 @@ input EstadoPaisInput {
   estado: String!
 }
 
+
 ##############################################
 # Scalars
 ##############################################
@@ -173,6 +174,23 @@ type Mutation {
   resetPassword(email: String!): NotificacionResponse!
 
   resetPassWithToken(token: String!, nuevaContrasena: String!): UsuarioResponse!
+
+ crearDatosPersonales( 
+    token: String!, 
+    primerNombre: String!,
+    segundoNombre: String,
+    tercerNombre: String,
+    primerApellido: String!,
+    segundoApellido: String,
+    sexo: Sex!,
+    fechaNacimiento: Date!,
+    numeroCedula: Int!,
+    numeroBancario: String,
+    telefono: String!,
+    zonaUrbanizacionId: Int!,
+    calle: String!,
+    numeroCasa: Int!
+  ): UsuarioResponse!
 
   ##############################################
   # Nuevas Mutations para entidades del modelo

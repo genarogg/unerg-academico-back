@@ -16,10 +16,14 @@ interface CrearDatosPersonalesArgs {
     segundoApellido?: string;
     sexo: Sex;
     fechaNacimiento: string;
-    numeroCedula: string;
+    numeroCedula: number;
     numeroBancario?: string;
-    telefono?: string;
-    direccionId?: number;
+    telefono: string;
+
+    // Datos de dirección
+    zonaUrbanizacionId: number;
+    calle: string;
+    numeroCasa: number;
 }
 
 const crearDatosPersonales = async (_: unknown, args: CrearDatosPersonalesArgs) => {
@@ -35,37 +39,35 @@ const crearDatosPersonales = async (_: unknown, args: CrearDatosPersonalesArgs) 
         numeroCedula,
         numeroBancario,
         telefono,
-        direccionId,
+        zonaUrbanizacionId,
+        calle,
+        numeroCasa,
     } = args;
 
-    if (!token) {
-        return errorResponse({ message: "Token requerido" });
-    }
-
-    // Campos obligatorios
+    // Validar campos obligatorios
     if (
+        !token ||
         !primerNombre ||
-        !segundoNombre ||
-
         !primerApellido ||
-        !segundoApellido ||
-
         !sexo ||
         !telefono ||
         !fechaNacimiento ||
-        !numeroCedula) {
+        !numeroCedula ||
+        !zonaUrbanizacionId ||
+        !calle ||
+        !numeroCasa
+    ) {
         return errorResponse({ message: "Faltan campos obligatorios" });
     }
 
     try {
-        // Verificar token y obtener usuario
+        // Verificar token
         const { isAuthenticated, id: usuarioId } = await verificarToken(token);
-
         if (!isAuthenticated) {
             return errorResponse({ message: "Token inválido o expirado" });
         }
 
-        // Verificar si ya tiene datos personales registrados
+        // Verificar si ya existen datos personales
         const existeDatos = await prisma.datosPersonales.findUnique({
             where: { usuarioId },
         });
@@ -74,43 +76,67 @@ const crearDatosPersonales = async (_: unknown, args: CrearDatosPersonalesArgs) 
             return errorResponse({ message: "Los datos personales ya están registrados" });
         }
 
-        // Crear los datos personales
-        const nuevosDatos = await prisma.datosPersonales.create({
-            data: {
-                usuarioId,
-                primerNombre,
-                segundoNombre,
-                tercerNombre,
-                primerApellido,
-                segundoApellido,
-                sexo,
-                fechaNacimiento: new Date(fechaNacimiento),
-                numeroCedula,
-                numeroBancario,
-                telefono,
-                direccionId,
-            },
-            include: {
-                direccion: true,
-            },
+        // Verificar que la zona exista
+        const zona = await prisma.zonaUrbanizacion.findUnique({
+            where: { id: zonaUrbanizacionId },
+        });
+        if (!zona) {
+            return errorResponse({ message: "Zona o urbanización no encontrada" });
+        }
+
+        // Crear todo dentro de una transacción
+        const resultado = await prisma.$transaction(async (tx) => {
+            // Crear la dirección
+            const direccion = await tx.direccion.create({
+                data: {
+                    zonaUrbanizacionId,
+                    calle,
+                    numeroCasa,
+                },
+            });
+
+            // Crear los datos personales vinculados
+            const datos = await tx.datosPersonales.create({
+                data: {
+                    usuarioId,
+                    direccionId: direccion.id,
+                    primerNombre,
+                    segundoNombre,
+                    tercerNombre,
+                    primerApellido,
+                    segundoApellido,
+                    sexo,
+                    fechaNacimiento: new Date(fechaNacimiento),
+                    numeroCedula,
+                    numeroBancario,
+                    telefono,
+                },
+                include: {
+                    direccion: {
+                        include: {
+                            zonaUrbanizacion: true,
+                        },
+                    },
+                },
+            });
+
+            return datos;
         });
 
-        // Registrar en la bitácora
+        // Registrar en bitácora
         await crearBitacora({
             usuarioId,
-            accion: "Registro de datos personales",
-            type: AccionesBitacora.REGISTRAR_USUARIO,
+            accion: "Registro de datos personales con dirección",
+            type: AccionesBitacora.REGISTRO_USUARIO,
         });
 
         return successResponse({
             message: "Datos personales registrados exitosamente",
-            data: nuevosDatos,
+            data: resultado,
         });
     } catch (error) {
         console.error("Error al registrar datos personales:", error);
         return errorResponse({ message: "Error al registrar datos personales" });
-    } finally {
-        await prisma.$disconnect();
     }
 };
 

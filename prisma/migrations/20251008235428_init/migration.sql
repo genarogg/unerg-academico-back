@@ -33,7 +33,7 @@ CREATE TABLE "DatosPersonales" (
     "segundoApellido" TEXT,
     "sexo" TEXT NOT NULL,
     "fechaNacimiento" DATETIME NOT NULL,
-    "numeroCedula" TEXT NOT NULL,
+    "numeroCedula" INTEGER NOT NULL,
     "numeroBancario" TEXT,
     "telefono" TEXT,
     CONSTRAINT "DatosPersonales_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -45,7 +45,7 @@ CREATE TABLE "Direccion" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "zonaUrbanizacionId" INTEGER NOT NULL,
     "calle" TEXT NOT NULL,
-    "numeroCasa" TEXT NOT NULL,
+    "numeroCasa" INTEGER NOT NULL,
     CONSTRAINT "Direccion_zonaUrbanizacionId_fkey" FOREIGN KEY ("zonaUrbanizacionId") REFERENCES "ZonaUrbanizacion" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -85,6 +85,9 @@ CREATE UNIQUE INDEX "Usuario_email_key" ON "Usuario"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "DatosPersonales_usuarioId_key" ON "DatosPersonales"("usuarioId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "EstadoPais_estado_key" ON "EstadoPais"("estado");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "CedulaAutorizada_cedula_key" ON "CedulaAutorizada"("cedula");

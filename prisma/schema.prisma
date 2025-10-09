@@ -45,7 +45,7 @@ model DatosPersonales {
   segundoApellido String?
   sexo            Sex
   fechaNacimiento DateTime
-  numeroCedula    String
+  numeroCedula    Int
   numeroBancario  String?
   telefono        String?
   Expediente      Expediente[]
@@ -56,7 +56,7 @@ model Direccion {
   zonaUrbanizacionId Int
   zonaUrbanizacion   ZonaUrbanizacion  @relation(fields: [zonaUrbanizacionId], references: [id])
   calle              String
-  numeroCasa         String
+  numeroCasa         Int
   DatosPersonales    DatosPersonales[]
 }
 
@@ -71,7 +71,7 @@ model ZonaUrbanizacion {
 
 model EstadoPais {
   id               Int                @id @default(autoincrement())
-  estado           String
+  estado           String             @unique
   ZonaUrbanizacion ZonaUrbanizacion[]
 }
 
@@ -95,9 +95,14 @@ enum CedulaAutorizadaStatus {
 }
 
 enum AccionesBitacora {
+  //Usuario
   LOGIN
-  REGISTRAR_USUARIO
+  REGISTRO_USUARIO
   CHANGE_PASSWORD_EMAIL
+
+  //estado
+  REGISTRO_ESTADO
+  //micelanea
   ERROR
 }
 

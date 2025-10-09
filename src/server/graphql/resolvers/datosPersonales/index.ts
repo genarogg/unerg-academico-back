@@ -1,9 +1,13 @@
-import hello from "../demo/hello";
+import crearDatosPersonales from "./crearDatosPersonales";
 
 const resolvers = {
     Query: {
-        hello
-    }
+
+    },
+
+    Mutation: {
+        crearDatosPersonales
+    },
 };
 
 export default resolvers;

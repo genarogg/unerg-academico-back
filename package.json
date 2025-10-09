@@ -4,10 +4,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "npx prisma generate && tsx -r tsconfig-paths/register index.ts",
+    "dev": "tsx -r tsconfig-paths/register index.ts",
     "dex": "bun --hot index.ts",
     "start": "node dist/index.js",
-    "devs": "npm run prisma && npm run dev",
+    "devs": "node scripts/clean/index.js && npm run prisma && npm run dev",
     "prisma": "npx prisma generate && npx prisma migrate dev --name init",
     "clean": "rimraf dist",
     "copy-views": " copyfiles -u 1 src/**/*.ejs dist/src",

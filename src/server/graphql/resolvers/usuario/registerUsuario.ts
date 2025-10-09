@@ -105,17 +105,15 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
         crearBitacora({
             usuarioId: nuevoUsuario.id,
             accion: `Registro de nuevo usuario (${rolAsignado})`,
-            type: AccionesBitacora.REGISTRAR_USUARIO,
+            type: AccionesBitacora.REGISTRO_USUARIO,
         });
 
         // Generar token de sesión
         const tokenGenerado = generarToken({ id: nuevoUsuario.id });
 
         const data = {
-            usuario: {
-                ...nuevoUsuario,
-                token: tokenGenerado,
-            },
+            ...nuevoUsuario,
+            token: tokenGenerado,
         }
 
         return successResponse({

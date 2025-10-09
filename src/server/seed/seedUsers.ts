@@ -5,20 +5,25 @@ const seedUsers = async () => {
     const users = [
         {
 
-            email: "admin@admin.com",
-            password: "admin",
+            email: "super@super.com",
+            password: "super",
             rol: Rol.SUPER,
         },
         {
 
-            email: "usuario@gmail.com",
-            password: "demo",
+            email: "admin@admin.com",
+            password: "admin",
             rol: Rol.ADMIN,
         },
         {
-            email: "asistente@gmail.com",
-            password: "demo",
+            email: "area@area.com",
+            password: "area",
             rol: Rol.AREA,
+        },
+        {
+            email: "docente@docente.com",
+            password: "docente",
+            rol: Rol.DOCENTE,
         },
     ];
 
