@@ -25,6 +25,7 @@
     "node": ">= 20"
   },
   "dependencies": {
+    "@apollo/client": "^4.0.7",
     "@apollo/server": "^4.12.2",
     "@as-integrations/fastify": "^3.0.0",
     "@fastify/caching": "^9.0.3",

@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet"
-import { useState } from "react"
 import { ExternalLink, Server, Database, FileText, Zap, Github, Globe } from "lucide-react"
 
 import reactLogo from "../img/logo/react.svg"
@@ -9,7 +8,6 @@ import fastifyLogo from "../img/logo/fastify.svg"
 import "../css/app.css"
 
 function App() {
-  const [count, setCount] = useState(0)
 
   const services = [
     {

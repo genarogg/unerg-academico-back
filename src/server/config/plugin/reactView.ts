@@ -21,6 +21,10 @@ const reactView = async (server: FastifyInstance) => {
         return reply.html()
     })
 
+    server.get("/demo", (req, reply) => {
+        return reply.html()
+    })
+
 };
 
 export default reactView;
