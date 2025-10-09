@@ -1,4 +1,4 @@
-import demoResolvers from "./resolvers/perfil/datosPersonales";
+
 import pdfResolverResolvers from "./resolvers/pdf"
 import usuarioResolver from "./resolvers/perfil/usuario";
 import datosPersonalesResolver from "./resolvers/perfil/datosPersonales";
@@ -13,7 +13,7 @@ import estudioResolver from "./resolvers/expediente/estudio"
 
 const resolvers = {
     Query: {
-        ...demoResolvers.Query,
+
         ...pdfResolverResolvers.Query,
         ...usuarioResolver.Query,
         ...estadoPaisResolver.Query,

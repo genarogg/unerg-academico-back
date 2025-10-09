@@ -1,6 +1,13 @@
 const schemas = /* GraphQL */ `
 
 ##############################################
+# Scalars
+##############################################
+
+scalar Upload
+scalar Date
+
+##############################################
 # Tipos básicos
 ##############################################
 
@@ -73,6 +80,13 @@ type Expediente {
   datosPersonalesId: Int!
 }
 
+type NivelEstudio {
+  id: Int!
+  nivelAcademico: String!
+  tipo: String!
+  Estudio: [Estudio]
+}
+
 type Meta {
   total: Int
   page: Int
@@ -124,7 +138,6 @@ type ZonasUrbanizacionResponse {
   data: [ZonaUrbanizacion]
 }
 
-
 type Estudio {
   id: Int!
   expedienteId: Int!
@@ -140,7 +153,6 @@ type Estudio {
   casaEstudio: CasaEstudio
 }
 
-
 type TipoDocumento {
   id: Int!
   nombre: String!
@@ -148,7 +160,6 @@ type TipoDocumento {
   createdAt: Date!
   updatedAt: Date!
 }
-
 
 type Documento {
   id: Int!
@@ -161,7 +172,6 @@ type Documento {
   createdAt: Date!
   updatedAt: Date!
 }
-
 
 type CasaEstudio {
   id: Int!
@@ -193,7 +203,6 @@ type TiposDocumentoResponse {
   data: [TipoDocumento]
 }
 
-
 type DocumentoResponse {
   type: String
   message: String
@@ -218,52 +227,12 @@ type CasasEstudioResponse {
   data: [CasaEstudio]
 }
 
-
-type NivelEstudio {
-  id: Int!
-  nivelAcademico: String!
-  tipo: String!
-  Estudio: [Estudio]
-}
-
-##############################################
-# Tipos de entrada
-##############################################
-
-input PDFDataInput {
-  data: String!
-}
-
-input DireccionInput {
-  zonaUrbanizacionId: Int!
-  calle: String!
-  numeroCasa: String!
-}
-
-input ZonaUrbanizacionInput {
-  estadoPaisId: Int!
-  codigoPostal: Int!
-  zona: String!
-}
-
-input EstadoPaisInput {
-  estado: String!
-}
-
-##############################################
-# Scalars
-##############################################
-
-scalar Upload
-scalar Date
-
 ##############################################
 # Query y Mutation
 ##############################################
 
 type Query {
-  hello: String
-  generatePDF(template: String!, data: PDFDataInput!): String  
+  generatePDF(template: String!, data: String!): String  
   validarSesion(token: String!): UsuarioResponse!
   getUsuario(token: String!, filtro: String): UsuariosResponse!
 
