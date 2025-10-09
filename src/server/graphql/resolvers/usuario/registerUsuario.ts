@@ -8,7 +8,7 @@ import {
     generarToken,
     validarCapchat,
 } from "src/server/functions";
-import { AccionesBitacora, Rol, CedulaAutorizadaStatus } from "@prisma/client";
+import { AccionesBitacora, Rol, Vigencia } from "@prisma/client";
 
 interface RegisterUsuarioArgs {
     email: string;
@@ -42,14 +42,14 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
         // verificar si la cedula esta autorizada
         const cedulaAutorizada = await prisma.cedulaAutorizada.findUnique({
             where: { cedula },
-            select: { estatus: true },
+            select: { vigencia: true },
         });
 
         if (!cedulaAutorizada) {
             return errorResponse({ message: "Cedula no autorizada" });
         }
 
-        if (cedulaAutorizada.estatus === CedulaAutorizadaStatus.INACTIVO) {
+        if (cedulaAutorizada.vigencia === Vigencia.INACTIVO) {
             return errorResponse({ message: "Cedula no autorizada" });
         }
 
@@ -100,6 +100,14 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
             },
         });
 
+        //busca la cedula en cedulaAutorizada
+        await prisma.cedulaAutorizada.update({
+            where: { cedula },
+            data: {
+                vigencia: Vigencia.INACTIVO,
+            },
+        });
+
         // Registrar acción en bitácora (opcional, puede eliminarse si lo deseas)
 
         crearBitacora({
@@ -120,11 +128,10 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
             message: "Usuario registrado",
             data
         });
+
     } catch (error) {
         console.error("Error en el registro:", error);
         return errorResponse({ message: "Error al registrar usuario" });
-    } finally {
-        await prisma.$disconnect();
     }
 };
 

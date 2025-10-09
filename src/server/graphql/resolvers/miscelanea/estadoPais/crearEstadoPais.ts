@@ -27,7 +27,7 @@ const crearEstadoPais = async (_: unknown, args: CrearEstadoPaisArgs) => {
             return errorResponse({ message: "Token inválido o expirado" });
         }
 
-        if (rol !== Rol.SUPER){
+        if (rol !== Rol.SUPER) {
             return errorResponse({ message: "No tienes permisos para realizar esta acción" });
         }
 

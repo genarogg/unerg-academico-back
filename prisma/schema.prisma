@@ -9,35 +9,35 @@ datasource db {
 }
 
 model Usuario {
-  id               Int                @id @default(autoincrement())
-  password         String
-  email            String             @unique
-  rol              Rol                @default(DOCENTE)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  rol      Rol    @default(DOCENTE)
+
   Bitacora         Bitacora[]
   DatosPersonales  DatosPersonales[]
   CedulaAutorizada CedulaAutorizada[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Bitacora {
-  id        Int              @id @default(autoincrement())
+  id      Int              @id @default(autoincrement())
+  accion  String
+  type    AccionesBitacora
+  ip      String
+  mensaje String?
+
   usuarioId Int
-  usuario   Usuario          @relation(fields: [usuarioId], references: [id])
-  accion    String
-  type      AccionesBitacora
-  ip        String
-  hora      DateTime         @default(now())
-  fecha     DateTime         @updatedAt
-  mensaje   String?
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model DatosPersonales {
-  id              Int          @id @default(autoincrement())
-  usuarioId       Int          @unique
-  usuario         Usuario      @relation(fields: [usuarioId], references: [id])
-  direccionId     Int?
-  direccion       Direccion?   @relation(fields: [direccionId], references: [id])
+  id              Int      @id @default(autoincrement())
   primerNombre    String
   segundoNombre   String?
   tercerNombre    String?
@@ -48,50 +48,75 @@ model DatosPersonales {
   numeroCedula    Int
   numeroBancario  String?
   telefono        String?
-  Expediente      Expediente[]
+
+  usuarioId   Int          @unique
+  usuario     Usuario      @relation(fields: [usuarioId], references: [id])
+  direccionId Int?
+  direccion   Direccion?   @relation(fields: [direccionId], references: [id])
+  Expediente  Expediente[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Direccion {
-  id                 Int               @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
+  calle      String
+  numeroCasa Int
+
+  DatosPersonales    DatosPersonales[]
   zonaUrbanizacionId Int
   zonaUrbanizacion   ZonaUrbanizacion  @relation(fields: [zonaUrbanizacionId], references: [id])
-  calle              String
-  numeroCasa         Int
-  DatosPersonales    DatosPersonales[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ZonaUrbanizacion {
-  id           Int         @id @default(autoincrement())
-  estadoPaisId Int
-  estadoPais   EstadoPais  @relation(fields: [estadoPaisId], references: [id])
+  id           Int      @id @default(autoincrement())
   codigoPostal Int
   zona         String
+  vigencia     Vigencia @default(ACTIVO)
+
+  estadoPaisId Int
+  estadoPais   EstadoPais  @relation(fields: [estadoPaisId], references: [id])
   Direccion    Direccion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model EstadoPais {
-  id               Int                @id @default(autoincrement())
-  estado           String             @unique
+  id       Int      @id @default(autoincrement())
+  estado   String   @unique
+  vigencia Vigencia @default(ACTIVO)
+
   ZonaUrbanizacion ZonaUrbanizacion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Expediente {
-  id                Int             @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+
   datosPersonalesId Int
   datosPersonales   DatosPersonales @relation(fields: [datosPersonalesId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model CedulaAutorizada {
-  id        Int                    @id @default(autoincrement())
-  cedula    Int                    @unique
-  estatus   CedulaAutorizadaStatus @default(ACTIVO)
-  usuarioId Int
-  usuario   Usuario                @relation(fields: [usuarioId], references: [id])
-}
+  id       Int      @id @default(autoincrement())
+  cedula   Int      @unique
+  vigencia Vigencia @default(ACTIVO)
 
-enum CedulaAutorizadaStatus {
-  ACTIVO
-  INACTIVO
+  usuarioId Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum AccionesBitacora {
@@ -102,6 +127,12 @@ enum AccionesBitacora {
 
   //estado
   REGISTRO_ESTADO
+  ACTUALIZACION_ESTADO
+
+  //zona
+  REGISTRO_ZONA
+  ACTUALIZACION_ZONA
+
   //micelanea
   ERROR
 }
@@ -116,4 +147,9 @@ enum Rol {
 enum Sex {
   HOMBRE
   MUJER
+}
+
+enum Vigencia {
+  ACTIVO
+  INACTIVO
 }

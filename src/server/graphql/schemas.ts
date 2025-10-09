@@ -63,6 +63,9 @@ type ZonaUrbanizacion {
 type EstadoPais {
   id: Int!
   estado: String!
+  vigencia: Boolean!
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 type Expediente {
@@ -98,6 +101,18 @@ type NotificacionResponse {
   message: String
 }
 
+type EstadoPaisResponse {
+  type: String
+  message: String
+  data: EstadoPais
+}
+
+type EstadosPaisResponse {
+  type: String
+  message: String
+  data: [EstadoPais]
+}
+
 ##############################################
 # Tipos de entrada
 ##############################################
@@ -106,19 +121,6 @@ input PDFDataInput {
   data: String!
 }
 
-input DatosPersonalesInput {
-  primerNombre: String!
-  segundoNombre: String
-  tercerNombre: String
-  primerApellido: String!
-  segundoApellido: String
-  sexo: Sex!
-  fechaNacimiento: Date!
-  numeroCedula: String!
-  numeroBancario: String
-  telefono: String
-  direccionId: Int
-}
 
 input DireccionInput {
   zonaUrbanizacionId: Int!
@@ -136,7 +138,6 @@ input EstadoPaisInput {
   estado: String!
 }
 
-
 ##############################################
 # Scalars
 ##############################################
@@ -153,6 +154,10 @@ type Query {
   generatePDF(template: String!, data: PDFDataInput!): String  
   validarSesion(token: String!): UsuarioResponse!
   getUsuario(token: String!, filtro: String): UsuariosResponse!
+
+  obtenerEstados(
+    token: String!
+  ): EstadosPaisResponse!
 }
 
 type Mutation {
@@ -175,7 +180,7 @@ type Mutation {
 
   resetPassWithToken(token: String!, nuevaContrasena: String!): UsuarioResponse!
 
- crearDatosPersonales( 
+  crearDatosPersonales( 
     token: String!, 
     primerNombre: String!,
     segundoNombre: String,
@@ -192,14 +197,17 @@ type Mutation {
     numeroCasa: Int!
   ): UsuarioResponse!
 
-  ##############################################
-  # Nuevas Mutations para entidades del modelo
-  ##############################################
+  crearEstadoPais(
+    token: String!,
+    estado: String!
+  ): EstadoPaisResponse!
 
-  # crearDatosPersonales(data: DatosPersonalesInput!, usuarioId: Int!): UsuarioResponse!
-  # crearDireccion(data: DireccionInput!): NotificacionResponse!
-  # crearZonaUrbanizacion(data: ZonaUrbanizacionInput!): NotificacionResponse!
-  # crearEstadoPais(data: EstadoPaisInput!): NotificacionResponse!
+  actualizarEstadoPais(
+    token: String!,
+    id: Int!,
+    estado: String!
+    vigencia: Boolean!
+  ): EstadoPaisResponse!
 }
 `;
 
