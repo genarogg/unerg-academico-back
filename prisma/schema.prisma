@@ -206,6 +206,10 @@ enum AccionesBitacora {
   REGISTRO_ZONA
   ACTUALIZACION_ZONA
 
+  //estudio
+  REGISTRO_ESTUDIO
+  ACTUALIZACION_ESTUDIO
+
   //micelanea
   ERROR
 }

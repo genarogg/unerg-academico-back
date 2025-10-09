@@ -116,6 +116,39 @@ CREATE TABLE "Documento" (
     CONSTRAINT "Documento_expedienteId_fkey" FOREIGN KEY ("expedienteId") REFERENCES "Expediente" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- CreateTable
+CREATE TABLE "NivelEstudio" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "nivelAcademico" TEXT NOT NULL,
+    "tipo" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "CasaEstudio" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "nombre" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Estudio" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "expedienteId" INTEGER NOT NULL,
+    "nivelEstudioId" INTEGER NOT NULL,
+    "casaEstudioId" INTEGER NOT NULL,
+    "titulo" TEXT NOT NULL,
+    "fecha" DATETIME NOT NULL,
+    "imgDocumento" TEXT NOT NULL,
+    "notas" TEXT NOT NULL,
+    "estatus" TEXT NOT NULL DEFAULT 'PENDIENTE',
+    CONSTRAINT "Estudio_expedienteId_fkey" FOREIGN KEY ("expedienteId") REFERENCES "Expediente" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Estudio_nivelEstudioId_fkey" FOREIGN KEY ("nivelEstudioId") REFERENCES "NivelEstudio" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Estudio_casaEstudioId_fkey" FOREIGN KEY ("casaEstudioId") REFERENCES "CasaEstudio" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Usuario_email_key" ON "Usuario"("email");
 

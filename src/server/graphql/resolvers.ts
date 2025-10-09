@@ -9,6 +9,7 @@ import zonaUrbanizarionRasolver from "./resolvers/miscelanea/zonaUrbanizacion";
 import tipoDocumentoResolver from "./resolvers/expediente/tipoDocumento";
 import documentoResolver from "./resolvers/expediente/documento"
 import crearCasaEstudio from "./resolvers/expediente/casaEstudio";
+import estudioResolver from "./resolvers/expediente/estudio"
 
 const resolvers = {
     Query: {
@@ -20,6 +21,7 @@ const resolvers = {
         ...tipoDocumentoResolver.Query,
         ...documentoResolver.Query,
         ...crearCasaEstudio.Query,
+        ...estudioResolver.Query,
     },
 
     Mutation: {
@@ -30,6 +32,7 @@ const resolvers = {
         ...tipoDocumentoResolver.Mutation,
         ...documentoResolver.Mutation,
         ...crearCasaEstudio.Mutation,
+        ...estudioResolver.Mutation,
     },
 };
 
