@@ -7,7 +7,8 @@ import estadoPaisResolver from "./resolvers/miscelanea/estadoPais";
 import zonaUrbanizarionRasolver from "./resolvers/miscelanea/zonaUrbanizacion";
 
 import tipoDocumentoResolver from "./resolvers/expediente/tipoDocumento";
-
+import documentoResolver from "./resolvers/expediente/documento"
+import crearCasaEstudio from "./resolvers/expediente/casaEstudio";
 
 const resolvers = {
     Query: {
@@ -16,7 +17,9 @@ const resolvers = {
         ...usuarioResolver.Query,
         ...estadoPaisResolver.Query,
         ...zonaUrbanizarionRasolver.Query,
-        ...tipoDocumentoResolver.Query
+        ...tipoDocumentoResolver.Query,
+        ...documentoResolver.Query,
+        ...crearCasaEstudio.Query,
     },
 
     Mutation: {
@@ -24,7 +27,9 @@ const resolvers = {
         ...datosPersonalesResolver.Mutation,
         ...estadoPaisResolver.Mutation,
         ...zonaUrbanizarionRasolver.Mutation,
-        ...tipoDocumentoResolver.Mutation
+        ...tipoDocumentoResolver.Mutation,
+        ...documentoResolver.Mutation,
+        ...crearCasaEstudio.Mutation,
     },
 };
 

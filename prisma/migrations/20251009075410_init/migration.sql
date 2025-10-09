@@ -109,6 +109,7 @@ CREATE TABLE "Documento" (
     "tipoDocumentoId" INTEGER NOT NULL,
     "expedienteId" INTEGER NOT NULL,
     "url" TEXT NOT NULL,
+    "estatus" TEXT NOT NULL DEFAULT 'PENDIENTE',
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     CONSTRAINT "Documento_tipoDocumentoId_fkey" FOREIGN KEY ("tipoDocumentoId") REFERENCES "TipoDocumento" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,

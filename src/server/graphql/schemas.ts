@@ -126,7 +126,7 @@ type ZonasUrbanizacionResponse {
 }
 
 ##############################################
-# ✅ NUEVOS tipos para TipoDocumento
+# ✅ Tipos para TipoDocumento
 ##############################################
 
 type TipoDocumento {
@@ -147,6 +147,82 @@ type TiposDocumentoResponse {
   type: String
   message: String
   data: [TipoDocumento]
+}
+
+##############################################
+# ✅ Tipos para Documento
+##############################################
+
+type Documento {
+  id: Int!
+  tipoDocumentoId: Int!
+  expedienteId: Int!
+  url: String!
+  estatus: String!
+  tipoDocumento: TipoDocumento
+  expediente: Expediente
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type DocumentoResponse {
+  type: String
+  message: String
+  data: Documento
+}
+
+type DocumentosResponse {
+  type: String
+  message: String
+  data: [Documento]
+}
+
+##############################################
+# ✅ NUEVOS tipos para CasaEstudio
+##############################################
+
+type CasaEstudio {
+  id: Int!
+  nombre: String!
+  Estudio: [Estudio]
+}
+
+type CasaEstudioResponse {
+  type: String
+  message: String
+  data: CasaEstudio
+}
+
+type CasasEstudioResponse {
+  type: String
+  message: String
+  data: [CasaEstudio]
+}
+
+##############################################
+# ✅ Tipos para Estudio y NivelEstudio
+##############################################
+
+type NivelEstudio {
+  id: Int!
+  nivelAcademico: String!
+  tipo: String!
+  Estudio: [Estudio]
+}
+
+type Estudio {
+  id: Int!
+  expedienteId: Int!
+  nivelEstudioId: Int!
+  casaEstudioId: Int!
+  titulo: String!
+  fecha: Date!
+  imgDocumento: String!
+  notas: String!
+  estatus: String!
+  expediente: Expediente
+  nivelEstudio: NivelEstudio
+  casaEstudio: CasaEstudio
 }
 
 ##############################################
@@ -198,11 +274,23 @@ type Query {
     token: String!
   ): ZonasUrbanizacionResponse!
 
-
   obtenerTipoDocumento(
     token: String!
     id: Int
   ): TiposDocumentoResponse!
+
+  obtenerDocumentos(
+    token: String!
+    documentoId: Int
+  ): DocumentosResponse!
+
+  ##############################################
+  # ✅ NUEVA QUERY: CasaEstudio
+  ##############################################
+  obtenerCasaEstudio(
+    token: String!
+    id: Int
+  ): CasasEstudioResponse!
 }
 
 type Mutation {
@@ -270,8 +358,6 @@ type Mutation {
     vigencia: Boolean!
   ): ZonaUrbanizacionResponse!
 
-
-
   crearTipoDocumento(
     token: String!,
     nombre: String!
@@ -283,6 +369,35 @@ type Mutation {
     nombre: String,
     vigencia: String
   ): TipoDocumentoResponse!
+
+  crearDocumento(
+    token: String!,
+    tipoDocumentoId: Int!,
+    expedienteId: Int!,
+    url: String!
+  ): DocumentoResponse!
+
+  actualizarDocumento(
+    token: String!,
+    documentoId: Int!,
+    tipoDocumentoId: Int,
+    url: String,
+    estatus: String
+  ): DocumentoResponse!
+
+  ##############################################
+  # ✅ NUEVAS MUTATIONS: CasaEstudio
+  ##############################################
+  crearCasaEstudio(
+    token: String!,
+    nombre: String!
+  ): CasaEstudioResponse!
+
+  actualizarCasaEstudio(
+    token: String!,
+    id: Int!,
+    nombre: String!
+  ): CasaEstudioResponse!
 }
 `;
 
