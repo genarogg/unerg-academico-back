@@ -1,5 +1,5 @@
 import { prisma } from "src/server/functions";
-import { CedulaAutorizadaStatus } from "@prisma/client";
+import { Vigencia } from "@prisma/client";
 
 const seedCedulasAutorizadas = async () => {
     // Cédulas que quieres autorizar
@@ -24,7 +24,7 @@ const seedCedulasAutorizadas = async () => {
             await prisma.cedulaAutorizada.create({
                 data: {
                     cedula,
-                    estatus: CedulaAutorizadaStatus.ACTIVO,
+                    vigencia: Vigencia.ACTIVO,
                     usuarioId: usuario.id,
                 },
             });

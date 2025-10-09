@@ -103,8 +103,9 @@ model Expediente {
   datosPersonalesId Int
   datosPersonales   DatosPersonales @relation(fields: [datosPersonalesId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  Documento Documento[]
 }
 
 model CedulaAutorizada {
@@ -114,6 +115,30 @@ model CedulaAutorizada {
 
   usuarioId Int
   usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TipoDocumento {
+  id       Int    @id @default(autoincrement())
+  nombre   String
+  vigencia String @default("ACTIVO")
+
+  Documento Documento[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Documento {
+  id              Int    @id @default(autoincrement())
+  tipoDocumentoId Int
+  expedienteId    Int
+  url             String
+
+  tipoDocumento TipoDocumento @relation(fields: [tipoDocumentoId], references: [id])
+  expediente    Expediente    @relation(fields: [expedienteId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -153,3 +178,5 @@ enum Vigencia {
   ACTIVO
   INACTIVO
 }
+
+//implementame este schema

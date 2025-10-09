@@ -126,6 +126,30 @@ type ZonasUrbanizacionResponse {
 }
 
 ##############################################
+# ✅ NUEVOS tipos para TipoDocumento
+##############################################
+
+type TipoDocumento {
+  id: Int!
+  nombre: String!
+  vigencia: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type TipoDocumentoResponse {
+  type: String
+  message: String
+  data: TipoDocumento
+}
+
+type TiposDocumentoResponse {
+  type: String
+  message: String
+  data: [TipoDocumento]
+}
+
+##############################################
 # Tipos de entrada
 ##############################################
 
@@ -170,10 +194,15 @@ type Query {
     token: String!
   ): EstadosPaisResponse!
 
-  # ✅ NUEVO: Obtener zonas o urbanizaciones
   obtenerZonasUrbanizacion(
     token: String!
   ): ZonasUrbanizacionResponse!
+
+
+  obtenerTipoDocumento(
+    token: String!
+    id: Int
+  ): TiposDocumentoResponse!
 }
 
 type Mutation {
@@ -225,6 +254,13 @@ type Mutation {
     vigencia: Boolean!
   ): EstadoPaisResponse!
 
+  crearZonaUrbanizacion(
+    token: String!,
+    estadoPaisId: Int!,
+    codigoPostal: Int!,
+    zona: String!,
+  ): ZonaUrbanizacionResponse!
+  
   actualizarZonaUrbanizacion(
     token: String!,
     id: Int!,
@@ -233,6 +269,20 @@ type Mutation {
     zona: String,
     vigencia: Boolean!
   ): ZonaUrbanizacionResponse!
+
+
+
+  crearTipoDocumento(
+    token: String!,
+    nombre: String!
+  ): TipoDocumentoResponse!
+
+  actualizarTipoDocumento(
+    token: String!,
+    id: Int!,
+    nombre: String,
+    vigencia: String
+  ): TipoDocumentoResponse!
 }
 `;
 

@@ -95,7 +95,7 @@ const crearDatosPersonales = async (_: unknown, args: CrearDatosPersonalesArgs) 
                 },
             });
 
-            // Crear los datos personales vinculados
+            // Crear los datos personales
             const datos = await tx.datosPersonales.create({
                 data: {
                     usuarioId,
@@ -120,18 +120,25 @@ const crearDatosPersonales = async (_: unknown, args: CrearDatosPersonalesArgs) 
                 },
             });
 
-            return datos;
+            // 🔹 Crear expediente asociado al usuario
+            const expediente = await tx.expediente.create({
+                data: {
+                    datosPersonalesId: datos.id,
+                },
+            });
+
+            return { datos, expediente };
         });
 
         // Registrar en bitácora
         await crearBitacora({
             usuarioId,
-            accion: "Registro de datos personales con dirección",
+            accion: "Registro de datos personales con dirección y expediente",
             type: AccionesBitacora.REGISTRO_USUARIO,
         });
 
         return successResponse({
-            message: "Datos personales registrados exitosamente",
+            message: "Datos personales y expediente creados exitosamente",
             data: resultado,
         });
     } catch (error) {

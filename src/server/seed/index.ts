@@ -2,6 +2,7 @@ import { prisma, log } from "src/server/functions";
 import seedUsers from "./seedUsers";
 import seedCedulasAutorizadas from "./seedCedulasAutorizadas"
 import seedZonasUrbanizaciones from "./seedZonasUrbanizaciones"
+import seedTiposDocumento from "./tiposDeDocumentos"
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -24,6 +25,9 @@ const seed = async () => {
         await delay(1000);
 
         await seedZonasUrbanizaciones()
+        await delay(1000);
+
+        await seedTiposDocumento()
         await delay(1000);
 
         log.info("Usuarios creados exitosamente.");

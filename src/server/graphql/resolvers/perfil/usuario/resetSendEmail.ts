@@ -1,4 +1,4 @@
-import { sendEmail } from "../../../email";
+import { sendEmail } from "../../../../email";
 import { generarToken, prisma, errorResponse, successResponse } from "@fn";
 
 const resetPassword = async (_: unknown, { email }: { email: string }) => {
