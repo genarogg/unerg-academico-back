@@ -6,8 +6,8 @@ import verificarToken from "./verificarToken";
 import { encriptarContrasena, compararContrasena } from "./encriptarContrasena";
 import { createResponse, successResponse, errorResponse, warningResponse } from "./response";
 import prisma from "./prisma";
-
 import crearBitacora from "./crearBitacora";
+import { hasAccess, notAccess } from "./autorizados";
 
 export {
     log,
@@ -22,5 +22,7 @@ export {
     errorResponse,
     warningResponse,
     prisma,
-    crearBitacora
+    crearBitacora,
+    hasAccess,
+    notAccess
 };

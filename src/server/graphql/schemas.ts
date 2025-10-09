@@ -73,15 +73,14 @@ type Expediente {
   datosPersonalesId: Int!
 }
 
-##############################################
-# Tipos de respuesta y metadatos
-##############################################
-
 type Meta {
   total: Int
   page: Int
   limit: Int
 }
+##############################################
+# Tipos de respuesta y metadatos
+##############################################
 
 type UsuarioResponse {
   type: String
@@ -141,6 +140,35 @@ type Estudio {
   casaEstudio: CasaEstudio
 }
 
+
+type TipoDocumento {
+  id: Int!
+  nombre: String!
+  vigencia: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+
+type Documento {
+  id: Int!
+  tipoDocumentoId: Int!
+  expedienteId: Int!
+  url: String!
+  estatus: String!
+  tipoDocumento: TipoDocumento
+  expediente: Expediente
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+
+type CasaEstudio {
+  id: Int!
+  nombre: String!
+  Estudio: [Estudio]
+}
+
 type EstudioResponse {
   type: String
   message: String
@@ -151,20 +179,6 @@ type EstudiosResponse {
   type: String
   message: String
   data: [Estudio]
-}
-
-
-
-##############################################
-# ✅ Tipos para TipoDocumento
-##############################################
-
-type TipoDocumento {
-  id: Int!
-  nombre: String!
-  vigencia: String!
-  createdAt: Date!
-  updatedAt: Date!
 }
 
 type TipoDocumentoResponse {
@@ -179,21 +193,6 @@ type TiposDocumentoResponse {
   data: [TipoDocumento]
 }
 
-##############################################
-# ✅ Tipos para Documento
-##############################################
-
-type Documento {
-  id: Int!
-  tipoDocumentoId: Int!
-  expedienteId: Int!
-  url: String!
-  estatus: String!
-  tipoDocumento: TipoDocumento
-  expediente: Expediente
-  createdAt: Date!
-  updatedAt: Date!
-}
 
 type DocumentoResponse {
   type: String
@@ -205,16 +204,6 @@ type DocumentosResponse {
   type: String
   message: String
   data: [Documento]
-}
-
-##############################################
-# ✅ NUEVOS tipos para CasaEstudio
-##############################################
-
-type CasaEstudio {
-  id: Int!
-  nombre: String!
-  Estudio: [Estudio]
 }
 
 type CasaEstudioResponse {
@@ -229,9 +218,6 @@ type CasasEstudioResponse {
   data: [CasaEstudio]
 }
 
-##############################################
-# ✅ Tipos para Estudio y NivelEstudio
-##############################################
 
 type NivelEstudio {
   id: Int!
@@ -299,9 +285,6 @@ type Query {
     documentoId: Int
   ): DocumentosResponse!
 
-  ##############################################
-  # ✅ NUEVA QUERY: CasaEstudio
-  ##############################################
   obtenerCasaEstudio(
     token: String!
     id: Int
@@ -406,9 +389,6 @@ type Mutation {
     estatus: String
   ): DocumentoResponse!
 
-  ##############################################
-  # ✅ NUEVAS MUTATIONS: CasaEstudio
-  ##############################################
   crearCasaEstudio(
     token: String!,
     nombre: String!
