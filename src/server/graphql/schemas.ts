@@ -232,6 +232,7 @@ type CasasEstudioResponse {
 ##############################################
 
 type Query {
+  hello: String!
   generatePDF(template: String!, data: String!): String  
   validarSesion(token: String!): UsuarioResponse!
   getUsuario(token: String!, filtro: String): UsuariosResponse!
