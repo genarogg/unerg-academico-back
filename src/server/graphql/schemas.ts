@@ -113,6 +113,18 @@ type EstadosPaisResponse {
   data: [EstadoPais]
 }
 
+type ZonaUrbanizacionResponse {
+  type: String
+  message: String
+  data: ZonaUrbanizacion
+}
+
+type ZonasUrbanizacionResponse {
+  type: String
+  message: String
+  data: [ZonaUrbanizacion]
+}
+
 ##############################################
 # Tipos de entrada
 ##############################################
@@ -120,7 +132,6 @@ type EstadosPaisResponse {
 input PDFDataInput {
   data: String!
 }
-
 
 input DireccionInput {
   zonaUrbanizacionId: Int!
@@ -158,6 +169,11 @@ type Query {
   obtenerEstados(
     token: String!
   ): EstadosPaisResponse!
+
+  # ✅ NUEVO: Obtener zonas o urbanizaciones
+  obtenerZonasUrbanizacion(
+    token: String!
+  ): ZonasUrbanizacionResponse!
 }
 
 type Mutation {
@@ -205,9 +221,18 @@ type Mutation {
   actualizarEstadoPais(
     token: String!,
     id: Int!,
-    estado: String!
+    estado: String!,
     vigencia: Boolean!
   ): EstadoPaisResponse!
+
+  actualizarZonaUrbanizacion(
+    token: String!,
+    id: Int!,
+    estadoPaisId: Int,
+    codigoPostal: Int,
+    zona: String,
+    vigencia: Boolean!
+  ): ZonaUrbanizacionResponse!
 }
 `;
 

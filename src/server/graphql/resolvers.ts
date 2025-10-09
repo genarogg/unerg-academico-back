@@ -1,22 +1,24 @@
-import demoResolvers from "./resolvers/datosPersonales";
+import demoResolvers from "./resolvers/perfil/datosPersonales";
 import pdfResolverResolvers from "./resolvers/pdf"
-import usuarioResolver from "./resolvers/usuario";
-import datosPersonalesResolver from "./resolvers/datosPersonales";
-import estadoPais from "./resolvers/miscelanea/estadoPais";
-
+import usuarioResolver from "./resolvers/perfil/usuario";
+import datosPersonalesResolver from "./resolvers/perfil/datosPersonales";
+import estadoPaisResolver from "./resolvers/miscelanea/estadoPais";
+import zonaUrbanizarionRasolver from "./resolvers/miscelanea/zonaUrbanizacion";
 
 const resolvers = {
     Query: {
         ...demoResolvers.Query,
         ...pdfResolverResolvers.Query,
         ...usuarioResolver.Query,
-        ...estadoPais.Query
+        ...estadoPaisResolver.Query,
+        ...zonaUrbanizarionRasolver.Query
     },
 
     Mutation: {
         ...usuarioResolver.Mutation,
         ...datosPersonalesResolver.Mutation,
-        ...estadoPais.Mutation
+        ...estadoPaisResolver.Mutation,
+        ...zonaUrbanizarionRasolver.Mutation
     },
 };
 
