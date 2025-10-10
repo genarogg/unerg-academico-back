@@ -1,21 +1,23 @@
 'use client'
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client/react';
-import { REGISTER_USUARIO } from '@/query'; // Ajusta la ruta según tu proyecto
+import { REGISTER_USUARIO } from '@/query';
+import { Rol } from '@/generated/enums';
 
 interface RegistrarUsuarioProps { }
 
-const roles = ['ADMIN', 'USER', 'GUEST']; // Ajusta según tus roles del enum
+const roles = Object.values(Rol);
 
 const RegistrarUsuario: React.FC<RegistrarUsuarioProps> = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [cedula, setCedula] = useState('');
     const [rol, setRol] = useState(roles[0]);
+    const [token, setToken] = useState('');
     const [response, setResponse] = useState<any>(null);
 
     const [registerUsuario, { loading, error }] = useMutation(REGISTER_USUARIO, {
-        onCompleted: (data) => setResponse(data.registerUsuario),
+        onCompleted: (data: any) => setResponse(data.registerUsuario),
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -27,6 +29,7 @@ const RegistrarUsuario: React.FC<RegistrarUsuarioProps> = () => {
                 password,
                 cedula: parseInt(cedula),
                 rol,
+                token
             },
         });
     };
@@ -74,11 +77,22 @@ const RegistrarUsuario: React.FC<RegistrarUsuarioProps> = () => {
                 </div>
 
                 <div>
+                    <label className="block mb-1 font-medium">Token (opcional):</label>
+                    <input
+                        type="text"
+                        value={token}
+                        onChange={(e) => setToken(e.target.value)}
+                        className="w-full border rounded px-3 py-2"
+                    />
+                </div>
+
+                <div>
                     <label className="block mb-1 font-medium">Rol:</label>
                     <select
                         value={rol}
-                        onChange={(e) => setRol(e.target.value)}
+                        onChange={(e: any) => setRol(e.target.value)}
                         className="w-full border rounded px-3 py-2"
+                        disabled={!token}
                     >
                         {roles.map((r) => (
                             <option key={r} value={r}>
@@ -96,9 +110,7 @@ const RegistrarUsuario: React.FC<RegistrarUsuarioProps> = () => {
                     {loading ? 'Registrando...' : 'Registrar'}
                 </button>
 
-                {error && (
-                    <p className="text-red-500 mt-2">Error: {error.message}</p>
-                )}
+                {error && <p className="text-red-500 mt-2">Error: {error.message}</p>}
             </form>
 
             {/* Resultado */}

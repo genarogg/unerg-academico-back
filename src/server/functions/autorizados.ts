@@ -1,18 +1,23 @@
 interface AuthParams {
-    rolesPermitidos: string[];
-    rolUsuario: string;
+    permitir: string[];
+    rolUser: string;
+}
+
+interface AuthParamsNegated {
+    denegar: string[];
+    rolUser: string;
 }
 
 /**
  * Verifica si el usuario está autorizado según su rol.
- * Retorna true si el rol del usuario está dentro del arreglo de rolesPermitidos.
+ * Retorna true si el rol del usuario está dentro del arreglo de permitir.
  */
-export const hasAccess = ({ rolesPermitidos, rolUsuario }: AuthParams): boolean =>
-    rolesPermitidos.includes(rolUsuario);
+export const hasAccess = ({ permitir, rolUser }: AuthParams): boolean =>
+    permitir.includes(rolUser);
 
 /**
  * Verifica si el usuario **no** está autorizado según su rol.
- * Retorna true si el rol del usuario NO está dentro del arreglo de rolesPermitidos.
+ * Retorna true si el rol del usuario está dentro del arreglo de noPermitidos.
  */
-export const notAccess = ({ rolesPermitidos, rolUsuario }: AuthParams): boolean =>
-    !rolesPermitidos.includes(rolUsuario);
+export const notAccess = ({ denegar, rolUser }: AuthParamsNegated): boolean =>
+    denegar.includes(rolUser);

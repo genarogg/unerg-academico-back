@@ -7,7 +7,9 @@ import {
     verificarToken,
     generarToken,
     validarCapchat,
-} from "src/server/functions";
+    hasAccess,
+    notAccess
+} from "@fn";
 import { AccionesBitacora, Rol, Vigencia } from "@prisma/client";
 
 interface RegisterUsuarioArgs {
@@ -65,27 +67,34 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
 
         // Si hay token, verificar permisos para asignar rol
         if (token && rolaAsignado) {
-            const { isAuthenticated, rol: rolUser } = await verificarToken(token);
+            const { isAuthenticated, rol: rolUser , id: usuarioId} = await verificarToken(token);
 
             if (!isAuthenticated) {
                 return errorResponse({ message: "Token inválido o expirado" });
             }
 
-            if (rolUser === SUPER) {
+            if (notAccess({ denegar: [DOCENTE], rolUser })) {
+                return errorResponse({ message: "No tiene permisos para asignar este rol" });
+            }
+
+            if (hasAccess({ permitir: [SUPER], rolUser })) {
                 // Puede asignar cualquier rol
                 rolAsignado = rolaAsignado;
-            } else if (rolUser === ADMIN) {
-                // Puede asignar ADMIN, DOCENTE o AREA
-                const rolesPermitidos: Rol[] = [ADMIN, DOCENTE, AREA];
-                if (rolesPermitidos.includes(rolaAsignado)) {
-                    rolAsignado = rolaAsignado;
-                } else {
-                    return errorResponse({ message: "No tiene permisos para asignar este rol" });
-                }
-            } else {
-                // Otros roles (AREA, DOCENTE, etc.) no pueden asignar roles
-                return errorResponse({ message: "No tiene permisos para asignar roles" });
             }
+
+            else if (hasAccess({ permitir: [ADMIN], rolUser })) {
+                // Puede asignar ADMIN, DOCENTE o AREA
+
+                if (hasAccess({ permitir: [ADMIN, DOCENTE, AREA], rolUser })) {
+                    rolAsignado = rolaAsignado;
+                }
+            }
+
+            crearBitacora({
+                usuarioId,
+                accion: `Registro de nuevo usuario (${rolAsignado})`,
+                type: AccionesBitacora.REGISTRO_USUARIO,
+            });
         }
 
         // Encriptar contraseña
@@ -108,13 +117,13 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
             },
         });
 
-        // Registrar acción en bitácora (opcional, puede eliminarse si lo deseas)
 
         crearBitacora({
             usuarioId: nuevoUsuario.id,
             accion: `Registro de nuevo usuario (${rolAsignado})`,
             type: AccionesBitacora.REGISTRO_USUARIO,
         });
+
 
         // Generar token de sesión
         const tokenGenerado = generarToken({ id: nuevoUsuario.id });

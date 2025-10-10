@@ -6,7 +6,8 @@ const REGISTER_USUARIO = gql`
     $password: String!
     $cedula: Int!
     $captchaToken: String
-    $rol: Rol
+    $rol: Rol,
+    $token: String
   ) {
     registerUsuario(
       email: $email
@@ -14,6 +15,7 @@ const REGISTER_USUARIO = gql`
       cedula: $cedula
       captchaToken: $captchaToken
       rol: $rol
+      token: $token
     ) {
       type
       message
