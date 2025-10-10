@@ -4,12 +4,12 @@ import resetPassword from "./resetSendEmail";
 import resetPassWithToken from "./resetPassWithToken";
 
 import validarSesion from "./sesionValidarSesion";
-import getUsuario from "./getUsuario";
+import getUsuarios from "./getUsuarios";
 
 const resolvers = {
     Query: {
         validarSesion,
-        getUsuario
+        getUsuarios
     },
     
     Mutation: {

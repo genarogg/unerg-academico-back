@@ -97,44 +97,44 @@ type Meta {
 ##############################################
 
 type UsuarioResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: Usuario
 }
 
 type UsuariosResponse {
-  type: String
-  message: String
-  data: [Usuario]
+  type: String!
+  message: String!
+  data: [Usuario]!
   meta: Meta
 }
 
 type NotificacionResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
 }
 
 type EstadoPaisResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: EstadoPais
 }
 
 type EstadosPaisResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: [EstadoPais]
 }
 
 type ZonaUrbanizacionResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: ZonaUrbanizacion
 }
 
 type ZonasUrbanizacionResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: [ZonaUrbanizacion]
 }
 
@@ -180,50 +180,50 @@ type CasaEstudio {
 }
 
 type EstudioResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: Estudio
 }
 
 type EstudiosResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: [Estudio]
 }
 
 type TipoDocumentoResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: TipoDocumento
 }
 
 type TiposDocumentoResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: [TipoDocumento]
 }
 
 type DocumentoResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: Documento
 }
 
 type DocumentosResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: [Documento]
 }
 
 type CasaEstudioResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: CasaEstudio
 }
 
 type CasasEstudioResponse {
-  type: String
-  message: String
+  type: String!
+  message: String!
   data: [CasaEstudio]
 }
 
@@ -235,7 +235,7 @@ type Query {
   hello: String!
   generatePDF(template: String!, data: String!): String  
   validarSesion(token: String!): UsuarioResponse!
-  getUsuario(token: String!, filtro: String): UsuariosResponse!
+  getUsuarios(token: String!, filtro: String): UsuariosResponse!
 
   obtenerEstados(
     token: String!
