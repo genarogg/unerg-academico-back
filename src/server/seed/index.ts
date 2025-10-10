@@ -1,4 +1,4 @@
-import { prisma, log } from "src/server/functions";
+import { prisma, log } from "@fn";
 import seedUsers from "./seedUsers";
 import seedCedulasAutorizadas from "./seedCedulasAutorizadas"
 import seedZonasUrbanizaciones from "./seedZonasUrbanizaciones"

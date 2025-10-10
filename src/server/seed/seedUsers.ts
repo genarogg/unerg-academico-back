@@ -1,4 +1,4 @@
-import { encriptarContrasena, prisma } from "src/server/functions";
+import { encriptarContrasena, prisma } from "@fn";
 import { Rol, Sex } from "@prisma/client";
 
 // Función para generar un número aleatorio dentro de un rango

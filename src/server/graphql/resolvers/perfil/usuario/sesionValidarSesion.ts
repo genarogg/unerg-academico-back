@@ -1,4 +1,4 @@
-import { verificarToken, successResponse, errorResponse } from 'src/server/functions';
+import { verificarToken, successResponse, errorResponse } from "@fn";
 
 interface validarSesionArgs {
     token: string;

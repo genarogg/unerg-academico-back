@@ -3,7 +3,7 @@ import {
     verificarToken,
     successResponse,
     errorResponse,
-} from "src/server/functions";
+} from "@fn";
 
 interface ObtenerCasaEstudioArgs {
     token: string;

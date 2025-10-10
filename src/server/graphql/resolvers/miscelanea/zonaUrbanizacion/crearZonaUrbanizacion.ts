@@ -3,7 +3,7 @@ import {
     verificarToken,
     successResponse,
     errorResponse,
-} from "src/server/functions";
+} from "@fn";
 import { Rol } from "@prisma/client";
 
 interface ObtenerZonasUrbanizacionArgs {

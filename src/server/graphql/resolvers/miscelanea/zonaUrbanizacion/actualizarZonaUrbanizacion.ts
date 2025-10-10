@@ -4,7 +4,7 @@ import {
     successResponse,
     errorResponse,
     crearBitacora,
-} from "src/server/functions";
+} from "@fn";
 import { AccionesBitacora, Rol, Vigencia } from "@prisma/client";
 
 interface ActualizarZonaUrbanizacionArgs {

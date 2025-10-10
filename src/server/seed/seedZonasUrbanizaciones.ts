@@ -1,4 +1,4 @@
-import { prisma } from "src/server/functions";
+import { prisma } from "@fn";
 
 const seedZonasUrbanizaciones = async () => {
     // Datos base

@@ -4,7 +4,7 @@ import {
     successResponse,
     errorResponse,
     crearBitacora,
-} from "src/server/functions";
+} from "@fn";
 import { AccionesBitacora, EstatusDocumento } from "@prisma/client";
 
 interface CrearDocumentoArgs {

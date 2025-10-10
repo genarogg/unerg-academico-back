@@ -7,6 +7,7 @@ interface GetUsuarioProps { }
 
 const GetUsuario: React.FC<GetUsuarioProps> = () => {
     const [token, setToken] = useState('');
+    const [filtro, setFiltro] = useState(''); // 👈 nuevo estado para filtro
     const [response, setResponse] = useState<any>(null);
 
     const [getUsuario, { loading, error }] = useLazyQuery(GET_USUARIO);
@@ -31,7 +32,9 @@ const GetUsuario: React.FC<GetUsuarioProps> = () => {
         localStorage.setItem('token', token);
 
         try {
-            const { data }: any = await getUsuario({ variables: { token } });
+            const { data }: any = await getUsuario({
+                variables: { token, filtro: filtro || undefined } // 👈 pasar filtro si existe
+            });
             setResponse(data.getUsuario);
         } catch (err) {
             console.error(err);
@@ -47,6 +50,7 @@ const GetUsuario: React.FC<GetUsuarioProps> = () => {
             >
                 <h2 className="text-xl font-bold mb-4 text-gray-800">Consultar Usuario</h2>
 
+                {/* Input Token */}
                 <div>
                     <label className="block mb-1 font-medium text-gray-700">Token:</label>
                     <input
@@ -54,6 +58,20 @@ const GetUsuario: React.FC<GetUsuarioProps> = () => {
                         value={token}
                         onChange={(e) => setToken(e.target.value)}
                         required
+                        className="w-full border rounded px-3 py-2 focus:ring focus:ring-blue-200"
+                    />
+                </div>
+
+                {/* Input Filtro */}
+                <div>
+                    <label className="block mb-1 font-medium text-gray-700">
+                        Filtro (email y cédula):
+                    </label>
+                    <input
+                        type="text"
+                        value={filtro}
+                        onChange={(e) => setFiltro(e.target.value)}
+                        placeholder="Ingresa email o número de cédula"
                         className="w-full border rounded px-3 py-2 focus:ring focus:ring-blue-200"
                     />
                 </div>

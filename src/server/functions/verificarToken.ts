@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { prisma, errorResponse } from "src/server/functions"
+import { prisma, errorResponse } from "@fn"
 
 
 const verificarToken = async (token: string) => {

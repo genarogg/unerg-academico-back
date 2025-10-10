@@ -1,4 +1,4 @@
-import { prisma } from "src/server/functions";
+import { prisma } from "@fn";
 import { ip } from "address";
 import { AccionesBitacora } from "@prisma/client";
 

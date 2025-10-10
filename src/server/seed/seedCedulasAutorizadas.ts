@@ -1,4 +1,4 @@
-import { prisma } from "src/server/functions";
+import { prisma } from "@fn";
 import { Vigencia } from "@prisma/client";
 
 const seedCedulasAutorizadas = async () => {

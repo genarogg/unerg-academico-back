@@ -239,7 +239,7 @@ type Query {
   generatePDF(template: String!, data: String!): String  
   validarSesion(token: String!): UsuarioResponse!
   getUsuarios(token: String!, filtro: String, page:Int, limit: Int): UsuariosResponse!
-  getUsuario(token: String!): UsuarioResponse!
+  getUsuario(token: String!, filtro: String): UsuarioResponse!
 
 
   obtenerEstados(
