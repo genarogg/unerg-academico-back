@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client/react';
 import { GET_USUARIO } from '@/query'; // ajusta la ruta según tu estructura
 
@@ -11,15 +11,28 @@ const GetUsuario: React.FC<GetUsuarioProps> = () => {
 
     const [getUsuario, { loading, error }] = useLazyQuery(GET_USUARIO);
 
+    // Al montar el componente, buscar token en localStorage
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if (storedToken) {
+            setToken(storedToken);
+            // Ejecutar la query automáticamente si hay token
+            getUsuario({ variables: { token: storedToken } })
+                .then(({ data }: any) => setResponse(data.getUsuario))
+                .catch(console.error);
+        }
+    }, [getUsuario]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!token) return;
 
+        // Guardar el token en localStorage
+        localStorage.setItem('token', token);
+
         try {
-            const { data } = await getUsuario({
-                variables: { token },
-            });
-            setResponse(data.getUsuario); // aquí manejas la respuesta
+            const { data }: any = await getUsuario({ variables: { token } });
+            setResponse(data.getUsuario);
         } catch (err) {
             console.error(err);
         }

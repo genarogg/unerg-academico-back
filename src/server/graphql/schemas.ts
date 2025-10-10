@@ -49,6 +49,8 @@ type DatosPersonales {
   telefono: String
   direccion: Direccion
   Expediente: [Expediente]
+   createdAt: Date!
+  updatedAt: Date!
 }
 
 type Direccion {

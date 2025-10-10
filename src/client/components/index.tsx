@@ -6,14 +6,13 @@ import LoginUsuario from './LoginUsuario'
 import Titulo from './Titulo'
 import TokenManager from "./TokenManager"
 import GetUsuario from './GetUsuario'
+import GetUsuarios from './GetUsuarios' // <--- Importa el nuevo componente
 
 interface IndexProps { }
 
 const Index: React.FC<IndexProps> = () => {
     return (
         <div className="space-y-10">
-
-
 
             <Titulo texto="Ejemplo de Query: Demo" />
             <Demo />
@@ -27,8 +26,11 @@ const Index: React.FC<IndexProps> = () => {
             <Titulo texto="Login de Usuario" />
             <LoginUsuario />
 
-            <Titulo texto="get usuario" />
+            <Titulo texto="Get Usuario" />
             <GetUsuario />
+
+            <Titulo texto="Get Usuarios" />
+            <GetUsuarios />
         </div>
     );
 }

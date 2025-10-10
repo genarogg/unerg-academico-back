@@ -18,7 +18,7 @@ const LOGIN_USUARIO = gql`
         email
         rol
         token
-        datosPersonales {
+        DatosPersonales {
             primerNombre
             primerApellido
         }

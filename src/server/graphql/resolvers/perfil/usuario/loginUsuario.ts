@@ -17,6 +17,7 @@ interface LoginUsuarioArgs {
 }
 
 const loginUsuario = async (_: unknown, args: LoginUsuarioArgs) => {
+
     const { email, password, captchaToken } = args;
 
     if (!email || !password) {
@@ -35,7 +36,8 @@ const loginUsuario = async (_: unknown, args: LoginUsuarioArgs) => {
 
     try {
         const usuario = await prisma.usuario.findUnique({
-            where: { email }
+            where: { email },
+            include: { DatosPersonales: true },
         });
 
         if (!usuario) {
@@ -52,14 +54,6 @@ const loginUsuario = async (_: unknown, args: LoginUsuarioArgs) => {
         }
 
 
-        const datosPersonales = await prisma.datosPersonales.findUnique({
-            where: { usuarioId: usuario.id },
-            select: {
-                primerNombre: true,
-                primerApellido: true,
-            }
-        })
-
         const token = generarToken({ id: usuario.id });
 
         await crearBitacora({
@@ -71,7 +65,6 @@ const loginUsuario = async (_: unknown, args: LoginUsuarioArgs) => {
         const data = {
             ...usuario,
             token,
-            datosPersonales
         }
 
         console.log("loginUsuario: ", data)

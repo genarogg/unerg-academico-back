@@ -4,8 +4,9 @@ import {
     prisma,
     verificarToken,
     crearBitacora
-} from "src/server/functions";
-import { Rol, AccionesBitacora } from "@prisma/client";
+} from "@fn";
+
+import { Rol, AccionesBitacora, Prisma } from "@prisma/client";
 
 interface ObtenerUsuariosArgs {
     token: string;
@@ -15,6 +16,8 @@ interface ObtenerUsuariosArgs {
 const { SUPER, ADMIN, AREA, DOCENTE } = Rol
 
 const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
+
+
 
     const { token, filtro } = args;
 
@@ -33,32 +36,23 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
         if (!isAuthenticated) {
             return errorResponse({ message: "Token inválido o expirado" });
         }
-
+        console.log("obtenerUsuarios: ", args)
         // Si se proporciona un email específico, buscar solo ese usuario
         if (filtro) {
 
             const filtroCleaned = filtro.trim().toLowerCase();
 
             // Buscar por email o número de cédula
+            const condicionesOR: Prisma.UsuarioWhereInput[] = [{ email: filtroCleaned }];
+
+            if (!isNaN(Number(filtroCleaned))) {
+                condicionesOR.push({ DatosPersonales: { numeroCedula: Number(filtroCleaned) } });
+            }
+
             const usuario = await prisma.usuario.findFirst({
-                where: {
-                    OR: [
-                        { email: filtroCleaned },
-                        {
-                            DatosPersonales: {
-                                some: {
-                                    numeroCedula: isNaN(Number(filtroCleaned))
-                                        ? undefined
-                                        : Number(filtroCleaned)
-                                }
-                            }
-                        }
-                    ]
-                },
-                omit: { password: true },
-                include: {
-                    DatosPersonales: true
-                }
+                where: { OR: condicionesOR },
+                include: { DatosPersonales: true },
+                omit: { password: true }
             });
 
             if (!usuario) {
@@ -80,6 +74,8 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
                 accion: `Consulta de usuario(s) (${filtroCleaned ? filtroCleaned : 'todos'})`,
                 type: AccionesBitacora.OBTENER_USUARIO
             })
+
+            console.log("obtenerUsuarios: ", usuario)
 
             return successResponse({
                 message: "Usuario encontrado",
@@ -127,6 +123,7 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
             where: whereCondition,
             omit: { password: true },
             orderBy: { createdAt: 'desc' },
+            include: { DatosPersonales: true }
         });
 
         const totalUsuarios = await prisma.usuario.count();
@@ -136,6 +133,8 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
             accion: `Consulta de usuario(s)`,
             type: AccionesBitacora.OBTENER_USUARIO
         })
+
+        console.log("21obtenerUsuarios: ", usuarios)
 
         return successResponse({
             message: "Usuarios obtenidos correctamente",

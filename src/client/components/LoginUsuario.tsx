@@ -6,8 +6,8 @@ import { LOGIN_USUARIO } from '@/query'; // ajusta la ruta según tu estructura
 interface LoginUsuarioProps { }
 
 const LoginUsuario: React.FC<LoginUsuarioProps> = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('super@super.com');
+    const [password, setPassword] = useState('super');
     const [captchaToken, setCaptchaToken] = useState('');
     const [response, setResponse] = useState<any>(null);
 
