@@ -10,6 +10,11 @@ export default {
     viteFastify({ spa: true, useRelativePaths: true }),
     viteReact()
   ],
+  resolve: {
+    alias: {
+      "@": resolve(process.cwd(), 'src', 'client'),
+    }
+  },
   css: {
     postcss: {
       plugins: [

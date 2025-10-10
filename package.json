@@ -14,7 +14,8 @@
     "build": "npm run build:server && npm run build:client",
     "build:server": "npm run clean && tsc && tsc-alias -p tsconfig.json && npm run copy-views && node scripts/add-js-ext.js",
     "build:client": "rimraf dist/src/client && vite build",
-    "production": "npm run build && npm run start"
+    "production": "npm run build && npm run start",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "keywords": [],
   "author": "",
@@ -71,6 +72,10 @@
     "react-router-dom": "^7.8.2"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^6.0.0",
+    "@graphql-codegen/typescript": "^5.0.2",
+    "@graphql-codegen/typescript-operations": "^5.0.2",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.3",
     "@swc/cli": "^0.7.3",
     "@swc/core": "^1.11.22",
     "@types/body-parser": "^1.19.5",
