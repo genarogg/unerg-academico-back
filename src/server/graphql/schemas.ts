@@ -92,7 +92,8 @@ type NivelEstudio {
 type Meta {
   total: Int
   page: Int
-  limit: Int
+  limit: Int,
+  totalPages: Int
 }
 ##############################################
 # Tipos de respuesta y metadatos
@@ -237,7 +238,7 @@ type Query {
   hello: String!
   generatePDF(template: String!, data: String!): String  
   validarSesion(token: String!): UsuarioResponse!
-  getUsuarios(token: String!, filtro: String): UsuariosResponse!
+  getUsuarios(token: String!, filtro: String, page:Int, limit: Int): UsuariosResponse!
   getUsuario(token: String!): UsuarioResponse!
 
 

@@ -5,6 +5,12 @@ const GET_USUARIOS = gql`
     getUsuarios(token: $token, filtro: $filtro) {
       type
       message
+      meta {
+        limit
+        page
+        total
+        totalPages
+      }
       data {
         id
         email

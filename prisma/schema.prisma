@@ -25,9 +25,16 @@ model Usuario {
   Bitacora         Bitacora[]
   DatosPersonales  DatosPersonales?
   CedulaAutorizada CedulaAutorizada[]
+  Docente          Docente?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Docente {
+  id         Int     @id @default(autoincrement())
+  usuario_id Int?    @unique
+  Usuario    Usuario? @relation(fields: [usuario_id], references: [id])
 }
 
 model Bitacora {

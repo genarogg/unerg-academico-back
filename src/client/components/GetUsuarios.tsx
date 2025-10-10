@@ -8,7 +8,10 @@ interface GetUsuariosProps { }
 const GetUsuarios: React.FC<GetUsuariosProps> = () => {
   const [token, setToken] = useState('');
   const [filtro, setFiltro] = useState('');
-  const [response, setResponse] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+
+  const [response, setResponse] = useState<any>(null);
 
   const [getUsuarios, { loading, error }] = useLazyQuery(GET_USUARIOS);
 
@@ -17,37 +20,44 @@ const GetUsuarios: React.FC<GetUsuariosProps> = () => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       setToken(storedToken);
-      getUsuarios({ variables: { token: storedToken, filtro: '' } })
-        .then(({ data }: any) => {
-          console.log('Respuesta completa:', data);
-          if (data?.getUsuarios?.data) {
-            setResponse(data.getUsuarios.data);
-          } else {
-            console.warn('No se encontró la propiedad data dentro de getUsuarios');
-          }
-        })
-        .catch((err) => console.error('Error ejecutando query:', err));
+      fetchUsuarios(storedToken, filtro, page, limit);
     }
-  }, [getUsuarios]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, limit]);
+
+  const fetchUsuarios = async (
+    tokenValue: string,
+    filtroValue: string,
+    pageValue: number,
+    limitValue: number
+  ) => {
+    try {
+      const { data }: any = await getUsuarios({
+        variables: {
+          token: tokenValue,
+          filtro: filtroValue,
+          page: pageValue,
+          limit: limitValue,
+        },
+      });
+
+      console.log('Respuesta completa:', data);
+
+      if (data?.getUsuarios) {
+        setResponse(data.getUsuarios); // 👈 ahora guardamos todo el objeto
+      } else {
+        setResponse(null);
+      }
+    } catch (err) {
+      console.error('Error ejecutando query:', err);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) return;
-
     localStorage.setItem('token', token);
-
-    try {
-      const { data }: any = await getUsuarios({ variables: { token, filtro } });
-      console.log('Respuesta manual:', data);
-      if (data?.getUsuarios?.data) {
-        setResponse(data.getUsuarios.data);
-      } else {
-        setResponse([]);
-        console.warn('No se encontró la propiedad data dentro de getUsuarios');
-      }
-    } catch (err) {
-      console.error('Error en handleSubmit:', err);
-    }
+    await fetchUsuarios(token, filtro, page, limit);
   };
 
   return (
@@ -81,6 +91,29 @@ const GetUsuarios: React.FC<GetUsuariosProps> = () => {
           />
         </div>
 
+        <div className="flex gap-4">
+          <div className="flex-1">
+            <label className="block mb-1 font-medium text-gray-700">Página:</label>
+            <input
+              type="number"
+              value={page}
+              onChange={(e) => setPage(Number(e.target.value))}
+              min={1}
+              className="w-full border rounded px-3 py-2 focus:ring focus:ring-blue-200"
+            />
+          </div>
+          <div className="flex-1">
+            <label className="block mb-1 font-medium text-gray-700">Límite:</label>
+            <input
+              type="number"
+              value={limit}
+              onChange={(e) => setLimit(Number(e.target.value))}
+              min={1}
+              className="w-full border rounded px-3 py-2 focus:ring focus:ring-blue-200"
+            />
+          </div>
+        </div>
+
         <button
           type="submit"
           disabled={loading}
@@ -96,13 +129,13 @@ const GetUsuarios: React.FC<GetUsuariosProps> = () => {
 
       {/* Resultado */}
       <div className="w-1/2 p-6 border rounded-lg shadow-md bg-gray-50">
-        <h2 className="text-xl font-bold mb-4 text-gray-800">Respuesta</h2>
-        {response.length > 0 ? (
-          <pre className="bg-white p-4 rounded shadow-inner text-sm overflow-auto max-h-[500px] text-gray-800">
+        <h2 className="text-xl font-bold mb-4 text-gray-800">Respuesta completa</h2>
+        {response ? (
+          <pre className="bg-white p-4 rounded shadow-inner text-sm overflow-auto max-h-[600px] text-gray-800">
             {JSON.stringify(response, null, 2)}
           </pre>
         ) : (
-          <p className="text-gray-500">Aquí aparecerá la información de los usuarios...</p>
+          <p className="text-gray-500">Aquí aparecerá la respuesta completa del servidor...</p>
         )}
       </div>
     </div>

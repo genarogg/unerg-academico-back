@@ -11,22 +11,19 @@ import { Rol, AccionesBitacora, Prisma } from "@prisma/client";
 interface ObtenerUsuariosArgs {
     token: string;
     filtro?: string;
+    page?: number;  
+    limit?: number; 
 }
 
-const { SUPER, ADMIN, AREA, DOCENTE } = Rol
+const { SUPER, ADMIN, AREA, DOCENTE } = Rol;
 
 const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
-
-
-
-    const { token, filtro } = args;
-
+    const { token, filtro, page = 1, limit = 20 } = args;
     if (!token) {
         return errorResponse({ message: "Token requerido" });
     }
 
     try {
-        // Verificar token y obtener usuario autenticado
         const {
             isAuthenticated,
             rol: rolUserSolicitante,
@@ -36,15 +33,12 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
         if (!isAuthenticated) {
             return errorResponse({ message: "Token inválido o expirado" });
         }
-        console.log("obtenerUsuarios: ", args)
-        // Si se proporciona un email específico, buscar solo ese usuario
-        if (filtro) {
 
+        // Si hay filtro, buscar un usuario específico
+        if (filtro) {
             const filtroCleaned = filtro.trim().toLowerCase();
 
-            // Buscar por email o número de cédula
             const condicionesOR: Prisma.UsuarioWhereInput[] = [{ email: filtroCleaned }];
-
             if (!isNaN(Number(filtroCleaned))) {
                 condicionesOR.push({ DatosPersonales: { numeroCedula: Number(filtroCleaned) } });
             }
@@ -59,7 +53,6 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
                 return errorResponse({ message: "Usuario no encontrado" });
             }
 
-            // Verificar permisos para ver este usuario específico
             const puedeVerUsuario = verificarPermisosUsuario({
                 rolSolicitante: rolUserSolicitante,
                 rolObjetivo: usuario.rol
@@ -71,11 +64,9 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
 
             crearBitacora({
                 usuarioId: usuarioIdSolicitante,
-                accion: `Consulta de usuario(s) (${filtroCleaned ? filtroCleaned : 'todos'})`,
+                accion: `Consulta de usuario específico (${filtroCleaned})`,
                 type: AccionesBitacora.OBTENER_USUARIO
-            })
-
-            console.log("obtenerUsuarios: ", usuario)
+            });
 
             return successResponse({
                 message: "Usuario encontrado",
@@ -83,65 +74,53 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
             });
         }
 
-        // Determinar qué usuarios puede ver según su rol
+        // Filtro según rol
         let whereCondition: any = {};
 
         switch (rolUserSolicitante) {
             case SUPER:
-                // Los ADMIN pueden ver todos los ADMIN y ASISTENTE
-                whereCondition = {
-                    rol: {
-                        in: [SUPER, ADMIN, AREA, DOCENTE]
-                    }
-                };
+                whereCondition = { rol: { in: [SUPER, ADMIN, AREA, DOCENTE] } };
                 break;
-
             case ADMIN:
-                // Los ASISTENTE pueden ver todos los ASISTENTE
-                whereCondition = {
-                    rol: {
-                        in: [ADMIN, AREA, DOCENTE]
-                    }
-                };
+                whereCondition = { rol: { in: [ADMIN, AREA, DOCENTE] } };
                 break;
-
             case AREA:
-                // Los USER pueden ver todos los USER
-                whereCondition = {
-                    rol: {
-                        in: [AREA, DOCENTE]
-                    }
-                };
+                whereCondition = { rol: { in: [AREA, DOCENTE] } };
                 break;
-
             default:
                 return errorResponse({ message: "Rol no válido" });
         }
 
-        // Buscar usuarios según los permisos
-        const usuarios = await prisma.usuario.findMany({
-            where: whereCondition,
-            omit: { password: true },
-            orderBy: { createdAt: 'desc' },
-            include: { DatosPersonales: true }
-        });
+        // 📄 Paginación
+        const skip = (page - 1) * limit;
+        const take = limit;
 
-        const totalUsuarios = await prisma.usuario.count();
+        const [usuarios, totalUsuarios] = await Promise.all([
+            prisma.usuario.findMany({
+                where: whereCondition,
+                omit: { password: true },
+                orderBy: { createdAt: "desc" },
+                include: { DatosPersonales: true },
+                skip,
+                take    // 👈 trae solo el límite definido
+            }),
+            prisma.usuario.count({ where: whereCondition })
+        ]);
 
         crearBitacora({
             usuarioId: usuarioIdSolicitante,
-            accion: `Consulta de usuario(s)`,
+            accion: `Consulta de usuarios - página ${page}`,
             type: AccionesBitacora.OBTENER_USUARIO
-        })
-
-        console.log("21obtenerUsuarios: ", usuarios)
+        });
 
         return successResponse({
             message: "Usuarios obtenidos correctamente",
             data: usuarios,
             meta: {
-                total: usuarios.length,
-                page: totalUsuarios,
+                total: totalUsuarios,  
+                page,                   
+                totalPages: Math.ceil(totalUsuarios / limit), 
+                perPage: limit
             }
         });
 
@@ -151,7 +130,7 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
     }
 };
 
-// Función auxiliar para verificar permisos sobre un usuario específico
+// 🔒 Verificación de permisos
 const verificarPermisosUsuario = ({
     rolSolicitante,
     rolObjetivo
@@ -175,5 +154,6 @@ const verificarPermisosUsuario = ({
             return false;
     }
 };
+
 
 export default obtenerUsuarios;
