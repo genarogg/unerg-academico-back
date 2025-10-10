@@ -4,14 +4,21 @@ import Demo from './Demo'
 import RegistrarUsuario from './RegistrarUsuario'
 import LoginUsuario from './LoginUsuario'
 import Titulo from './Titulo'
+import TokenManager from "./TokenManager"
 
 interface IndexProps { }
 
 const Index: React.FC<IndexProps> = () => {
     return (
         <div className="space-y-10">
+
+
+
             <Titulo texto="Ejemplo de Query: Demo" />
             <Demo />
+
+            <Titulo texto="Token Local" colorFondo="bg-gray-800" />
+            <TokenManager />
 
             <Titulo texto="Registro de Usuario" />
             <RegistrarUsuario />
