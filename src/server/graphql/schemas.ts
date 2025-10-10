@@ -18,7 +18,7 @@ type Usuario {
   token: String
   createdAt: Date!
   updatedAt: Date!
-  DatosPersonales: [DatosPersonales]
+  datosPersonales: DatosPersonales
   Bitacora: [Bitacora]
 }
 

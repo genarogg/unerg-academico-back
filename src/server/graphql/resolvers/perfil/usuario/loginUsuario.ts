@@ -74,6 +74,8 @@ const loginUsuario = async (_: unknown, args: LoginUsuarioArgs) => {
             datosPersonales
         }
 
+        console.log("loginUsuario: ", data)
+
         return successResponse({
             message: "Inicio de sesión exitoso",
             data

@@ -67,7 +67,7 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
 
         // Si hay token, verificar permisos para asignar rol
         if (token && rolaAsignado) {
-            const { isAuthenticated, rol: rolUser , id: usuarioId} = await verificarToken(token);
+            const { isAuthenticated, rol: rolUser, id: usuarioId } = await verificarToken(token);
 
             if (!isAuthenticated) {
                 return errorResponse({ message: "Token inválido o expirado" });
@@ -132,6 +132,8 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
             ...nuevoUsuario,
             token: tokenGenerado,
         }
+
+        console.log("registerUsuario: ", data)
 
         return successResponse({
             message: "Usuario registrado",
