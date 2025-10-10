@@ -23,7 +23,7 @@ model Usuario {
   rol      Rol    @default(DOCENTE)
 
   Bitacora         Bitacora[]
-  DatosPersonales  DatosPersonales[]
+  DatosPersonales  DatosPersonales?
   CedulaAutorizada CedulaAutorizada[]
 
   createdAt DateTime @default(now())

@@ -5,6 +5,7 @@ import RegistrarUsuario from './RegistrarUsuario'
 import LoginUsuario from './LoginUsuario'
 import Titulo from './Titulo'
 import TokenManager from "./TokenManager"
+import GetUsuario from './GetUsuario'
 
 interface IndexProps { }
 
@@ -25,6 +26,9 @@ const Index: React.FC<IndexProps> = () => {
 
             <Titulo texto="Login de Usuario" />
             <LoginUsuario />
+
+            <Titulo texto="get usuario" />
+            <GetUsuario />
         </div>
     );
 }

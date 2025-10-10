@@ -5,13 +5,16 @@ import resetPassWithToken from "./resetPassWithToken";
 
 import validarSesion from "./sesionValidarSesion";
 import getUsuarios from "./getUsuarios";
+import getUsuario from "./getUsuario";
+
 
 const resolvers = {
     Query: {
         validarSesion,
-        getUsuarios
+        getUsuarios,
+        getUsuario
     },
-    
+
     Mutation: {
         registerUsuario,
         loginUsuario,

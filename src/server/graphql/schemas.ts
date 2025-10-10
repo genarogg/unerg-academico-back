@@ -18,7 +18,7 @@ type Usuario {
   token: String
   createdAt: Date!
   updatedAt: Date!
-  datosPersonales: DatosPersonales
+  DatosPersonales: DatosPersonales
   Bitacora: [Bitacora]
 }
 
@@ -56,7 +56,7 @@ type Direccion {
   zonaUrbanizacionId: Int!
   calle: String!
   numeroCasa: String!
-  zonaUrbanizacion: ZonaUrbanizacion!
+  ZonaUrbanizacion: ZonaUrbanizacion!
 }
 
 type ZonaUrbanizacion {
@@ -236,6 +236,8 @@ type Query {
   generatePDF(template: String!, data: String!): String  
   validarSesion(token: String!): UsuarioResponse!
   getUsuarios(token: String!, filtro: String): UsuariosResponse!
+  getUsuario(token: String!): UsuarioResponse!
+
 
   obtenerEstados(
     token: String!

@@ -1,10 +1,11 @@
-import { Rol, AccionesBitacora, Sex, Vigencia } from '@prisma/client';
+import {
+    Rol, AccionesBitacora, Sex, Vigencia,
+    EstatusDocumento, NivelAcademico, TipoStudio
+} from '@prisma/client';
 
 const createEnumString = (enumObj: object) => {
     const keys = Object.keys(enumObj);
-    if (keys.length === 0) {
-        return 'EMPTY_ENUM';
-    }
+    if (keys.length === 0) return 'EMPTY_ENUM';
     return keys.map(key => `${key}`).join('\n        ');
 };
 
@@ -15,11 +16,20 @@ const enums = /* GraphQL */`
     enum AccionesBitacora {
         ${createEnumString(AccionesBitacora)}
     }
-     enum Sex {
+    enum Sex {
         ${createEnumString(Sex)}
     }
-     enum Vigencia {
+    enum Vigencia {
         ${createEnumString(Vigencia)}
+    }
+    enum EstatusDocumento {
+        ${createEnumString(EstatusDocumento)}
+    }
+    enum NivelAcademico {
+        ${createEnumString(NivelAcademico)}
+    }
+    enum TipoStudio {
+        ${createEnumString(TipoStudio)}
     }
 `;
 

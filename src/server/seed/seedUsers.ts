@@ -1,5 +1,5 @@
 import { encriptarContrasena, prisma } from "src/server/functions";
-import { Rol, Sex, Vigencia } from "@prisma/client";
+import { Rol, Sex } from "@prisma/client";
 
 // Función para generar un número aleatorio dentro de un rango
 const randomInt = (min: number, max: number) =>
