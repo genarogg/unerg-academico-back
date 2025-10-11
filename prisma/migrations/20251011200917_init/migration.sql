@@ -151,9 +151,44 @@ CREATE TABLE "Estudio" (
     "imgDocumento" TEXT NOT NULL,
     "notas" TEXT NOT NULL,
     "estatus" TEXT NOT NULL DEFAULT 'PENDIENTE',
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
     CONSTRAINT "Estudio_expedienteId_fkey" FOREIGN KEY ("expedienteId") REFERENCES "Expediente" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Estudio_nivelEstudioId_fkey" FOREIGN KEY ("nivelEstudioId") REFERENCES "NivelEstudio" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Estudio_casaEstudioId_fkey" FOREIGN KEY ("casaEstudioId") REFERENCES "CasaEstudio" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Campus" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "zona_urbanizacion_id" INTEGER NOT NULL,
+    "tipo" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Area" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "nombre" TEXT NOT NULL,
+    "campus_id" INTEGER NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "Area_campus_id_fkey" FOREIGN KEY ("campus_id") REFERENCES "Campus" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Programa" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "area_id" INTEGER NOT NULL,
+    "nombre" TEXT NOT NULL,
+    "nivelAcademico" TEXT NOT NULL,
+    "modalidad" TEXT NOT NULL,
+    "duracion_anios" INTEGER NOT NULL,
+    "vigencia" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "Programa_area_id_fkey" FOREIGN KEY ("area_id") REFERENCES "Area" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateIndex

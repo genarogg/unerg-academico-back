@@ -4,7 +4,9 @@ import seedCedulasAutorizadas from "./seedCedulasAutorizadas"
 import seedZonasUrbanizaciones from "./seedZonasUrbanizaciones"
 import seedTiposDocumento from "./tiposDeDocumentos"
 import agregarDirecciones from "./seedDirecciones";
-
+import seedCampus from "./seedCampus"
+import seedAreas from "./seedAreas"
+import seedProgramas from "./seedProgramas"
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -21,20 +23,28 @@ const seed = async () => {
         }
 
         await seedUsers();
-        await delay(1000);
+        await delay(100);
 
         await seedCedulasAutorizadas()
-        await delay(1000);
+        await delay(100);
 
         await seedZonasUrbanizaciones()
-        await delay(1000);
+        await delay(100);
 
         await seedTiposDocumento()
-        await delay(1000);
+        await delay(100);
 
         await agregarDirecciones()
-        await delay(1000);
+        await delay(100);
 
+        await seedCampus()
+        await delay(100);
+
+        await seedAreas()
+        await delay(100);
+
+        await seedProgramas()
+        await delay(100);
 
         log.info("Usuarios creados exitosamente.");
     } catch (error) {
