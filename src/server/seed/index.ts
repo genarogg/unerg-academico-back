@@ -3,6 +3,8 @@ import seedUsers from "./seedUsers";
 import seedCedulasAutorizadas from "./seedCedulasAutorizadas"
 import seedZonasUrbanizaciones from "./seedZonasUrbanizaciones"
 import seedTiposDocumento from "./tiposDeDocumentos"
+import agregarDirecciones from "./seedDirecciones";
+
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -29,6 +31,10 @@ const seed = async () => {
 
         await seedTiposDocumento()
         await delay(1000);
+
+        await agregarDirecciones()
+        await delay(1000);
+
 
         log.info("Usuarios creados exitosamente.");
     } catch (error) {

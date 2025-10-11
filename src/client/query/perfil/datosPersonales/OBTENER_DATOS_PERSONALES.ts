@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
-export const OBTENER_DATOS_PERSONALES = gql`
+const OBTENER_DATOS_PERSONALES = gql`
   query ObtenerDatosPersonales($token: String!) {
     obtenerDatosPersonales(token: $token) {
       type
@@ -17,8 +17,25 @@ export const OBTENER_DATOS_PERSONALES = gql`
         numeroCedula
         numeroBancario
         telefono
-        
+        direccion {
+          id
+          calle
+          numeroCasa
+          zonaUrbanizacion {
+            id
+            codigoPostal
+            zona
+            vigencia
+            estadoPais {
+              id
+              estado
+              vigencia
+            }
+          }
+        }
       }
     }
   }
 `;
+
+export default OBTENER_DATOS_PERSONALES;

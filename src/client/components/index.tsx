@@ -16,6 +16,9 @@ import CrearZonaUrbanizacion from './CrearZonaUrbanizacion'
 import GetZonasUrbanizacion from './GetZonasUrbanizacion'
 import ActualizarZonaUrbanizacion from './ActualizarZonaUrbanizacion'
 
+// import ActualizarDatosPersonales from './ActualizarDatosPersonales'
+
+import VerDatosPersonales from './VerDatosPersonales'
 import ActualizarDatosPersonales from './ActualizarDatosPersonales'
 
 
@@ -25,8 +28,8 @@ const Index: React.FC<IndexProps> = () => {
     return (
         <div className="space-y-10">
 
-            <Titulo texto="Ejemplo de Query: Demo" />
-            <Demo />
+            {/* <Titulo texto="Ejemplo de Query: Demo" />
+            <Demo /> */}
 {/* 
             <Titulo texto="Token Local" colorFondo="bg-gray-800" />
             <TokenManager />
@@ -40,8 +43,11 @@ const Index: React.FC<IndexProps> = () => {
             <Titulo texto="Get Usuario" />
             <GetUsuario /> */}
 
+            {/* <Titulo texto="Ver Datos Personales" />
+            <VerDatosPersonales />
+
             <Titulo texto="Actualizar Datos Personales" />
-            <ActualizarDatosPersonales />
+            <ActualizarDatosPersonales /> */}
 {/* 
             <Titulo texto="Get Usuarios" />
             <GetUsuarios />

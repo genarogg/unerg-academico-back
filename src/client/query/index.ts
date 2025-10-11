@@ -12,7 +12,7 @@ import { OBTENER_ZONAS_URBANIZACION } from "./geografia/zonaUrbanizacion/OBTENER
 import { ACTUALIZAR_ZONA_URBANIZACION } from "./geografia/zonaUrbanizacion/ACTUALIZAR_ZONA_URBANIZACION"
 
 import { ACTUALIZAR_DATOS_PERSONALES } from "./perfil/datosPersonales/ACTUALIZAR_DATOS_PERSONALES"
-import { OBTENER_DATOS_PERSONALES } from "./perfil/datosPersonales/OBTENER_DATOS_PERSONALES"
+import OBTENER_DATOS_PERSONALES from "./perfil/datosPersonales/OBTENER_DATOS_PERSONALES"
 
 
 export {

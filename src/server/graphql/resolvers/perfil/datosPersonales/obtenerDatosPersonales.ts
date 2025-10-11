@@ -14,9 +14,6 @@ interface ObtenerDatosPersonalesArgs {
 const obtenerDatosPersonales = async (_: unknown, args: ObtenerDatosPersonalesArgs) => {
     const { token } = args;
 
-    console.log("args", args);
-
-
     if (!token) {
         return errorResponse({ message: "Token requerido" });
     }

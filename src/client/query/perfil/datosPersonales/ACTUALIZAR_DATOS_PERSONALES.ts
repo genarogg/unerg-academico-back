@@ -51,14 +51,11 @@ export const ACTUALIZAR_DATOS_PERSONALES = gql`
           id
           calle
           numeroCasa
-          ZonaUrbanizacion {
+          zonaUrbanizacion {
             id
-            zona
             codigoPostal
-            estadoPais {
-              id
-              estado
-            }
+            zona
+            vigencia
           }
         }
       }

@@ -49,7 +49,7 @@ type DatosPersonales {
   numeroBancario: String
   telefono: String
   direccion: Direccion
-  Expediente: [Expediente]
+  expediente: Expediente
   createdAt: Date!
   updatedAt: Date!
 }
@@ -59,7 +59,7 @@ type Direccion {
   zonaUrbanizacionId: Int!
   calle: String!
   numeroCasa: String!
-  ZonaUrbanizacion: ZonaUrbanizacion!
+  zonaUrbanizacion: ZonaUrbanizacion!
 }
 
 type ZonaUrbanizacion {
