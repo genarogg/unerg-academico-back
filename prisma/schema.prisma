@@ -32,8 +32,8 @@ model Usuario {
 }
 
 model Docente {
-  id         Int     @id @default(autoincrement())
-  usuario_id Int?    @unique
+  id         Int      @id @default(autoincrement())
+  usuario_id Int?     @unique
   Usuario    Usuario? @relation(fields: [usuario_id], references: [id])
 }
 
@@ -197,6 +197,47 @@ model Estudio {
   expediente   Expediente   @relation(fields: [expedienteId], references: [id])
   nivelEstudio NivelEstudio @relation(fields: [nivelEstudioId], references: [id])
   casaEstudio  CasaEstudio  @relation(fields: [casaEstudioId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Campus {
+  id                   Int        @id @default(autoincrement())
+  zona_urbanizacion_id Int
+  tipo                 TipoCampus
+
+  Area Area[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Area {
+  id        Int    @id @default(autoincrement())
+  nombre    String
+  campus_id Int
+
+  Campus   Campus     @relation(fields: [campus_id], references: [id])
+  Programa Programa[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Programa {
+  id             Int            @id @default(autoincrement())
+  area_id        Int
+  nombre         String
+  nivelAcademico NivelAcademico
+  modalidad      Modalidad
+  duracion_anios Int
+  vigencia       Vigencia
+
+  Area Area @relation(fields: [area_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum AccionesBitacora {
@@ -214,7 +255,6 @@ enum AccionesBitacora {
   //zona
   REGISTRO_ZONA_URBANIZACION
   ACTUALIZACION_ZONA_URBANIZACION
-
 
   //estudio
   REGISTRO_ESTUDIO
@@ -259,4 +299,16 @@ enum NivelAcademico {
 enum TipoStudio {
   PREGRADO
   POSTGRADO
+}
+
+enum TipoCampus {
+  SEDE
+  NUCLEO
+  AULAMOVIL
+}
+
+enum Modalidad {
+  ANUAL
+  SEMESTRAL
+  TRIMESTRAL
 }
