@@ -5,17 +5,17 @@ import {
     verificarToken,
     crearBitacora
 } from "@fn";
-import { Rol, AccionesBitacora, Prisma } from "@prisma/client";
+import { Rol, AccionesBitacora } from "@prisma/client";
 
-interface ObtenerUsuarioArgs {
+interface getUsuarioArgs {
     token: string;
-    filtro?: string;
+    id?: number;
 }
 
 const { SUPER, ADMIN, AREA, DOCENTE } = Rol;
 
-const obtenerUsuario = async (_: unknown, args: ObtenerUsuarioArgs) => {
-    const { token, filtro } = args;
+const getUsuario = async (_: unknown, args: getUsuarioArgs) => {
+    const { token, id } = args;
 
     if (!token) {
         return errorResponse({ message: "Token requerido" });
@@ -33,23 +33,11 @@ const obtenerUsuario = async (_: unknown, args: ObtenerUsuarioArgs) => {
             return errorResponse({ message: "Token inválido o expirado" });
         }
 
-        // 🔍 Validar filtro
-        if (!filtro || filtro.trim() === "") {
-            return errorResponse({ message: "Debe proporcionar un filtro (email o número de cédula)" });
-        }
+        // 🧠 Si no se pasa id, devolver el usuario del token
+        const idObjetivo = id ?? usuarioIdToken;
 
-        const filtroCleaned = filtro.trim().toLowerCase();
-
-        // 🔎 Buscar por email o número de cédula
-        const condicionesOR: Prisma.UsuarioWhereInput[] = [{ email: filtroCleaned }];
-        if (!isNaN(Number(filtroCleaned))) {
-            condicionesOR.push({
-                DatosPersonales: { numeroCedula: Number(filtroCleaned) }
-            });
-        }
-
-        const usuario = await prisma.usuario.findFirst({
-            where: { OR: condicionesOR },
+        const usuario = await prisma.usuario.findUnique({
+            where: { id: idObjetivo },
             include: { DatosPersonales: true },
             omit: { password: true }
         });
@@ -58,20 +46,25 @@ const obtenerUsuario = async (_: unknown, args: ObtenerUsuarioArgs) => {
             return errorResponse({ message: "Usuario no encontrado" });
         }
 
-        // 🧩 Verificar permisos
-        const puedeVerUsuario = verificarPermisosUsuario({
-            rolSolicitante,
-            rolObjetivo: usuario.rol
-        });
+        // 🔐 Verificar permisos si intenta ver a otro usuario
+        if (usuario.id !== usuarioIdToken) {
+            const puedeVerUsuario = verificarPermisosUsuario({
+                rolSolicitante,
+                rolObjetivo: usuario.rol
+            });
 
-        if (!puedeVerUsuario && usuario.id !== usuarioIdToken) {
-            return errorResponse({ message: "No tienes permisos para ver este usuario" });
+            if (!puedeVerUsuario) {
+                return errorResponse({ message: "No tienes permisos para ver este usuario" });
+            }
         }
 
         // 🪶 Registrar en bitácora
         await crearBitacora({
             usuarioId: usuarioIdToken,
-            accion: `Consulta de usuario (${filtroCleaned}) por ${emailToken}`,
+            accion:
+                usuario.id === usuarioIdToken
+                    ? `Consulta de su propia información por ${emailToken}`
+                    : `Consulta de usuario (${usuario.email}) por ${emailToken}`,
             type: AccionesBitacora.OBTENER_USUARIO
         });
 
@@ -102,10 +95,9 @@ const verificarPermisosUsuario = ({
         case AREA:
             return ([AREA, DOCENTE] as Rol[]).includes(rolObjetivo);
         case DOCENTE:
-            return false;
         default:
             return false;
     }
 };
 
-export default obtenerUsuario;
+export default getUsuario

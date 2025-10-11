@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 const GET_USUARIO = gql`
-  query GetUsuario($token: String!, $filtro: String) {
-    getUsuario(token: $token, filtro: $filtro) {
+  query GetUsuario($token: String!, $id: Int) {
+    getUsuario(token: $token, id: $id) {
       type
       message
       data {

@@ -1,4 +1,5 @@
 import crearDatosPersonales from "./crearDatosPersonales";
+import actualizarDatosPersonales from "./actualizarDatosPersonales";
 
 const resolvers = {
     Query: {
@@ -6,7 +7,8 @@ const resolvers = {
     },
 
     Mutation: {
-        crearDatosPersonales
+        crearDatosPersonales,
+        actualizarDatosPersonales,
     },
 };
 

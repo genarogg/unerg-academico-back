@@ -7,7 +7,7 @@ interface GetUsuarioProps { }
 
 const GetUsuario: React.FC<GetUsuarioProps> = () => {
     const [token, setToken] = useState('');
-    const [filtro, setFiltro] = useState(''); // 👈 nuevo estado para filtro
+    const [id, setId] = useState<number | ''>(''); // 👈 nuevo estado para id
     const [response, setResponse] = useState<any>(null);
 
     const [getUsuario, { loading, error }] = useLazyQuery(GET_USUARIO);
@@ -33,7 +33,10 @@ const GetUsuario: React.FC<GetUsuarioProps> = () => {
 
         try {
             const { data }: any = await getUsuario({
-                variables: { token, filtro: filtro || undefined } // 👈 pasar filtro si existe
+                variables: {
+                    token,
+                    id: id ? Number(id) : undefined // 👈 pasar id si existe
+                }
             });
             setResponse(data.getUsuario);
         } catch (err) {
@@ -62,16 +65,16 @@ const GetUsuario: React.FC<GetUsuarioProps> = () => {
                     />
                 </div>
 
-                {/* Input Filtro */}
+                {/* Input ID */}
                 <div>
                     <label className="block mb-1 font-medium text-gray-700">
-                        Filtro (email y cédula):
+                        ID del Usuario (opcional):
                     </label>
                     <input
-                        type="text"
-                        value={filtro}
-                        onChange={(e) => setFiltro(e.target.value)}
-                        placeholder="Ingresa email o número de cédula"
+                        type="number"
+                        value={id}
+                        onChange={(e) => setId(e.target.value ? Number(e.target.value) : '')}
+                        placeholder="Ingresa un ID para consultar otro usuario"
                         className="w-full border rounded px-3 py-2 focus:ring focus:ring-blue-200"
                     />
                 </div>
@@ -97,7 +100,9 @@ const GetUsuario: React.FC<GetUsuarioProps> = () => {
                         {JSON.stringify(response, null, 2)}
                     </pre>
                 ) : (
-                    <p className="text-gray-500">Aquí aparecerá la información del usuario...</p>
+                    <p className="text-gray-500">
+                        Aquí aparecerá la información del usuario...
+                    </p>
                 )}
             </div>
         </div>

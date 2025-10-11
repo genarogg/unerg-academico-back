@@ -3,6 +3,16 @@ import REGISTER_USUARIO from "./perfil/usuario/REGISTER_USUARIO"
 import LOGIN_USUARIO from "./perfil/usuario/LOGIN_USUARIO"
 import GET_USUARIO from "./perfil/usuario/GET_USUARIO"
 import GET_USUARIOS from "./perfil/usuario/GET_USUARIOS"
+import CREAR_ESTADO_PAIS from "./geografia/estadoPais/CREAR_ESTADO_PAIS"
+import OBTENER_ESTADOS from "./geografia/estadoPais/OBTENER_ESTADOS"
+import ACTUALIZAR_ESTADO_PAIS from "./geografia/estadoPais/ACTUALIZAR_ESTADO_PAIS"
+
+import { CREAR_ZONA_URBANIZACION } from "./geografia/zonaUrbanizacion/CREAR_ZONA_URBANIZACION"
+import { OBTENER_ZONAS_URBANIZACION } from "./geografia/zonaUrbanizacion/OBTENER_ZONAS_URBANIZACION"
+import { ACTUALIZAR_ZONA_URBANIZACION } from "./geografia/zonaUrbanizacion/ACTUALIZAR_ZONA_URBANIZACION"
+
+import { ACTUALIZAR_DATOS_PERSONALES } from "./perfil/datosPersonales/ACTUALIZAR_DATOS_PERSONALES"
+import { OBTENER_DATOS_PERSONALES } from "./perfil/datosPersonales/OBTENER_DATOS_PERSONALES"
 
 
 export {
@@ -11,6 +21,17 @@ export {
     REGISTER_USUARIO,
     LOGIN_USUARIO,
     GET_USUARIO,
-    GET_USUARIOS
+    GET_USUARIOS,
 
+    CREAR_ESTADO_PAIS,
+    OBTENER_ESTADOS,
+    ACTUALIZAR_ESTADO_PAIS,
+
+    CREAR_ZONA_URBANIZACION,
+    OBTENER_ZONAS_URBANIZACION,
+    ACTUALIZAR_ZONA_URBANIZACION,
+
+
+    ACTUALIZAR_DATOS_PERSONALES,
+    OBTENER_DATOS_PERSONALES
 }

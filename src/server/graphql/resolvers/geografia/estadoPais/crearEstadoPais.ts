@@ -13,6 +13,7 @@ interface CrearEstadoPaisArgs {
 }
 
 const crearEstadoPais = async (_: unknown, args: CrearEstadoPaisArgs) => {
+
     const { token, estado } = args;
 
     // Validar campos obligatorios
@@ -23,6 +24,7 @@ const crearEstadoPais = async (_: unknown, args: CrearEstadoPaisArgs) => {
     try {
         // Verificar token
         const { isAuthenticated, id: usuarioId, rol } = await verificarToken(token);
+
         if (!isAuthenticated) {
             return errorResponse({ message: "Token inválido o expirado" });
         }

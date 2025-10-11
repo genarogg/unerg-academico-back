@@ -9,6 +9,13 @@ CREATE TABLE "Usuario" (
 );
 
 -- CreateTable
+CREATE TABLE "Docente" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "usuario_id" INTEGER,
+    CONSTRAINT "Docente_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "Usuario" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+-- CreateTable
 CREATE TABLE "Bitacora" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "accion" TEXT NOT NULL,
@@ -151,6 +158,9 @@ CREATE TABLE "Estudio" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Usuario_email_key" ON "Usuario"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Docente_usuario_id_key" ON "Docente"("usuario_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "DatosPersonales_usuarioId_key" ON "DatosPersonales"("usuarioId");

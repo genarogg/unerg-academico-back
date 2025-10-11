@@ -36,7 +36,7 @@ const TokenManager: React.FC<TokenManagerProps> = ({ storageKey = 'token' }) => 
     const handleCopy = async () => {
         if (token) {
             await navigator.clipboard.writeText(token);
-            alert('✅ Token copiado al portapapeles');
+            
         }
     };
 

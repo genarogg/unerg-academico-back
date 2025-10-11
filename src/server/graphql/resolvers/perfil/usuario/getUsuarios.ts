@@ -8,20 +8,22 @@ import {
 
 import { Rol, AccionesBitacora, Prisma } from "@prisma/client";
 
-interface ObtenerUsuariosArgs {
+interface getUsuariosArgs {
     token: string;
     filtro?: string;
-    page?: number;  
-    limit?: number; 
+    page?: number;
+    limit?: number;
 }
 
 const { SUPER, ADMIN, AREA, DOCENTE } = Rol;
 
-const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
+const getUsuarios = async (_: unknown, args: getUsuariosArgs) => {
     const { token, filtro, page = 1, limit = 20 } = args;
     if (!token) {
         return errorResponse({ message: "Token requerido" });
     }
+
+
 
     try {
         const {
@@ -34,43 +36,65 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
             return errorResponse({ message: "Token inválido o expirado" });
         }
 
-        // Si hay filtro, buscar un usuario específico
+        // Si hay filtro, buscar usuarios que coincidan
         if (filtro) {
             const filtroCleaned = filtro.trim().toLowerCase();
 
-            const condicionesOR: Prisma.UsuarioWhereInput[] = [{ email: filtroCleaned }];
+            console.log("filtroCleaned: ", filtroCleaned)
+
+            const condicionesOR: Prisma.UsuarioWhereInput[] = [
+                {
+                    email: {
+                        contains: filtroCleaned,
+                    }
+                }
+            ];
+
             if (!isNaN(Number(filtroCleaned))) {
-                condicionesOR.push({ DatosPersonales: { numeroCedula: Number(filtroCleaned) } });
+                condicionesOR.push({
+                    DatosPersonales: {
+                        numeroCedula: Number(filtroCleaned)
+                    }
+                });
             }
 
-            const usuario = await prisma.usuario.findFirst({
+            const usuarios = await prisma.usuario.findMany({
                 where: { OR: condicionesOR },
                 include: { DatosPersonales: true },
                 omit: { password: true }
             });
 
-            if (!usuario) {
-                return errorResponse({ message: "Usuario no encontrado" });
+
+            console.log("usuarios: ", usuarios)
+
+
+            if (usuarios.length === 0) {
+                return errorResponse({ message: "No se encontraron usuarios" });
             }
 
-            const puedeVerUsuario = verificarPermisosUsuario({
-                rolSolicitante: rolUserSolicitante,
-                rolObjetivo: usuario.rol
-            });
+            // Verificar permisos para cada usuario encontrado
+            const usuariosFiltrados = usuarios.filter(usuario =>
+                verificarPermisosUsuario({
+                    rolSolicitante: rolUserSolicitante,
+                    rolObjetivo: usuario.rol
+                })
+            );
 
-            if (!puedeVerUsuario) {
-                return errorResponse({ message: "No tienes permisos para ver este usuario" });
+            if (usuariosFiltrados.length === 0) {
+                return errorResponse({ message: "No tienes permisos para ver estos usuarios" });
             }
+
+            console.log("usuariosFiltrados: ", usuariosFiltrados)
 
             crearBitacora({
                 usuarioId: usuarioIdSolicitante,
-                accion: `Consulta de usuario específico (${filtroCleaned})`,
+                accion: `Consulta de usuarios por filtro (${filtroCleaned})`,
                 type: AccionesBitacora.OBTENER_USUARIO
             });
 
             return successResponse({
-                message: "Usuario encontrado",
-                data: usuario
+                message: `${usuariosFiltrados.length} usuario(s) encontrado(s)`,
+                data: usuariosFiltrados
             });
         }
 
@@ -102,7 +126,7 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
                 orderBy: { createdAt: "desc" },
                 include: { DatosPersonales: true },
                 skip,
-                take    // 👈 trae solo el límite definido
+                take
             }),
             prisma.usuario.count({ where: whereCondition })
         ]);
@@ -113,13 +137,14 @@ const obtenerUsuarios = async (_: unknown, args: ObtenerUsuariosArgs) => {
             type: AccionesBitacora.OBTENER_USUARIO
         });
 
+        console.log("usuarios: ", usuarios)
         return successResponse({
             message: "Usuarios obtenidos correctamente",
             data: usuarios,
             meta: {
-                total: totalUsuarios,  
-                page,                   
-                totalPages: Math.ceil(totalUsuarios / limit), 
+                total: totalUsuarios,
+                page,
+                totalPages: Math.ceil(totalUsuarios / limit),
                 perPage: limit
             }
         });
@@ -156,4 +181,4 @@ const verificarPermisosUsuario = ({
 };
 
 
-export default obtenerUsuarios;
+export default getUsuarios;

@@ -3,8 +3,8 @@ import pdfResolverResolvers from "./resolvers/pdf"
 import usuarioResolver from "./resolvers/perfil/usuario";
 import datosPersonalesResolver from "./resolvers/perfil/datosPersonales";
 
-import estadoPaisResolver from "./resolvers/miscelanea/estadoPais";
-import zonaUrbanizarionRasolver from "./resolvers/miscelanea/zonaUrbanizacion";
+import estadoPaisResolver from "./resolvers/geografia/estadoPais";
+import zonaUrbanizarionRasolver from "./resolvers/geografia/zonaUrbanizacion";
 
 import tipoDocumentoResolver from "./resolvers/expediente/tipoDocumento";
 import documentoResolver from "./resolvers/expediente/documento"
@@ -15,6 +15,7 @@ const resolvers = {
     Query: {
         ...demoResolver.Query,
         ...pdfResolverResolvers.Query,
+        ...datosPersonalesResolver.Query,
         ...usuarioResolver.Query,
         ...estadoPaisResolver.Query,
         ...zonaUrbanizarionRasolver.Query,

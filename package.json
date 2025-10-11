@@ -15,7 +15,7 @@
     "build:server": "npm run clean && tsc && tsc-alias -p tsconfig.json && npm run copy-views && node scripts/add-js-ext.js",
     "build:client": "rimraf dist/src/client && vite build",
     "production": "npm run build && npm run start",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "generarEnums": "graphql-codegen --config codegen.yml"
   },
   "keywords": [],
   "author": "",

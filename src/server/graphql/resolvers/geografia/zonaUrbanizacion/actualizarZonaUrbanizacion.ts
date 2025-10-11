@@ -19,6 +19,8 @@ interface ActualizarZonaUrbanizacionArgs {
 const actualizarZonaUrbanizacion = async (_: unknown, args: ActualizarZonaUrbanizacionArgs) => {
     const { token, id, estadoPaisId, codigoPostal, zona, vigencia } = args;
 
+    console.log(args)
+
     // Validar campos obligatorios
     if (!token || !id) {
         return errorResponse({ message: "Faltan campos obligatorios" });
@@ -45,15 +47,21 @@ const actualizarZonaUrbanizacion = async (_: unknown, args: ActualizarZonaUrbani
             return errorResponse({ message: "La zona especificada no existe" });
         }
 
-        const zonaDuplicada = await prisma.zonaUrbanizacion.findFirst({
-            where: { zona, estadoPaisId },
-        });
-
-        // Verificar duplicidad si se intenta cambiar el nombre o estadoPaisId
-        if (zonaDuplicada) {
-            return errorResponse({
-                message: "Ya existe una zona con ese nombre en este estado o región",
+        // Verificar duplicidad solo si se están cambiando zona o estadoPaisId
+        if (zona || estadoPaisId) {
+            const zonaDuplicada = await prisma.zonaUrbanizacion.findFirst({
+                where: { 
+                    zona: zona || zonaExistente.zona,
+                    estadoPaisId: estadoPaisId || zonaExistente.estadoPaisId,
+                    id: { not: id } // IMPORTANTE: Excluir el registro actual
+                },
             });
+
+            if (zonaDuplicada) {
+                return errorResponse({
+                    message: "Ya existe una zona con ese nombre en este estado o región",
+                });
+            }
         }
 
         // Actualizar la zona
@@ -71,7 +79,7 @@ const actualizarZonaUrbanizacion = async (_: unknown, args: ActualizarZonaUrbani
         await crearBitacora({
             usuarioId,
             accion: `Actualización de zona/urbanización '${zonaActualizada.zona}' (ID: ${zonaActualizada.id})`,
-            type: AccionesBitacora.ACTUALIZACION_ZONA,
+            type: AccionesBitacora.ACTUALIZACION_ZONA_URBANIZACION,
         });
 
         return successResponse({

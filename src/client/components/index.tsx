@@ -6,7 +6,18 @@ import LoginUsuario from './LoginUsuario'
 import Titulo from './Titulo'
 import TokenManager from "./TokenManager"
 import GetUsuario from './GetUsuario'
-import GetUsuarios from './GetUsuarios' // <--- Importa el nuevo componente
+import GetUsuarios from './GetUsuarios'
+
+import CrearEstadoPais from "./CrearEstadoPais"
+import GetEstadosPais from "./GetEstadoPais"
+import ActualizarEstadoPais from './ActualizarEstadoPais'
+
+import CrearZonaUrbanizacion from './CrearZonaUrbanizacion'
+import GetZonasUrbanizacion from './GetZonasUrbanizacion'
+import ActualizarZonaUrbanizacion from './ActualizarZonaUrbanizacion'
+
+import ActualizarDatosPersonales from './ActualizarDatosPersonales'
+
 
 interface IndexProps { }
 
@@ -16,7 +27,7 @@ const Index: React.FC<IndexProps> = () => {
 
             <Titulo texto="Ejemplo de Query: Demo" />
             <Demo />
-
+{/* 
             <Titulo texto="Token Local" colorFondo="bg-gray-800" />
             <TokenManager />
 
@@ -27,10 +38,33 @@ const Index: React.FC<IndexProps> = () => {
             <LoginUsuario />
 
             <Titulo texto="Get Usuario" />
-            <GetUsuario />
+            <GetUsuario /> */}
 
+            <Titulo texto="Actualizar Datos Personales" />
+            <ActualizarDatosPersonales />
+{/* 
             <Titulo texto="Get Usuarios" />
             <GetUsuarios />
+
+            <Titulo texto="crear estado del pais" />
+            <CrearEstadoPais />
+
+            <Titulo texto="obtener estados del pais" />
+            <GetEstadosPais />
+
+            <Titulo texto="actualizar estado del pais" />
+            <ActualizarEstadoPais />
+
+
+            <Titulo texto="crear zona urbanizacion" />
+            <CrearZonaUrbanizacion />
+
+            <Titulo texto="obtener zonas urbanizacion" />
+            <GetZonasUrbanizacion />
+
+            <Titulo texto="actualizar zona urbanizacion" />
+            <ActualizarZonaUrbanizacion /> */}
+
         </div>
     );
 }

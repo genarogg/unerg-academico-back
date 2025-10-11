@@ -1,3 +1,4 @@
+
 const schemas = /* GraphQL */ `
 
 ##############################################
@@ -49,7 +50,7 @@ type DatosPersonales {
   telefono: String
   direccion: Direccion
   Expediente: [Expediente]
-   createdAt: Date!
+  createdAt: Date!
   updatedAt: Date!
 }
 
@@ -66,13 +67,16 @@ type ZonaUrbanizacion {
   estadoPaisId: Int!
   codigoPostal: Int!
   zona: String!
+  vigencia: Vigencia!
+  createdAt: Date!
+  updatedAt: Date!
   estadoPais: EstadoPais!
 }
 
 type EstadoPais {
   id: Int!
   estado: String!
-  vigencia: Boolean!
+  vigencia: Vigencia!
   createdAt: Date!
   updatedAt: Date!
 }
@@ -230,6 +234,12 @@ type CasasEstudioResponse {
   data: [CasaEstudio]
 }
 
+type DatosPersonalesResponse {
+  type: String!
+  message: String!
+  data: DatosPersonales
+}
+
 ##############################################
 # Query y Mutation
 ##############################################
@@ -239,7 +249,7 @@ type Query {
   generatePDF(template: String!, data: String!): String  
   validarSesion(token: String!): UsuarioResponse!
   getUsuarios(token: String!, filtro: String, page:Int, limit: Int): UsuariosResponse!
-  getUsuario(token: String!, filtro: String): UsuarioResponse!
+  getUsuario(token: String!, id: Int): UsuarioResponse!
 
 
   obtenerEstados(
@@ -270,6 +280,10 @@ type Query {
     id: Int
     expedienteId: Int
   ): EstudiosResponse!
+
+  obtenerDatosPersonales(
+    token: String!
+  ): DatosPersonalesResponse!
 }
 
 type Mutation {
@@ -307,7 +321,24 @@ type Mutation {
     zonaUrbanizacionId: Int!,
     calle: String!,
     numeroCasa: Int!
-  ): UsuarioResponse!
+  ): DatosPersonalesResponse!
+
+  actualizarDatosPersonales(
+    token: String!,
+    primerNombre: String,
+    segundoNombre: String,
+    tercerNombre: String,
+    primerApellido: String,
+    segundoApellido: String,
+    sexo: Sex,
+    fechaNacimiento: Date,
+    numeroCedula: Int,
+    numeroBancario: String,
+    telefono: String,
+    zonaUrbanizacionId: Int,
+    calle: String,
+    numeroCasa: Int,
+  ): DatosPersonalesResponse!
 
   crearEstadoPais(
     token: String!,
@@ -318,7 +349,7 @@ type Mutation {
     token: String!,
     id: Int!,
     estado: String!,
-    vigencia: Boolean!
+    vigencia: Vigencia!
   ): EstadoPaisResponse!
 
   crearZonaUrbanizacion(
@@ -334,7 +365,7 @@ type Mutation {
     estadoPaisId: Int,
     codigoPostal: Int,
     zona: String,
-    vigencia: Boolean!
+    vigencia: Vigencia
   ): ZonaUrbanizacionResponse!
 
   crearTipoDocumento(
