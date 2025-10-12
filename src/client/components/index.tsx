@@ -29,8 +29,8 @@ const Index: React.FC<IndexProps> = () => {
         <div className="space-y-10">
 
             {/* <Titulo texto="Ejemplo de Query: Demo" />
-            <Demo /> */}
-{/* 
+            <Demo />
+
             <Titulo texto="Token Local" colorFondo="bg-gray-800" />
             <TokenManager />
 
@@ -41,14 +41,14 @@ const Index: React.FC<IndexProps> = () => {
             <LoginUsuario />
 
             <Titulo texto="Get Usuario" />
-            <GetUsuario /> */}
+            <GetUsuario />
 
-            {/* <Titulo texto="Ver Datos Personales" />
+            <Titulo texto="Ver Datos Personales" />
             <VerDatosPersonales />
 
             <Titulo texto="Actualizar Datos Personales" />
-            <ActualizarDatosPersonales /> */}
-{/* 
+            <ActualizarDatosPersonales />
+            
             <Titulo texto="Get Usuarios" />
             <GetUsuarios />
 
@@ -68,9 +68,10 @@ const Index: React.FC<IndexProps> = () => {
             <Titulo texto="obtener zonas urbanizacion" />
             <GetZonasUrbanizacion />
 
+           
+
             <Titulo texto="actualizar zona urbanizacion" />
             <ActualizarZonaUrbanizacion /> */}
-
         </div>
     );
 }
