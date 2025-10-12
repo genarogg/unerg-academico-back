@@ -11,6 +11,8 @@ import documentoResolver from "./resolvers/expediente/documento"
 import crearCasaEstudio from "./resolvers/expediente/casaEstudio";
 import estudioResolver from "./resolvers/expediente/estudio"
 
+import campusResolver from "./resolvers/institucion/campus"
+
 const resolvers = {
     Query: {
         ...demoResolver.Query,
@@ -23,6 +25,7 @@ const resolvers = {
         ...documentoResolver.Query,
         ...crearCasaEstudio.Query,
         ...estudioResolver.Query,
+        ...campusResolver.Query
     },
 
     Mutation: {
@@ -34,6 +37,7 @@ const resolvers = {
         ...documentoResolver.Mutation,
         ...crearCasaEstudio.Mutation,
         ...estudioResolver.Mutation,
+        ...campusResolver.Mutation
     },
 };
 

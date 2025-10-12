@@ -22,37 +22,20 @@ model Usuario {
   password String
   rol      Rol    @default(DOCENTE)
 
-  Bitacora         Bitacora[]
-  DatosPersonales  DatosPersonales?
-  CedulaAutorizada CedulaAutorizada[]
-  Docente          Docente?
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
 
-model Docente {
-  id         Int      @id @default(autoincrement())
-  usuario_id Int?     @unique
-  Usuario    Usuario? @relation(fields: [usuario_id], references: [id])
-}
-
-model Bitacora {
-  id      Int              @id @default(autoincrement())
-  accion  String
-  type    AccionesBitacora
-  ip      String
-  mensaje String?
-
-  usuarioId Int
-  usuario   Usuario @relation(fields: [usuarioId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  bitacora         Bitacora[]
+  datosPersonales  DatosPersonales?
+  cedulaAutorizada CedulaAutorizada[]
+  docente          Docente?
 }
 
 model DatosPersonales {
-  id              Int      @id @default(autoincrement())
+  id          Int  @id @default(autoincrement())
+  usuarioId   Int  @unique
+  direccionId Int?
+
   primerNombre    String
   segundoNombre   String?
   tercerNombre    String?
@@ -60,81 +43,35 @@ model DatosPersonales {
   segundoApellido String?
   sexo            Sex
   fechaNacimiento DateTime
+  telefono        String?
   numeroCedula    Int
   numeroBancario  String?
-  telefono        String?
-
-  usuarioId   Int          @unique
-  usuario     Usuario      @relation(fields: [usuarioId], references: [id])
-  direccionId Int?
-  direccion   Direccion?   @relation(fields: [direccionId], references: [id])
-  Expediente  Expediente[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
 
-model Direccion {
-  id         Int    @id @default(autoincrement())
-  calle      String
-  numeroCasa Int
-
-  DatosPersonales    DatosPersonales[]
-  zonaUrbanizacionId Int
-  zonaUrbanizacion   ZonaUrbanizacion  @relation(fields: [zonaUrbanizacionId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model ZonaUrbanizacion {
-  id           Int      @id @default(autoincrement())
-  codigoPostal Int
-  zona         String
-  vigencia     Vigencia @default(ACTIVO)
-
-  estadoPaisId Int
-  estadoPais   EstadoPais  @relation(fields: [estadoPaisId], references: [id])
-  Direccion    Direccion[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model EstadoPais {
-  id       Int      @id @default(autoincrement())
-  estado   String   @unique
-  vigencia Vigencia @default(ACTIVO)
-
-  ZonaUrbanizacion ZonaUrbanizacion[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  usuario    Usuario     @relation(fields: [usuarioId], references: [id])
+  direccion  Direccion?  @relation(fields: [direccionId], references: [id])
+  expediente Expediente?
 }
 
 model Expediente {
-  id Int @id @default(autoincrement())
+  id                Int @id @default(autoincrement())
+  datosPersonalesId Int @unique
 
-  datosPersonalesId Int
-  datosPersonales   DatosPersonales @relation(fields: [datosPersonalesId], references: [id])
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  Documento Documento[]
-
-  Estudio Estudio[]
+  datosPersonales DatosPersonales @relation(fields: [datosPersonalesId], references: [id])
+  documento       Documento[]
+  estudio         Estudio[]
 }
 
-model CedulaAutorizada {
-  id       Int      @id @default(autoincrement())
-  cedula   Int      @unique
-  vigencia Vigencia @default(ACTIVO)
+model Docente {
+  id         Int @id @default(autoincrement())
+  usuario_id Int @unique
 
-  usuarioId Int
-  usuario   Usuario @relation(fields: [usuarioId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  usuario Usuario? @relation(fields: [usuario_id], references: [id])
 }
 
 model TipoDocumento {
@@ -142,10 +79,10 @@ model TipoDocumento {
   nombre   String
   vigencia Vigencia @default(ACTIVO)
 
-  Documento Documento[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  documento Documento[]
 }
 
 model Documento {
@@ -155,11 +92,11 @@ model Documento {
   url             String
   estatus         EstatusDocumento @default(PENDIENTE)
 
-  tipoDocumento TipoDocumento @relation(fields: [tipoDocumentoId], references: [id])
-  expediente    Expediente    @relation(fields: [expedienteId], references: [id])
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  tipoDocumento TipoDocumento @relation(fields: [tipoDocumentoId], references: [id])
+  expediente    Expediente    @relation(fields: [expedienteId], references: [id])
 }
 
 model NivelEstudio {
@@ -167,10 +104,10 @@ model NivelEstudio {
   nivelAcademico NivelAcademico
   tipo           TipoStudio
 
-  Estudio Estudio[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  estudio Estudio[]
 }
 
 model CasaEstudio {
@@ -191,26 +128,80 @@ model Estudio {
   titulo         String
   fecha          DateTime
   imgDocumento   String
-  notas          String
+  notas          NotaEstudio[]
   estatus        EstatusDocumento @default(PENDIENTE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   expediente   Expediente   @relation(fields: [expedienteId], references: [id])
   nivelEstudio NivelEstudio @relation(fields: [nivelEstudioId], references: [id])
   casaEstudio  CasaEstudio  @relation(fields: [casaEstudioId], references: [id])
+}
+
+model NotaEstudio {
+  id           Int    @id @default(autoincrement())
+  estudioId    Int
+  url          String
+  numeroPagina Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  estudio Estudio @relation(fields: [estudioId], references: [id], onDelete: Cascade)
+}
+
+model ZonaUrbanizacion {
+  id           Int      @id @default(autoincrement())
+  estadoPaisId Int
+  codigoPostal Int
+  zona         String
+  vigencia     Vigencia @default(ACTIVO)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  estadoPais EstadoPais  @relation(fields: [estadoPaisId], references: [id])
+  direccion  Direccion[]
+  Campus     Campus[]
+}
+
+model Direccion {
+  id                 Int    @id @default(autoincrement())
+  zonaUrbanizacionId Int
+  calle              String
+  numeroCasa         Int
+
+  datosPersonales  DatosPersonales[]
+  zonaUrbanizacion ZonaUrbanizacion  @relation(fields: [zonaUrbanizacionId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EstadoPais {
+  id       Int      @id @default(autoincrement())
+  estado   String   @unique
+  vigencia Vigencia @default(ACTIVO)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  zonaUrbanizacion ZonaUrbanizacion[]
 }
 
 model Campus {
   id                   Int        @id @default(autoincrement())
   zona_urbanizacion_id Int
   tipo                 TipoCampus
-
-  Area Area[]
+  fecha_creacion       DateTime
+  fecha_cierre         DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  area             Area[]
+  zonaUrbanizacion ZonaUrbanizacion @relation(fields: [zona_urbanizacion_id], references: [id])
 }
 
 model Area {
@@ -218,11 +209,11 @@ model Area {
   nombre    String
   campus_id Int
 
-  Campus   Campus     @relation(fields: [campus_id], references: [id])
-  Programa Programa[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  campus   Campus     @relation(fields: [campus_id], references: [id])
+  programa Programa[]
 }
 
 model Programa {
@@ -234,10 +225,36 @@ model Programa {
   duracion_anios Int
   vigencia       Vigencia
 
-  Area Area @relation(fields: [area_id], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  area Area @relation(fields: [area_id], references: [id])
+}
+
+model Bitacora {
+  id        Int              @id @default(autoincrement())
+  usuarioId Int
+  accion    String
+  type      AccionesBitacora
+  ip        String
+  mensaje   String?
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model CedulaAutorizada {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int
+  cedula    Int      @unique
+  vigencia  Vigencia @default(ACTIVO)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
 }
 
 enum AccionesBitacora {

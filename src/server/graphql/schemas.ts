@@ -99,6 +99,41 @@ type Meta {
   limit: Int,
   totalPages: Int
 }
+
+type Campus {
+  id: Int!
+  nombre: String!
+  descripcion: String
+  direccion: String
+  Area: [Area]  
+  tipo: TipoCampus!
+  fecha_creacion: Date!
+  fecha_cierre: Date!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Area {
+  id: Int!
+  campusId: Int!
+  nombre: String!
+  descripcion: String
+  Programa: [Programa]  
+  Campus: Campus
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Programa {
+  id: Int!
+  areaId: Int!
+  nombre: String!
+  descripcion: String
+  duracion: String
+  area: Area
+  createdAt: Date!
+  updatedAt: Date!
+}
 ##############################################
 # Tipos de respuesta y metadatos
 ##############################################
@@ -240,6 +275,46 @@ type DatosPersonalesResponse {
   data: DatosPersonales
 }
 
+
+type CampusResponse {
+  type: String!
+  message: String!
+  data: Campus
+}
+
+type CampusesResponse {
+  type: String!
+  message: String!
+  data: [Campus]!
+  meta: Meta
+}
+
+type AreaResponse {
+  type: String!
+  message: String!
+  data: Area
+}
+
+type AreasResponse {
+  type: String!
+  message: String!
+  data: [Area]!
+  meta: Meta
+}
+
+type ProgramaResponse {
+  type: String!
+  message: String!
+  data: Programa
+}
+
+type ProgramasResponse {
+  type: String!
+  message: String!
+  data: [Programa]!
+  meta: Meta
+}
+
 ##############################################
 # Query y Mutation
 ##############################################
@@ -284,6 +359,8 @@ type Query {
   obtenerDatosPersonales(
     token: String!
   ): DatosPersonalesResponse!
+
+  obtenerCampuses(token: String!, page: Int, limit: Int): CampusesResponse!
 }
 
 type Mutation {

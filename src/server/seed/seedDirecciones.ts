@@ -11,13 +11,13 @@ const agregarDirecciones = async () => {
     // Obtener todos los usuarios con DatosPersonales pero sin dirección
     const usuarios = await prisma.usuario.findMany({
         where: {
-            DatosPersonales: {
+            datosPersonales: {
                 isNot: null,
                 direccionId: undefined, // TypeScript friendly
             },
         },
         include: {
-            DatosPersonales: true,
+            datosPersonales: true,
         },
     });
 
@@ -26,7 +26,7 @@ const agregarDirecciones = async () => {
     const zonas = await prisma.zonaUrbanizacion.findMany();
 
     for (const usuario of usuarios) {
-        const datosPersonales = usuario.DatosPersonales;
+        const datosPersonales = usuario.datosPersonales;
         if (!datosPersonales) continue;
 
         // Filtrar zonas según el estado aleatorio

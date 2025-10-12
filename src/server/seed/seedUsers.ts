@@ -22,7 +22,7 @@ const seedUsers = async () => {
 
         const existingUser = await prisma.usuario.findUnique({
             where: { email },
-            include: { DatosPersonales: true },
+            include: { datosPersonales: true },
         });
 
         if (!existingUser) {
@@ -33,7 +33,7 @@ const seedUsers = async () => {
                     email,
                     password: hashedPassword,
                     rol,
-                    DatosPersonales: {
+                    datosPersonales: {
                         create: {
                             primerNombre: nombres[randomInt(0, nombres.length - 1)],
                             segundoNombre: nombres[randomInt(0, nombres.length - 1)],
