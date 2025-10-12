@@ -19,8 +19,8 @@ type Usuario {
   token: String
   createdAt: Date!
   updatedAt: Date!
-  DatosPersonales: DatosPersonales
-  Bitacora: [Bitacora]
+  datosPersonales: DatosPersonales
+  bitacora: [Bitacora]
 }
 
 type Bitacora {
@@ -105,7 +105,7 @@ type Campus {
   nombre: String!
   descripcion: String
   direccion: String
-  Area: [Area]  
+  area: [Area]  
   tipo: TipoCampus!
   fecha_creacion: Date!
   fecha_cierre: Date!
@@ -118,8 +118,8 @@ type Area {
   campusId: Int!
   nombre: String!
   descripcion: String
-  Programa: [Programa]  
-  Campus: Campus
+  programa: [Programa]  
+  campus: Campus
   createdAt: Date!
   updatedAt: Date!
 }
@@ -133,6 +133,48 @@ type Programa {
   area: Area
   createdAt: Date!
   updatedAt: Date!
+}
+
+
+type Estudio {
+  id: Int!
+  expedienteId: Int!
+  nivelEstudioId: Int!
+  casaEstudioId: Int!
+  titulo: String!
+  fecha: Date!
+  imgDocumento: String!
+  notas: String!
+  estatus: String!
+  expediente: Expediente
+  nivelEstudio: NivelEstudio
+  casaEstudio: CasaEstudio
+}
+
+type TipoDocumento {
+  id: Int!
+  nombre: String!
+  vigencia: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Documento {
+  id: Int!
+  tipoDocumentoId: Int!
+  expedienteId: Int!
+  url: String!
+  estatus: String!
+  tipoDocumento: TipoDocumento
+  expediente: Expediente
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type CasaEstudio {
+  id: Int!
+  nombre: String!
+  estudio: [Estudio]
 }
 ##############################################
 # Tipos de respuesta y metadatos
@@ -180,46 +222,6 @@ type ZonasUrbanizacionResponse {
   data: [ZonaUrbanizacion]
 }
 
-type Estudio {
-  id: Int!
-  expedienteId: Int!
-  nivelEstudioId: Int!
-  casaEstudioId: Int!
-  titulo: String!
-  fecha: Date!
-  imgDocumento: String!
-  notas: String!
-  estatus: String!
-  expediente: Expediente
-  nivelEstudio: NivelEstudio
-  casaEstudio: CasaEstudio
-}
-
-type TipoDocumento {
-  id: Int!
-  nombre: String!
-  vigencia: String!
-  createdAt: Date!
-  updatedAt: Date!
-}
-
-type Documento {
-  id: Int!
-  tipoDocumentoId: Int!
-  expedienteId: Int!
-  url: String!
-  estatus: String!
-  tipoDocumento: TipoDocumento
-  expediente: Expediente
-  createdAt: Date!
-  updatedAt: Date!
-}
-
-type CasaEstudio {
-  id: Int!
-  nombre: String!
-  Estudio: [Estudio]
-}
 
 type EstudioResponse {
   type: String!
@@ -325,7 +327,6 @@ type Query {
   validarSesion(token: String!): UsuarioResponse!
   getUsuarios(token: String!, filtro: String, page:Int, limit: Int): UsuariosResponse!
   getUsuario(token: String!, id: Int): UsuarioResponse!
-
 
   obtenerEstados(
     token: String!
