@@ -1,4 +1,4 @@
-import schema from "./schemasBuild"
+import schema from "./graphBuild"
 import resolvers from "./resolvers"
 
 export {

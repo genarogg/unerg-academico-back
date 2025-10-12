@@ -68,10 +68,10 @@ model Expediente {
 }
 
 model Docente {
-  id         Int @id @default(autoincrement())
-  usuario_id Int @unique
+  id        Int @id @default(autoincrement())
+  usuarioId Int @unique
 
-  usuario Usuario? @relation(fields: [usuario_id], references: [id])
+  usuario Usuario? @relation(fields: [usuarioId], references: [id])
 }
 
 model TipoDocumento {
@@ -191,44 +191,44 @@ model EstadoPais {
 }
 
 model Campus {
-  id                   Int        @id @default(autoincrement())
-  zona_urbanizacion_id Int
-  tipo                 TipoCampus
-  fecha_creacion       DateTime
-  fecha_cierre         DateTime
+  id                 Int        @id @default(autoincrement())
+  zonaUrbanizacionId Int
+  tipo               TipoCampus
+  fechaCreacion      DateTime
+  fechaCierre        DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   area             Area[]
-  zonaUrbanizacion ZonaUrbanizacion @relation(fields: [zona_urbanizacion_id], references: [id])
+  zonaUrbanizacion ZonaUrbanizacion @relation(fields: [zonaUrbanizacionId], references: [id])
 }
 
 model Area {
-  id        Int    @id @default(autoincrement())
-  nombre    String
-  campus_id Int
+  id       Int    @id @default(autoincrement())
+  nombre   String
+  campusId Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  campus   Campus     @relation(fields: [campus_id], references: [id])
+  campus   Campus     @relation(fields: [campusId], references: [id])
   programa Programa[]
 }
 
 model Programa {
   id             Int            @id @default(autoincrement())
-  area_id        Int
+  areaId         Int
   nombre         String
   nivelAcademico NivelAcademico
   modalidad      Modalidad
-  duracion_anios Int
+  duracionAnios Int
   vigencia       Vigencia
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  area Area @relation(fields: [area_id], references: [id])
+  area Area @relation(fields: [areaId], references: [id])
 }
 
 model Bitacora {

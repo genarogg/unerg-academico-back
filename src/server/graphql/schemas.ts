@@ -29,8 +29,6 @@ type Bitacora {
   accion: String!
   type: AccionesBitacora!
   ip: String!
-  hora: Date!
-  fecha: Date!
   mensaje: String
 }
 
@@ -58,7 +56,7 @@ type Direccion {
   id: Int!
   zonaUrbanizacionId: Int!
   calle: String!
-  numeroCasa: String!
+  numeroCasa: Int!
   zonaUrbanizacion: ZonaUrbanizacion!
 }
 
@@ -84,31 +82,35 @@ type EstadoPais {
 type Expediente {
   id: Int!
   datosPersonalesId: Int!
+  documentos: [Documento]
+  estudios: [Estudio]
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 type NivelEstudio {
   id: Int!
-  nivelAcademico: String!
-  tipo: String!
+  nivelAcademico: NivelAcademico!
+  tipo: TipoStudio!
   Estudio: [Estudio]
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 type Meta {
   total: Int
   page: Int
-  limit: Int,
+  limit: Int
   totalPages: Int
 }
 
 type Campus {
   id: Int!
-  nombre: String!
-  descripcion: String
-  direccion: String
-  area: [Area]  
   tipo: TipoCampus!
-  fecha_creacion: Date!
-  fecha_cierre: Date!
+  zonaUrbanizacion: ZonaUrbanizacion!
+  area: [Area]  
+  fechaCreacion: Date!
+  fechaCierre: Date!
   createdAt: Date!
   updatedAt: Date!
 }
@@ -117,7 +119,6 @@ type Area {
   id: Int!
   campusId: Int!
   nombre: String!
-  descripcion: String
   programa: [Programa]  
   campus: Campus
   createdAt: Date!
@@ -128,8 +129,10 @@ type Programa {
   id: Int!
   areaId: Int!
   nombre: String!
-  descripcion: String
-  duracion: String
+  nivelAcademico: NivelAcademico!
+  modalidad: Modalidad!
+  duracion_anios: String
+  vigencia: Vigencia!
   area: Area
   createdAt: Date!
   updatedAt: Date!
@@ -144,8 +147,8 @@ type Estudio {
   titulo: String!
   fecha: Date!
   imgDocumento: String!
-  notas: String!
-  estatus: String!
+  notas: [NotaEstudio]
+  estatus: EstatusDocumento!
   expediente: Expediente
   nivelEstudio: NivelEstudio
   casaEstudio: CasaEstudio
@@ -154,7 +157,7 @@ type Estudio {
 type TipoDocumento {
   id: Int!
   nombre: String!
-  vigencia: String!
+  vigencia: Vigencia!
   createdAt: Date!
   updatedAt: Date!
 }
@@ -164,7 +167,7 @@ type Documento {
   tipoDocumentoId: Int!
   expedienteId: Int!
   url: String!
-  estatus: String!
+  estatus: EstatusDocumento!
   tipoDocumento: TipoDocumento
   expediente: Expediente
   createdAt: Date!
@@ -175,6 +178,17 @@ type CasaEstudio {
   id: Int!
   nombre: String!
   estudio: [Estudio]
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type NotaEstudio {
+  id: Int!
+  estudioId: Int!
+  url: String!
+  numeroPagina: Int!
+  createdAt: Date!
+  updatedAt: Date!
 }
 ##############################################
 # Tipos de respuesta y metadatos
@@ -415,7 +429,7 @@ type Mutation {
     telefono: String,
     zonaUrbanizacionId: Int,
     calle: String,
-    numeroCasa: Int,
+    numeroCasa: Int
   ): DatosPersonalesResponse!
 
   crearEstadoPais(
