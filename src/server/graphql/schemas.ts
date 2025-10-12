@@ -91,7 +91,7 @@ type Expediente {
 type NivelEstudio {
   id: Int!
   nivelAcademico: NivelAcademico!
-  tipo: TipoStudio!
+  tipo: TipoEstudio!
   Estudio: [Estudio]
   createdAt: Date!
   updatedAt: Date!
@@ -131,7 +131,7 @@ type Programa {
   nombre: String!
   nivelAcademico: NivelAcademico!
   modalidad: Modalidad!
-  duracion_anios: String
+  duracionAnios: String
   vigencia: Vigencia!
   area: Area
   createdAt: Date!

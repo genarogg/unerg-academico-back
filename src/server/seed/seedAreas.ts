@@ -34,14 +34,14 @@ const seedAreas = async () => {
 
             // Verificar si ya existe el área en este campus
             const existingArea = await prisma.area.findFirst({
-                where: { nombre, campus_id: campus.id },
+                where: { nombre, campusId: campus.id },
             });
 
             if (!existingArea) {
                 await prisma.area.create({
                     data: {
                         nombre,
-                        campus_id: campus.id,
+                        campusId: campus.id,
                     },
                 });
 

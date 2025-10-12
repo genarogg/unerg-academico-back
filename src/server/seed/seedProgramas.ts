@@ -80,17 +80,17 @@ const seedProgramas = async () => {
         for (const nombre of seleccionados) {
             // Verificar si ya existe ese programa en esta área
             const existe = await prisma.programa.findFirst({
-                where: { nombre, area_id: area.id },
+                where: { nombre, areaId: area.id },
             });
 
             if (!existe) {
                 await prisma.programa.create({
                     data: {
                         nombre,
-                        area_id: area.id,
+                        areaId: area.id,
                         nivelAcademico: niveles[randomInt(0, niveles.length - 1)],
                         modalidad: modalidades[randomInt(0, modalidades.length - 1)],
-                        duracion_anios: randomInt(3, 5),
+                        duracionAnios: randomInt(3, 5),
                         vigencia: vigencias[randomInt(0, vigencias.length - 1)],
                     },
                 });

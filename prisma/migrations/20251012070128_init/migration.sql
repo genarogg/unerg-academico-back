@@ -41,8 +41,8 @@ CREATE TABLE "Expediente" (
 -- CreateTable
 CREATE TABLE "Docente" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "usuario_id" INTEGER NOT NULL,
-    CONSTRAINT "Docente_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "Usuario" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "usuarioId" INTEGER NOT NULL,
+    CONSTRAINT "Docente_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -147,37 +147,37 @@ CREATE TABLE "EstadoPais" (
 -- CreateTable
 CREATE TABLE "Campus" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "zona_urbanizacion_id" INTEGER NOT NULL,
+    "zonaUrbanizacionId" INTEGER NOT NULL,
     "tipo" TEXT NOT NULL,
-    "fecha_creacion" DATETIME NOT NULL,
-    "fecha_cierre" DATETIME NOT NULL,
+    "fechaCreacion" DATETIME NOT NULL,
+    "fechaCierre" DATETIME NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "Campus_zona_urbanizacion_id_fkey" FOREIGN KEY ("zona_urbanizacion_id") REFERENCES "ZonaUrbanizacion" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Campus_zonaUrbanizacionId_fkey" FOREIGN KEY ("zonaUrbanizacionId") REFERENCES "ZonaUrbanizacion" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "Area" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "nombre" TEXT NOT NULL,
-    "campus_id" INTEGER NOT NULL,
+    "campusId" INTEGER NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "Area_campus_id_fkey" FOREIGN KEY ("campus_id") REFERENCES "Campus" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Area_campusId_fkey" FOREIGN KEY ("campusId") REFERENCES "Campus" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "Programa" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "area_id" INTEGER NOT NULL,
+    "areaId" INTEGER NOT NULL,
     "nombre" TEXT NOT NULL,
     "nivelAcademico" TEXT NOT NULL,
     "modalidad" TEXT NOT NULL,
-    "duracion_anios" INTEGER NOT NULL,
+    "duracionAnios" INTEGER NOT NULL,
     "vigencia" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "Programa_area_id_fkey" FOREIGN KEY ("area_id") REFERENCES "Area" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Programa_areaId_fkey" FOREIGN KEY ("areaId") REFERENCES "Area" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -214,7 +214,7 @@ CREATE UNIQUE INDEX "DatosPersonales_usuarioId_key" ON "DatosPersonales"("usuari
 CREATE UNIQUE INDEX "Expediente_datosPersonalesId_key" ON "Expediente"("datosPersonalesId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Docente_usuario_id_key" ON "Docente"("usuario_id");
+CREATE UNIQUE INDEX "Docente_usuarioId_key" ON "Docente"("usuarioId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "EstadoPais_estado_key" ON "EstadoPais"("estado");

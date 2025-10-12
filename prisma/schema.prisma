@@ -102,7 +102,7 @@ model Documento {
 model NivelEstudio {
   id             Int            @id @default(autoincrement())
   nivelAcademico NivelAcademico
-  tipo           TipoStudio
+  tipo           TipoEstudio
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -310,10 +310,10 @@ enum NivelAcademico {
   INGENIERO
   ESPECIALIDAD
   MAESTRIA
-  DOCTORA
+  DOCTORADO
 }
 
-enum TipoStudio {
+enum TipoEstudio {
   PREGRADO
   POSTGRADO
 }

@@ -1,6 +1,6 @@
 import {
     Rol, AccionesBitacora, Sex, Vigencia,
-    EstatusDocumento, NivelAcademico, TipoStudio,
+    EstatusDocumento, NivelAcademico, TipoEstudio,
     TipoCampus, Modalidad
 } from '@prisma/client';
 
@@ -29,8 +29,8 @@ const enums = /* GraphQL */`
     enum NivelAcademico {
         ${createEnumString(NivelAcademico)}
     }
-    enum TipoStudio {
-        ${createEnumString(TipoStudio)}
+    enum TipoEstudio {
+        ${createEnumString(TipoEstudio)}
     }
     enum TipoCampus {
         ${createEnumString(TipoCampus)}

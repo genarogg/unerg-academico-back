@@ -34,31 +34,31 @@ const seedCampus = async () => {
         const zona = zonas[randomInt(0, zonas.length - 1)];
 
         const existingCampus = await prisma.campus.findFirst({
-            where: { zona_urbanizacion_id: zona.id },
+            where: { zonaUrbanizacionId: zona.id },
         });
 
         if (!existingCampus) {
             const tipo = tiposCampus[randomInt(0, tiposCampus.length - 1)];
 
             // Fecha de creación aleatoria dentro de los últimos 5 años
-            const fecha_creacion = randomDate(
+            const fechaCreacion = randomDate(
                 new Date(new Date().setFullYear(new Date().getFullYear() - 5)),
                 new Date()
             );
 
             // Fecha de cierre entre 1 y 3 años después de la creación
-            const fecha_cierre = new Date(
-                fecha_creacion.getFullYear() + randomInt(1, 3),
-                fecha_creacion.getMonth(),
-                fecha_creacion.getDate()
+            const fechaCierre = new Date(
+                fechaCreacion.getFullYear() + randomInt(1, 3),
+                fechaCreacion.getMonth(),
+                fechaCreacion.getDate()
             );
 
             await prisma.campus.create({
                 data: {
-                    zona_urbanizacion_id: zona.id,
+                    zonaUrbanizacionId: zona.id,
                     tipo,
-                    fecha_creacion,
-                    fecha_cierre,
+                    fechaCreacion,
+                    fechaCierre,
                 },
             });
 
