@@ -5,13 +5,13 @@ import {
     errorResponse,
     crearBitacora,
 } from "@fn";
-import { AccionesBitacora, Rol } from "@prisma/client";
+import { AccionesBitacora, Rol, Vigencia } from "@prisma/client";
 
 interface ActualizarTipoDocumentoArgs {
     token: string;
     id: number;
     nombre?: string;
-    vigencia?: string; // ACTIVO | INACTIVO
+    vigencia?: Vigencia; // ACTIVO | INACTIVO
 }
 
 const actualizarTipoDocumento = async (_: unknown, args: ActualizarTipoDocumentoArgs) => {
@@ -70,7 +70,7 @@ const actualizarTipoDocumento = async (_: unknown, args: ActualizarTipoDocumento
         await crearBitacora({
             usuarioId,
             accion: `Actualización de tipo de documento: ${tipoDocumentoActualizado.nombre}`,
-            type: AccionesBitacora.ACTUALIZACION_ZONA, // Puedes crear un enum específico como ACTUALIZACION_TIPO_DOCUMENTO si lo prefieres
+            type: AccionesBitacora.ACTUALIZACION_ZONA_URBANIZACION,
         });
 
         return successResponse({

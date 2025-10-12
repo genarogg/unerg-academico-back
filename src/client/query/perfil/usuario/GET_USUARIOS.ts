@@ -17,7 +17,7 @@ const GET_USUARIOS = gql`
         rol
         createdAt
         updatedAt
-        DatosPersonales {
+        datosPersonales {
           id
           primerNombre
           segundoNombre

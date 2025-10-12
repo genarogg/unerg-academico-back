@@ -38,7 +38,7 @@ const getUsuario = async (_: unknown, args: getUsuarioArgs) => {
 
         const usuario = await prisma.usuario.findUnique({
             where: { id: idObjetivo },
-            include: { DatosPersonales: true },
+            include: { datosPersonales: true },
             omit: { password: true }
         });
 

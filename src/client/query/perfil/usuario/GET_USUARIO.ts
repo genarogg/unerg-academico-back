@@ -12,7 +12,7 @@ const GET_USUARIO = gql`
         token
         createdAt
         updatedAt
-        DatosPersonales {
+        datosPersonales {
           primerNombre
           segundoNombre
           tercerNombre

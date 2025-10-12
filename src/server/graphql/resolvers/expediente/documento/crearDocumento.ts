@@ -68,7 +68,7 @@ const crearDocumento = async (_: unknown, args: CrearDocumentoArgs) => {
         await crearBitacora({
             usuarioId,
             accion: `Creación de documento tipo ${tipoDocumento.nombre} para expediente ${expedienteId}`,
-            type: AccionesBitacora.REGISTRO_ZONA, // Puedes crear un tipo más específico si lo deseas
+            type: AccionesBitacora.REGISTRO_ZONA_URBANIZACION, // Puedes crear un tipo más específico si lo deseas
         });
 
         return successResponse({

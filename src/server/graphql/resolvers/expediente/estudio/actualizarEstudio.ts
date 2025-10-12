@@ -42,7 +42,7 @@ const actualizarEstudio = async (_: any, args: ActualizarEstudioArgs) => {
                 titulo,
                 fecha: fecha ? new Date(fecha) : undefined,
                 imgDocumento,
-                notas,
+           
                 estatus,
             },
             include: {

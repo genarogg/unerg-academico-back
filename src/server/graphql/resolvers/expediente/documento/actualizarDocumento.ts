@@ -92,7 +92,7 @@ const actualizarDocumento = async (_: unknown, args: ActualizarDocumentoArgs) =>
         await crearBitacora({
             usuarioId,
             accion: `Actualización del documento ID ${documentoId}`,
-            type: AccionesBitacora.ACTUALIZACION_ZONA, // puedes crear un tipo más específico si deseas
+            type: AccionesBitacora.ACTUALIZACION_ZONA_URBANIZACION, // puedes crear un tipo más específico si deseas
         });
 
         return successResponse({

@@ -38,9 +38,9 @@ const obtenerCampuses = async (_: unknown, args: ObtenerCampusesArgs) => {
                         estadoPais: true, 
                     },
                 },
-                Area: {
+                area: {
                     include: {
-                        Programa: true,
+                        programa: true,
                     },
                 },
             },

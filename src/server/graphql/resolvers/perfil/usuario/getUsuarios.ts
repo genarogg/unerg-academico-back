@@ -52,7 +52,7 @@ const getUsuarios = async (_: unknown, args: getUsuariosArgs) => {
 
             if (!isNaN(Number(filtroCleaned))) {
                 condicionesOR.push({
-                    DatosPersonales: {
+                    datosPersonales: {
                         numeroCedula: Number(filtroCleaned)
                     }
                 });
@@ -60,7 +60,7 @@ const getUsuarios = async (_: unknown, args: getUsuariosArgs) => {
 
             const usuarios = await prisma.usuario.findMany({
                 where: { OR: condicionesOR },
-                include: { DatosPersonales: true },
+                include: { datosPersonales: true },
                 omit: { password: true }
             });
 
@@ -124,7 +124,7 @@ const getUsuarios = async (_: unknown, args: getUsuariosArgs) => {
                 where: whereCondition,
                 omit: { password: true },
                 orderBy: { createdAt: "desc" },
-                include: { DatosPersonales: true },
+                include: { datosPersonales: true },
                 skip,
                 take
             }),
