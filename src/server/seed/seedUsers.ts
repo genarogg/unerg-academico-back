@@ -14,7 +14,16 @@ const seedUsers = async () => {
         { email: "super@super.com", password: "super", rol: Rol.SUPER },
         { email: "admin@admin.com", password: "admin", rol: Rol.ADMIN },
         { email: "area@area.com", password: "area", rol: Rol.AREA },
-        { email: "docente@docente.com", password: "docente", rol: Rol.DOCENTE },
+        { email: "docente0@docente.com", password: "docente", rol: Rol.DOCENTE },
+        { email: "docente1@docente.com", password: "docente", rol: Rol.DOCENTE },
+        { email: "docente2@docente.com", password: "docente", rol: Rol.DOCENTE },
+        { email: "docente3@docente.com", password: "docente", rol: Rol.DOCENTE },
+        { email: "docente4@docente.com", password: "docente", rol: Rol.DOCENTE },
+        { email: "docente5@docente.com", password: "docente", rol: Rol.DOCENTE },
+        { email: "docente6@docente.com", password: "docente", rol: Rol.DOCENTE },
+        { email: "docente7@docente.com", password: "docente", rol: Rol.DOCENTE },
+        { email: "docente8@docente.com", password: "docente", rol: Rol.DOCENTE },
+        { email: "docente9@docente.com", password: "docente", rol: Rol.DOCENTE },
     ];
 
     for (const user of users) {

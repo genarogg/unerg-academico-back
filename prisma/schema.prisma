@@ -4,6 +4,7 @@
 // - Claves foráneas (fk) con sus relaciones
 // - Campos únicos (unique)
 // - Valores por defecto cuando sean relevantes
+// - Omite de las tablas los valores createdAt y updatedAt
 // - Los enums como tablas de referencia
 
 generator client {

@@ -204,6 +204,35 @@ CREATE TABLE "CedulaAutorizada" (
     CONSTRAINT "CedulaAutorizada_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- CreateTable
+CREATE TABLE "Dedicacion" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "docenteId" INTEGER NOT NULL,
+    "nombre" TEXT NOT NULL,
+    "horas" INTEGER NOT NULL,
+    CONSTRAINT "Dedicacion_docenteId_fkey" FOREIGN KEY ("docenteId") REFERENCES "Docente" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "EstatusLaboral" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "docenteId" INTEGER NOT NULL,
+    "tipoEmpleo" TEXT NOT NULL,
+    "categoriaLaboral" TEXT NOT NULL,
+    CONSTRAINT "EstatusLaboral_docenteId_fkey" FOREIGN KEY ("docenteId") REFERENCES "Docente" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "ActividadDocente" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "docenteId" INTEGER NOT NULL,
+    "estatus" TEXT NOT NULL,
+    "motivo" TEXT NOT NULL,
+    "fechaInicio" DATETIME NOT NULL,
+    "fechaFin" DATETIME NOT NULL,
+    CONSTRAINT "ActividadDocente_docenteId_fkey" FOREIGN KEY ("docenteId") REFERENCES "Docente" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Usuario_email_key" ON "Usuario"("email");
 
