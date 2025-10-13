@@ -21,6 +21,9 @@ import ActualizarZonaUrbanizacion from './ActualizarZonaUrbanizacion'
 import VerDatosPersonales from './VerDatosPersonales'
 import ActualizarDatosPersonales from './ActualizarDatosPersonales'
 
+import GetAreas from "./GetAreas"
+
+import GetCampuses from "./GetCampuses"
 
 interface IndexProps { }
 
@@ -69,9 +72,15 @@ const Index: React.FC<IndexProps> = () => {
             <GetZonasUrbanizacion />
 
            
-
             <Titulo texto="actualizar zona urbanizacion" />
             <ActualizarZonaUrbanizacion /> */}
+
+            <Titulo texto="obtener campus" />
+            <GetCampuses />
+
+            <Titulo texto="obtener areas" />
+            <GetAreas />
+
         </div>
     );
 }

@@ -21,6 +21,7 @@ const obtenerCampuses = async (_: unknown, args: ObtenerCampusesArgs) => {
     try {
         // Verificar token
         const { isAuthenticated, rol } = await verificarToken(token);
+
         if (!isAuthenticated) {
             return errorResponse({ message: "Token inválido o expirado" });
         }
@@ -35,7 +36,7 @@ const obtenerCampuses = async (_: unknown, args: ObtenerCampusesArgs) => {
             include: {
                 zonaUrbanizacion: {
                     include: {
-                        estadoPais: true, 
+                        estadoPais: true,
                     },
                 },
                 area: {
@@ -46,9 +47,8 @@ const obtenerCampuses = async (_: unknown, args: ObtenerCampusesArgs) => {
             },
         });
 
-        console.log(campuses)
+        console.log("campuses: ", campuses)
 
-        // Ordenar los campus por fecha de creación (más recientes primero)
         const campusesOrdenados = campuses.sort(
             (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
         );

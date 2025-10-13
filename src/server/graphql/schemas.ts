@@ -43,7 +43,7 @@ type DatosPersonales {
   segundoApellido: String
   sexo: Sex!
   fechaNacimiento: Date!
-  numeroCedula: String!
+  numeroCedula: Int!
   numeroBancario: String
   telefono: String
   direccion: Direccion
@@ -131,7 +131,7 @@ type Programa {
   nombre: String!
   nivelAcademico: NivelAcademico!
   modalidad: Modalidad!
-  duracionAnios: String
+  duracionAnios: Int!
   vigencia: Vigencia!
   area: Area
   createdAt: Date!
@@ -375,7 +375,9 @@ type Query {
     token: String!
   ): DatosPersonalesResponse!
 
-  obtenerCampuses(token: String!, page: Int, limit: Int): CampusesResponse!
+  obtenerCampuses(token: String!): CampusesResponse!
+  obtenerAreas(token: String!): AreasResponse!
+
 }
 
 type Mutation {

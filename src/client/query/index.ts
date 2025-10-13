@@ -14,6 +14,9 @@ import { ACTUALIZAR_ZONA_URBANIZACION } from "./geografia/zonaUrbanizacion/ACTUA
 import { ACTUALIZAR_DATOS_PERSONALES } from "./perfil/datosPersonales/ACTUALIZAR_DATOS_PERSONALES"
 import OBTENER_DATOS_PERSONALES from "./perfil/datosPersonales/OBTENER_DATOS_PERSONALES"
 
+import OBTENER_CAMPUSES from "./institucion/campus/OBTENER_CAMPUSES"
+
+import { GET_AREAS } from "./institucion/area/GET_AREAS"
 
 export {
     GET_HELLO,
@@ -33,5 +36,9 @@ export {
 
 
     ACTUALIZAR_DATOS_PERSONALES,
-    OBTENER_DATOS_PERSONALES
+    OBTENER_DATOS_PERSONALES,
+
+    OBTENER_CAMPUSES,
+
+    GET_AREAS
 }

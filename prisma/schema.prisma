@@ -71,7 +71,10 @@ model Docente {
   id        Int @id @default(autoincrement())
   usuarioId Int @unique
 
-  usuario Usuario? @relation(fields: [usuarioId], references: [id])
+  usuario          Usuario?           @relation(fields: [usuarioId], references: [id])
+  Dedicacion       Dedicacion[]
+  EstatusLaboral   EstatusLaboral[]
+  ActividadDocente ActividadDocente[]
 }
 
 model TipoDocumento {
@@ -222,7 +225,7 @@ model Programa {
   nombre         String
   nivelAcademico NivelAcademico
   modalidad      Modalidad
-  duracionAnios Int
+  duracionAnios  Int
   vigencia       Vigencia
 
   createdAt DateTime @default(now())
@@ -257,6 +260,32 @@ model CedulaAutorizada {
   usuario Usuario @relation(fields: [usuarioId], references: [id])
 }
 
+model Dedicacion {
+  id        Int            @id @default(autoincrement())
+  docente   Docente        @relation(fields: [docenteId], references: [id])
+  docenteId Int
+  nombre    TipoDedicacion
+  horas     Int
+}
+
+model EstatusLaboral {
+  id               Int              @id @default(autoincrement())
+  docente          Docente          @relation(fields: [docenteId], references: [id])
+  docenteId        Int
+  tipoEmpleo       TipoEmpleo
+  categoriaLaboral CategoriaLaboral
+}
+
+model ActividadDocente {
+  id          Int              @id @default(autoincrement())
+  docente     Docente          @relation(fields: [docenteId], references: [id])
+  docenteId   Int
+  estatus     EstatusActividad
+  motivo      String
+  fechaInicio DateTime
+  fechaFin    DateTime
+}
+
 enum AccionesBitacora {
   //Usuario
   LOGIN
@@ -279,6 +308,11 @@ enum AccionesBitacora {
 
   //micelanea
   ERROR
+
+  //areas
+  REGISTRO_AREA
+  ACTUALIZACION_AREA
+  OBTENER_AREAS
 }
 
 enum Rol {
@@ -328,4 +362,30 @@ enum Modalidad {
   ANUAL
   SEMESTRAL
   TRIMESTRAL
+}
+
+enum TipoDedicacion {
+  DEDICACION_EXCLUSIVA
+  TIEMPO_COMPLETO
+  MEDIO_TIEMPO
+  TIEMPO_CONVENCIONAL
+}
+
+enum TipoEmpleo {
+  CONTRATADO
+  FIJO
+  HORARIOS_PROFESIONALES
+}
+
+enum CategoriaLaboral {
+  INSTRUCTOR
+  ASISTENTE
+  AGREGADO
+  ASOCIADO
+  TITULAR
+}
+
+enum EstatusActividad {
+  ACTIVO
+  INACTIVO
 }
