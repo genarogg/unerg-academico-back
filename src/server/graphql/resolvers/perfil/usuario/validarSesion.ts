@@ -6,6 +6,11 @@ interface validarSesionArgs {
 
 const validarSesion = async (_: unknown, { token }: validarSesionArgs) => {
     try {
+
+        if (!token) {
+            return errorResponse({ message: 'Token no proporcionado' });
+        }
+        
         const usuario = await verificarToken(token);
 
         if (!usuario.id) {
@@ -14,7 +19,7 @@ const validarSesion = async (_: unknown, { token }: validarSesionArgs) => {
 
         return successResponse({
             message: 'Token verificado exitosamente',
-            data: [usuario]
+            data: usuario
         });
 
     } catch (error: any) {
