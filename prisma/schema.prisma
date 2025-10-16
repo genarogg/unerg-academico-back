@@ -17,304 +17,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Usuario {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
-  rol      Rol    @default(DOCENTE)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  bitacora         Bitacora[]
-  datosPersonales  DatosPersonales?
-  cedulaAutorizada CedulaAutorizada[]
-  docente          Docente?
-}
-
-model DatosPersonales {
-  id          Int  @id @default(autoincrement())
-  usuarioId   Int  @unique
-  direccionId Int?
-
-  primerNombre    String
-  segundoNombre   String?
-  tercerNombre    String?
-  primerApellido  String
-  segundoApellido String?
-  sexo            Sex
-  fechaNacimiento DateTime
-  telefono        String?
-  numeroCedula    Int
-  numeroBancario  String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  usuario    Usuario     @relation(fields: [usuarioId], references: [id])
-  direccion  Direccion?  @relation(fields: [direccionId], references: [id])
-  expediente Expediente?
-}
-
-model Expediente {
-  id                Int @id @default(autoincrement())
-  datosPersonalesId Int @unique
-
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
-
-  datosPersonales DatosPersonales @relation(fields: [datosPersonalesId], references: [id])
-  documento       Documento[]
-  estudio         Estudio[]
-}
-
-model Docente {
-  id        Int @id @default(autoincrement())
-  usuarioId Int @unique
-
-  usuario          Usuario?           @relation(fields: [usuarioId], references: [id])
-  Dedicacion       Dedicacion[]
-  EstatusLaboral   EstatusLaboral[]
-  ActividadDocente ActividadDocente[]
-}
-
-model TipoDocumento {
-  id       Int      @id @default(autoincrement())
-  nombre   String
-  vigencia Vigencia @default(ACTIVO)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  documento Documento[]
-}
-
-model Documento {
-  id              Int              @id @default(autoincrement())
-  tipoDocumentoId Int
-  expedienteId    Int
-  url             String
-  estatus         EstatusDocumento @default(PENDIENTE)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  tipoDocumento TipoDocumento @relation(fields: [tipoDocumentoId], references: [id])
-  expediente    Expediente    @relation(fields: [expedienteId], references: [id])
-}
-
-model NivelEstudio {
-  id             Int            @id @default(autoincrement())
-  nivelAcademico NivelAcademico
-  tipo           TipoEstudio
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  estudio Estudio[]
-}
-
-model CasaEstudio {
-  id     Int    @id @default(autoincrement())
-  nombre String
-
-  Estudio Estudio[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Estudio {
-  id             Int              @id @default(autoincrement())
-  expedienteId   Int
-  nivelEstudioId Int
-  casaEstudioId  Int
-  titulo         String
-  fecha          DateTime
-  imgDocumento   String
-  notas          NotaEstudio[]
-  estatus        EstatusDocumento @default(PENDIENTE)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  expediente   Expediente   @relation(fields: [expedienteId], references: [id])
-  nivelEstudio NivelEstudio @relation(fields: [nivelEstudioId], references: [id])
-  casaEstudio  CasaEstudio  @relation(fields: [casaEstudioId], references: [id])
-}
-
-model NotaEstudio {
-  id           Int    @id @default(autoincrement())
-  estudioId    Int
-  url          String
-  numeroPagina Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  estudio Estudio @relation(fields: [estudioId], references: [id], onDelete: Cascade)
-}
-
-model ZonaUrbanizacion {
-  id           Int      @id @default(autoincrement())
-  estadoPaisId Int
-  codigoPostal Int
-  zona         String
-  vigencia     Vigencia @default(ACTIVO)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  estadoPais EstadoPais  @relation(fields: [estadoPaisId], references: [id])
-  direccion  Direccion[]
-  Campus     Campus[]
-}
-
-model Direccion {
-  id                 Int    @id @default(autoincrement())
-  zonaUrbanizacionId Int
-  calle              String
-  numeroCasa         Int
-
-  datosPersonales  DatosPersonales[]
-  zonaUrbanizacion ZonaUrbanizacion  @relation(fields: [zonaUrbanizacionId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model EstadoPais {
-  id       Int      @id @default(autoincrement())
-  estado   String   @unique
-  vigencia Vigencia @default(ACTIVO)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  zonaUrbanizacion ZonaUrbanizacion[]
-}
-
-model Campus {
-  id                 Int        @id @default(autoincrement())
-  zonaUrbanizacionId Int
-  tipo               TipoCampus
-  fechaCreacion      DateTime
-  fechaCierre        DateTime
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  area             Area[]
-  zonaUrbanizacion ZonaUrbanizacion @relation(fields: [zonaUrbanizacionId], references: [id])
-}
-
-model Area {
-  id       Int    @id @default(autoincrement())
-  nombre   String
-  campusId Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  campus   Campus     @relation(fields: [campusId], references: [id])
-  programa Programa[]
-}
-
-model Programa {
-  id             Int            @id @default(autoincrement())
-  areaId         Int
-  nombre         String
-  nivelAcademico NivelAcademico
-  modalidad      Modalidad
-  duracionAnios  Int
-  vigencia       Vigencia
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  area Area @relation(fields: [areaId], references: [id])
-}
-
-model Bitacora {
-  id        Int              @id @default(autoincrement())
-  usuarioId Int
-  accion    String
-  type      AccionesBitacora
-  ip        String
-  mensaje   String?
-
-  usuario Usuario @relation(fields: [usuarioId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model CedulaAutorizada {
-  id        Int      @id @default(autoincrement())
-  usuarioId Int
-  cedula    Int      @unique
-  vigencia  Vigencia @default(ACTIVO)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  usuario Usuario @relation(fields: [usuarioId], references: [id])
-}
-
-model Dedicacion {
-  id        Int            @id @default(autoincrement())
-  docente   Docente        @relation(fields: [docenteId], references: [id])
-  docenteId Int
-  nombre    TipoDedicacion
-  horas     Int
-}
-
-model EstatusLaboral {
-  id               Int              @id @default(autoincrement())
-  docente          Docente          @relation(fields: [docenteId], references: [id])
-  docenteId        Int
-  tipoEmpleo       TipoEmpleo
-  categoriaLaboral CategoriaLaboral
-}
-
-model ActividadDocente {
-  id          Int              @id @default(autoincrement())
-  docente     Docente          @relation(fields: [docenteId], references: [id])
-  docenteId   Int
-  estatus     EstatusActividad
-  motivo      String
-  fechaInicio DateTime
-  fechaFin    DateTime
-}
-
-enum AccionesBitacora {
-  //Usuario
-  LOGIN
-  REGISTRO_USUARIO
-  CHANGE_PASSWORD_EMAIL
-  OBTENER_USUARIO
-  ACTUALIZACION_USUARIO
-
-  //estado
-  REGISTRO_ESTADO
-  ACTUALIZACION_ESTADO
-
-  //zona
-  REGISTRO_ZONA_URBANIZACION
-  ACTUALIZACION_ZONA_URBANIZACION
-
-  //estudio
-  REGISTRO_ESTUDIO
-  ACTUALIZACION_ESTUDIO
-
-  //micelanea
-  ERROR
-
-  //areas
-  REGISTRO_AREA
-  ACTUALIZACION_AREA
-  OBTENER_AREAS
-}
+// ========================================
+// ENUMS
+// ========================================
 
 enum Rol {
   SUPER
@@ -389,4 +94,332 @@ enum CategoriaLaboral {
 enum EstatusActividad {
   ACTIVO
   INACTIVO
+}
+
+enum AccionesBitacora {
+  LOGIN
+  REGISTRO_USUARIO
+  CHANGE_PASSWORD_EMAIL
+  OBTENER_USUARIO
+  ACTUALIZACION_USUARIO
+  REGISTRO_ESTADO
+  ACTUALIZACION_ESTADO
+  REGISTRO_ZONA_URBANIZACION
+  ACTUALIZACION_ZONA_URBANIZACION
+  REGISTRO_ESTUDIO
+  ACTUALIZACION_ESTUDIO
+  ERROR
+  REGISTRO_AREA
+  ACTUALIZACION_AREA
+  OBTENER_AREAS
+}
+
+// ========================================
+// MODELOS - ORDENADOS POR DEPENDENCIAS
+// ========================================
+
+// 1. EstadoPais (sin dependencias)
+model EstadoPais {
+  id       Int      @id @default(autoincrement())
+  estado   String   @unique
+  vigencia Vigencia @default(ACTIVO)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  zonaUrbanizacion ZonaUrbanizacion[]
+}
+
+// 2. ZonaUrbanizacion (depende de EstadoPais)
+model ZonaUrbanizacion {
+  id           Int      @id @default(autoincrement())
+  estadoPaisId Int
+  codigoPostal Int
+  zona         String
+  vigencia     Vigencia @default(ACTIVO)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  estadoPais EstadoPais  @relation(fields: [estadoPaisId], references: [id])
+  direccion  Direccion[]
+  Campus     Campus[]
+}
+
+// 3. Direccion (depende de ZonaUrbanizacion)
+model Direccion {
+  id                 Int    @id @default(autoincrement())
+  zonaUrbanizacionId Int
+  calle              String
+  numeroCasa         Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  zonaUrbanizacion ZonaUrbanizacion  @relation(fields: [zonaUrbanizacionId], references: [id])
+  datosPersonales  DatosPersonales[]
+}
+
+// 4. Usuario (sin dependencias externas)
+model Usuario {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  rol      Rol    @default(DOCENTE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bitacora         Bitacora[]
+  datosPersonales  DatosPersonales?
+  cedulaAutorizada CedulaAutorizada[]
+  docente          Docente?
+  redirect         Redirect?
+}
+
+// 5. TipoDocumento (sin dependencias)
+model TipoDocumento {
+  id       Int      @id @default(autoincrement())
+  nombre   String
+  vigencia Vigencia @default(ACTIVO)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  documento Documento[]
+}
+
+// 6. CasaEstudio (sin dependencias)
+model CasaEstudio {
+  id     Int    @id @default(autoincrement())
+  nombre String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Estudio Estudio[]
+}
+
+// 7. NivelEstudio (sin dependencias)
+model NivelEstudio {
+  id             Int            @id @default(autoincrement())
+  nivelAcademico NivelAcademico
+  tipo           TipoEstudio
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  estudio Estudio[]
+}
+
+// 8. Campus (depende de ZonaUrbanizacion)
+model Campus {
+  id                 Int        @id @default(autoincrement())
+  zonaUrbanizacionId Int
+  tipo               TipoCampus
+  fechaCreacion      DateTime
+  fechaCierre        DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  zonaUrbanizacion ZonaUrbanizacion @relation(fields: [zonaUrbanizacionId], references: [id])
+  area             Area[]
+}
+
+// 9. DatosPersonales (depende de Usuario y Direccion)
+model DatosPersonales {
+  id          Int  @id @default(autoincrement())
+  usuarioId   Int  @unique
+  direccionId Int?
+
+  primerNombre    String?
+  segundoNombre   String?
+  tercerNombre    String?
+  primerApellido  String?
+  segundoApellido String?
+  sexo            Sex?
+  fechaNacimiento DateTime?
+  telefono        String?
+  numeroCedula    Int?
+  numeroBancario  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usuario    Usuario     @relation(fields: [usuarioId], references: [id])
+  direccion  Direccion?  @relation(fields: [direccionId], references: [id])
+  expediente Expediente?
+}
+
+// 10. Docente (depende de Usuario)
+model Docente {
+  id        Int @id @default(autoincrement())
+  usuarioId Int @unique
+
+  usuario          Usuario?           @relation(fields: [usuarioId], references: [id])
+  Dedicacion       Dedicacion[]
+  EstatusLaboral   EstatusLaboral[]
+  ActividadDocente ActividadDocente[]
+}
+
+// 11. CedulaAutorizada (depende de Usuario)
+model CedulaAutorizada {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int
+  cedula    Int      @unique
+  vigencia  Vigencia @default(ACTIVO)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+}
+
+// 12. Bitacora (depende de Usuario)
+model Bitacora {
+  id        Int              @id @default(autoincrement())
+  usuarioId Int
+  accion    String
+  type      AccionesBitacora
+  ip        String
+  mensaje   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+}
+
+// 13. Area (depende de Campus)
+model Area {
+  id       Int    @id @default(autoincrement())
+  nombre   String
+  campusId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campus   Campus     @relation(fields: [campusId], references: [id])
+  programa Programa[]
+}
+
+// 14. Dedicacion (depende de Docente)
+model Dedicacion {
+  id        Int            @id @default(autoincrement())
+  docenteId Int
+  nombre    TipoDedicacion
+  horas     Int
+
+  docente Docente @relation(fields: [docenteId], references: [id])
+}
+
+// 15. EstatusLaboral (depende de Docente)
+model EstatusLaboral {
+  id               Int              @id @default(autoincrement())
+  docenteId        Int
+  tipoEmpleo       TipoEmpleo
+  categoriaLaboral CategoriaLaboral
+
+  docente Docente @relation(fields: [docenteId], references: [id])
+}
+
+// 16. ActividadDocente (depende de Docente)
+model ActividadDocente {
+  id          Int              @id @default(autoincrement())
+  docenteId   Int
+  estatus     EstatusActividad
+  motivo      String
+  fechaInicio DateTime
+  fechaFin    DateTime
+
+  docente Docente @relation(fields: [docenteId], references: [id])
+}
+
+// 17. Expediente (depende de DatosPersonales)
+model Expediente {
+  id                Int @id @default(autoincrement())
+  datosPersonalesId Int @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  datosPersonales DatosPersonales @relation(fields: [datosPersonalesId], references: [id])
+  documento       Documento[]
+  estudio         Estudio[]
+}
+
+// 18. Programa (depende de Area)
+model Programa {
+  id             Int            @id @default(autoincrement())
+  areaId         Int
+  nombre         String
+  nivelAcademico NivelAcademico
+  modalidad      Modalidad
+  duracionAnios  Int
+  vigencia       Vigencia
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  area Area @relation(fields: [areaId], references: [id])
+}
+
+// 19. Documento (depende de TipoDocumento y Expediente)
+model Documento {
+  id              Int              @id @default(autoincrement())
+  tipoDocumentoId Int
+  expedienteId    Int
+  url             String
+  estatus         EstatusDocumento @default(PENDIENTE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tipoDocumento TipoDocumento @relation(fields: [tipoDocumentoId], references: [id])
+  expediente    Expediente    @relation(fields: [expedienteId], references: [id])
+}
+
+// 20. Estudio (depende de Expediente, NivelEstudio y CasaEstudio)
+model Estudio {
+  id             Int              @id @default(autoincrement())
+  expedienteId   Int
+  nivelEstudioId Int
+  casaEstudioId  Int
+  titulo         String
+  fecha          DateTime
+  imgDocumento   String
+  estatus        EstatusDocumento @default(PENDIENTE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  expediente   Expediente    @relation(fields: [expedienteId], references: [id])
+  nivelEstudio NivelEstudio  @relation(fields: [nivelEstudioId], references: [id])
+  casaEstudio  CasaEstudio   @relation(fields: [casaEstudioId], references: [id])
+  notas        NotaEstudio[]
+}
+
+// 21. NotaEstudio (depende de Estudio)
+model NotaEstudio {
+  id           Int    @id @default(autoincrement())
+  estudioId    Int
+  url          String
+  numeroPagina Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  estudio Estudio @relation(fields: [estudioId], references: [id], onDelete: Cascade)
+}
+
+model Redirect {
+  id              Int     @id @default(autoincrement())
+  usuarioId       Int     @unique
+  datosPersonales Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
 }

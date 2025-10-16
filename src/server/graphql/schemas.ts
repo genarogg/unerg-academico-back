@@ -1,4 +1,3 @@
-
 const schemas = /* GraphQL */ `
 
 ##############################################
@@ -21,6 +20,7 @@ type Usuario {
   updatedAt: Date!
   datosPersonales: DatosPersonales
   bitacora: [Bitacora]
+  redirect: Redirect
 }
 
 type Bitacora {
@@ -36,20 +36,20 @@ type DatosPersonales {
   id: Int!
   usuarioId: Int!
   direccionId: Int
-  primerNombre: String!
+  primerNombre: String
   segundoNombre: String
   tercerNombre: String
-  primerApellido: String!
+  primerApellido: String
   segundoApellido: String
-  sexo: Sex!
-  fechaNacimiento: Date!
-  numeroCedula: Int!
+  sexo: Sex
+  fechaNacimiento: Date
+  numeroCedula: Int
   numeroBancario: String
   telefono: String
   direccion: Direccion
   expediente: Expediente
-  createdAt: Date!
-  updatedAt: Date!
+  createdAt: Date
+  updatedAt: Date
 }
 
 type Direccion {
@@ -138,7 +138,6 @@ type Programa {
   updatedAt: Date!
 }
 
-
 type Estudio {
   id: Int!
   expedienteId: Int!
@@ -190,6 +189,16 @@ type NotaEstudio {
   createdAt: Date!
   updatedAt: Date!
 }
+
+type Redirect {
+  id: Int!
+  usuarioId: Int!
+  datosPersonales: Boolean!
+  createdAt: Date!
+  updatedAt: Date!
+  usuario: Usuario
+}
+
 ##############################################
 # Tipos de respuesta y metadatos
 ##############################################
@@ -235,7 +244,6 @@ type ZonasUrbanizacionResponse {
   message: String!
   data: [ZonaUrbanizacion]
 }
-
 
 type EstudioResponse {
   type: String!
@@ -291,7 +299,6 @@ type DatosPersonalesResponse {
   data: DatosPersonales
 }
 
-
 type CampusResponse {
   type: String!
   message: String!
@@ -331,6 +338,12 @@ type ProgramasResponse {
   meta: Meta
 }
 
+type RedirectResponse {
+  type: String!
+  message: String!
+  data: Redirect
+}
+
 ##############################################
 # Query y Mutation
 ##############################################
@@ -365,7 +378,7 @@ type Query {
     id: Int
   ): CasasEstudioResponse!
 
-    obtenerEstudios(
+  obtenerEstudios(
     token: String!
     id: Int
     expedienteId: Int
@@ -378,6 +391,7 @@ type Query {
   obtenerCampuses(token: String!): CampusesResponse!
   obtenerAreas(token: String!): AreasResponse!
 
+  obtenerRedirect(token: String!): RedirectResponse!
 }
 
 type Mutation {
@@ -386,8 +400,6 @@ type Mutation {
     password: String!
     cedula: Int!
     captchaToken: String
-    token: String
-    rol: Rol
   ): UsuarioResponse!
 
   loginUsuario(
@@ -500,7 +512,7 @@ type Mutation {
     nombre: String!
   ): CasaEstudioResponse!
 
-   crearEstudio(
+  crearEstudio(
     token: String!
     expedienteId: Int!
     nivelEstudioId: Int!
@@ -523,6 +535,18 @@ type Mutation {
     notas: String
     estatus: String
   ): EstudioResponse!
+
+  crearRedirect(
+    token: String!
+    usuarioId: Int!
+    datosPersonales: Boolean!
+  ): RedirectResponse!
+
+  actualizarRedirect(
+    token: String!
+    id: Int!
+    datosPersonales: Boolean
+  ): RedirectResponse!
 }
 `;
 

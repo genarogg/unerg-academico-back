@@ -4,11 +4,8 @@ import {
     successResponse,
     errorResponse,
     prisma,
-    verificarToken,
     generarToken,
     validarCapchat,
-    hasAccess,
-    notAccess
 } from "@fn";
 import { AccionesBitacora, Rol, Vigencia } from "@prisma/client";
 
@@ -16,13 +13,11 @@ interface RegisterUsuarioArgs {
     email: string;
     password: string;
     cedula: number;
-    token?: string;
-    rol?: Rol;
     captchaToken?: string;
 }
 
 const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
-    const { email, password, cedula, rol: rolaAsignado, token, captchaToken } = args;
+    const { email, password, cedula, captchaToken } = args;
 
     // Validar campos mínimos
     if (!email || !password || !cedula) {
@@ -34,7 +29,6 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
         const captchaValidado = await validarCapchat(captchaToken)
 
         if (!captchaValidado) {
-
             return errorResponse({ message: 'Error al validar captcha' });
         }
     }
@@ -61,41 +55,7 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
             return errorResponse({ message: "El correo ya está registrado" });
         }
 
-        const { SUPER, ADMIN, AREA, DOCENTE, } = Rol
-
-        let rolAsignado: Rol = DOCENTE;
-
-        // Si hay token, verificar permisos para asignar rol
-        if (token && rolaAsignado) {
-            const { isAuthenticated, rol: rolUser, id: usuarioId } = await verificarToken(token);
-
-            if (!isAuthenticated) {
-                return errorResponse({ message: "Token inválido o expirado" });
-            }
-
-            if (notAccess({ denegar: [DOCENTE], rolUser })) {
-                return errorResponse({ message: "No tiene permisos para asignar este rol" });
-            }
-
-            if (hasAccess({ permitir: [SUPER], rolUser })) {
-                // Puede asignar cualquier rol
-                rolAsignado = rolaAsignado;
-            }
-
-            else if (hasAccess({ permitir: [ADMIN], rolUser })) {
-                // Puede asignar ADMIN, DOCENTE o AREA
-
-                if (hasAccess({ permitir: [ADMIN, DOCENTE, AREA], rolUser })) {
-                    rolAsignado = rolaAsignado;
-                }
-            }
-
-            crearBitacora({
-                usuarioId,
-                accion: `Registro de nuevo usuario (${rolAsignado})`,
-                type: AccionesBitacora.REGISTRO_USUARIO,
-            });
-        }
+        let rolAsignado: Rol = Rol.DOCENTE;
 
         // Encriptar contraseña
         const hashedPassword = await encriptarContrasena({ password });
@@ -106,7 +66,21 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
                 email,
                 password: hashedPassword,
                 rol: rolAsignado,
+                datosPersonales: {
+                    create: {
+                        numeroCedula: Number(cedula),
+                    }
+                },
+                redirect: {
+                    create: {
+                        datosPersonales: false,
+                    }
+                }
             },
+            include: {
+                datosPersonales: true,
+                redirect: true,
+            }
         });
 
         //busca la cedula en cedulaAutorizada
@@ -117,20 +91,18 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
             },
         });
 
-
         crearBitacora({
             usuarioId: nuevoUsuario.id,
             accion: `Registro de nuevo usuario (${rolAsignado})`,
             type: AccionesBitacora.REGISTRO_USUARIO,
         });
 
-
         // Generar token de sesión
         const tokenGenerado = generarToken({ id: nuevoUsuario.id });
 
         const data = {
-            ...nuevoUsuario,
             token: tokenGenerado,
+            ...nuevoUsuario,
         }
 
         console.log("registerUsuario: ", data)
