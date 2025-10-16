@@ -1,3 +1,4 @@
+
 import {
     encriptarContrasena,
     crearBitacora,
@@ -69,13 +70,19 @@ const registerUsuario = async (_: unknown, args: RegisterUsuarioArgs) => {
                 datosPersonales: {
                     create: {
                         numeroCedula: Number(cedula),
-                    }
+                        expediente: {
+                            create: {}
+                        }
+                    },
+
                 },
                 redirect: {
                     create: {
                         datosPersonales: false,
                     }
-                }
+                },
+
+
             },
             include: {
                 datosPersonales: true,
