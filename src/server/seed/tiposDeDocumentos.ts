@@ -2,7 +2,7 @@ import { prisma } from "@fn";
 
 const seedTiposDocumento = async () => {
     // Tipos de documento a crear
-    const documentos = ["avatar", "img cedula", "cuenta bancaria", "certificado de salud mental"];
+    const documentos = ["avatar", "img-cedula", "cuenta-bancaria", "certificado de salud mental"];
 
     for (const nombre of documentos) {
         const existente = await prisma.tipoDocumento.findFirst({

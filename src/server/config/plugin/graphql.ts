@@ -27,7 +27,7 @@ const createApolloServer = (server: FastifyInstance) => {
         resolvers, // Usar los resolvers importados
         introspection: true,
         csrfPrevention: false,
-        validationRules: [depthLimit(10)], // Limitar profundidad de queries
+        // validationRules: [depthLimit(10)], // Limitar profundidad de queries
         plugins: [
             ApolloServerPluginLandingPageLocalDefault({ embed: true }),
             // Plugin para manejar el cierre limpio del servidor

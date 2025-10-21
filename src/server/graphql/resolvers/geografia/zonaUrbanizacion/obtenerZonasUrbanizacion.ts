@@ -7,10 +7,11 @@ import {
 
 interface ObtenerZonasUrbanizacionArgs {
     token: string;
+    estadoId?: number;
 }
 
 const obtenerZonasUrbanizacion = async (_: unknown, args: ObtenerZonasUrbanizacionArgs) => {
-    const { token } = args;
+    const { token, estadoId } = args;
 
     // Validar campos obligatorios
     if (!token) {
@@ -24,15 +25,27 @@ const obtenerZonasUrbanizacion = async (_: unknown, args: ObtenerZonasUrbanizaci
             return errorResponse({ message: "Token inválido o expirado" });
         }
 
-        // Obtener todas las zonas con información del estado al que pertenecen
+        // Construir filtro dinámico
+        const where: any = {};
+        if (estadoId) {
+            where.estadoPaisId = estadoId;
+        }
+
+        // Obtener zonas (filtradas o todas)
         const zonas = await prisma.zonaUrbanizacion.findMany({
+            where,
             include: {
                 estadoPais: true,
-            }
+            },
+            orderBy: {
+                id: 'asc',
+            },
         });
 
         return successResponse({
-            message: "Zonas de urbanización obtenidas correctamente",
+            message: estadoId
+                ? "Zonas de urbanización del estado obtenidas correctamente"
+                : "Todas las zonas de urbanización obtenidas correctamente",
             data: zonas,
         });
     } catch (error) {

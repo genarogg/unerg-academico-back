@@ -345,6 +345,42 @@ type RedirectResponse {
 }
 
 ##############################################
+# Inputs
+##############################################
+input DocumentoInput {
+  tipoDocumento: String!
+  archivo: String!
+}
+
+input DireccionInput {
+  estadoId: String!
+  zonaId: String!
+  calle: String!
+  numeroCasa: String!
+  codigoPostal: Int!
+}
+
+input ExpedienteInput {
+  documentos: [DocumentoInput!]!
+}
+
+input DatosPersonalesInput {
+  primerNombre: String!
+  segundoNombre: String
+  tercerNombre: String
+  primerApellido: String!
+  segundoApellido: String
+  numeroCedula: String!
+  numeroBancario: String!
+  telefono: String!
+  fechaNacimiento: Date!
+  sexo: Sex!
+  direccion: DireccionInput!
+  expediente: ExpedienteInput!
+}
+
+
+##############################################
 # Query y Mutation
 ##############################################
 
@@ -361,6 +397,7 @@ type Query {
 
   obtenerZonasUrbanizacion(
     token: String!
+    estadoId: Int
   ): ZonasUrbanizacionResponse!
 
   obtenerTipoDocumento(
@@ -547,6 +584,12 @@ type Mutation {
     id: Int!
     datosPersonales: Boolean
   ): RedirectResponse!
+
+
+ registroDatosArranque(
+    token: String!
+    datosPersonales: DatosPersonalesInput!
+  ): UsuarioResponse!
 }
 `;
 

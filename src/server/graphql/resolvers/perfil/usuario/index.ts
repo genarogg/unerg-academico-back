@@ -7,6 +7,8 @@ import validarSesion from "./validarSesion";
 import getUsuarios from "./getUsuarios";
 import getUsuario from "./getUsuario";
 
+import registroDatosArranque from "./registroDatosArranque"
+
 
 const resolvers = {
     Query: {
@@ -19,7 +21,8 @@ const resolvers = {
         registerUsuario,
         loginUsuario,
         resetPassword,
-        resetPassWithToken
+        resetPassWithToken,
+        registroDatosArranque
     }
 };
 

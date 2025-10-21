@@ -6,7 +6,7 @@ const multipar = async (server: FastifyInstance) => {
 
     return await server.register(multipart, {
         limits: {
-            fileSize: Number(MAX_FILE_SIZE || 10) * 1024 * 1024, // valor por defecto
+            fileSize: Number(MAX_FILE_SIZE || 100) * 1024 * 1024, // valor por defecto
             files: 1000,
         },
     });
