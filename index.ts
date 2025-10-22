@@ -51,8 +51,6 @@ import tack from "./src/server/tasks"
 import seed from 'src/server/seed';
 import router from 'src/server/routers';
 
-
-
 (async () => {
   clear();
   try {

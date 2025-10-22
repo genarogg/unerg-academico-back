@@ -1,7 +1,13 @@
 import {
-    Rol, AccionesBitacora, Sex, Vigencia,
-    EstatusDocumento, NivelAcademico, TipoEstudio,
-    TipoCampus, Modalidad
+    Rol,
+    AccionesBitacora,
+    Sex,
+    Vigencia,
+    EstatusDocumento,
+    NivelAcademico,
+    TipoEstudio,
+    TipoCampus,
+    Modalidad
 } from '@prisma/client';
 
 const createEnumString = (enumObj: object) => {

@@ -14,8 +14,6 @@ import reactView from './plugin/reactView';
 import dbConection from './db-conection';
 import multipart from './plugin/multipar';
 
-
-
 export {
     staticFiles,
     viewEJS,

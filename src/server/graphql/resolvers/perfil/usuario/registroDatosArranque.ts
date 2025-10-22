@@ -136,6 +136,13 @@ const registroDatosArranque = async (_: unknown, args: registroDatosArranqueArgs
                 });
             }
 
+            // 5️⃣ Actualizar o crear registro de redirect
+            await tx.redirect.upsert({
+                where: { usuarioId },
+                create: { usuarioId, datosPersonales: true },
+                update: { datosPersonales: true }
+            });
+
             return { datos, expediente: expedienteExistente };
         });
 
