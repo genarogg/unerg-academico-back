@@ -1,4 +1,8 @@
-type ResponseType = "success" | "error" | "warning";
+enum ResponseType {
+    SUCCESS = "success",
+    ERROR = "error",
+    WARNING = "warning"
+}
 
 interface ResponsePayload {
     type?: ResponseType;
@@ -37,15 +41,15 @@ const createResponse = (type: ResponseType, message?: string, token?: string, da
 
 // Funciones de ayuda
 const successResponse = ({ message, token, data, meta, additionalParams }: ResponsePayload): ResponsePayload => {
-    return createResponse("success", message, token, data, meta, additionalParams);
+    return createResponse(ResponseType.SUCCESS, message, token, data, meta, additionalParams);
 };
 
 const errorResponse = ({ message, token, data, meta, additionalParams }: ResponsePayload): ResponsePayload => {
-    return createResponse("error", message, token, data, meta, additionalParams);
+    return createResponse(ResponseType.ERROR, message, token, data, meta, additionalParams);
 };
 
 const warningResponse = ({ message, token, data, meta, additionalParams }: ResponsePayload): ResponsePayload => {
-    return createResponse("warning", message, token, data, meta, additionalParams);
+    return createResponse(ResponseType.WARNING, message, token, data, meta, additionalParams);
 };
 
-export { createResponse, successResponse, errorResponse, warningResponse };
+export { ResponseType, createResponse, successResponse, errorResponse, warningResponse };

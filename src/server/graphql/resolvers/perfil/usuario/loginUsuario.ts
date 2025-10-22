@@ -40,6 +40,8 @@ const loginUsuario = async (_: unknown, args: LoginUsuarioArgs) => {
             include: { datosPersonales: true },
         });
 
+        console.log(usuario)
+
         if (!usuario) {
             return errorResponse({ message: "Credenciales incorrectas" });
         }

@@ -1,0 +1,191 @@
+##############################################
+# Tipos básicos
+##############################################
+
+type Usuario {
+  id: Int!
+  email: String!
+  rol: Rol!
+  token: String
+  createdAt: Date!
+  updatedAt: Date!
+  datosPersonales: DatosPersonales
+  bitacora: [Bitacora]
+  redirect: Redirect
+}
+
+type Bitacora {
+  id: Int!
+  usuarioId: Int!
+  accion: String!
+  type: AccionesBitacora!
+  ip: String!
+  mensaje: String
+}
+
+type DatosPersonales {
+  id: Int!
+  usuarioId: Int!
+  direccionId: Int
+  primerNombre: String
+  segundoNombre: String
+  tercerNombre: String
+  primerApellido: String
+  segundoApellido: String
+  sexo: Sex
+  fechaNacimiento: Date
+  numeroCedula: Int
+  numeroBancario: String
+  telefono: String
+  direccion: Direccion
+  expediente: Expediente
+  createdAt: Date
+  updatedAt: Date
+}
+
+type Direccion {
+  id: Int!
+  zonaUrbanizacionId: Int!
+  calle: String!
+  numeroCasa: Int!
+  zonaUrbanizacion: ZonaUrbanizacion!
+}
+
+type ZonaUrbanizacion {
+  id: Int!
+  estadoPaisId: Int!
+  codigoPostal: Int!
+  zona: String!
+  vigencia: Vigencia!
+  createdAt: Date!
+  updatedAt: Date!
+  estadoPais: EstadoPais!
+}
+
+type EstadoPais {
+  id: Int!
+  estado: String!
+  vigencia: Vigencia!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Expediente {
+  id: Int!
+  datosPersonalesId: Int!
+  documentos: [Documento]
+  estudios: [Estudio]
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type NivelEstudio {
+  id: Int!
+  nivelAcademico: NivelAcademico!
+  tipo: TipoEstudio!
+  Estudio: [Estudio]
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Meta {
+  total: Int
+  page: Int
+  limit: Int
+  totalPages: Int
+}
+
+type Campus {
+  id: Int!
+  tipo: TipoCampus!
+  zonaUrbanizacion: ZonaUrbanizacion!
+  area: [Area]
+  fechaCreacion: Date!
+  fechaCierre: Date!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Area {
+  id: Int!
+  campusId: Int!
+  nombre: String!
+  programa: [Programa]
+  campus: Campus
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Programa {
+  id: Int!
+  areaId: Int!
+  nombre: String!
+  nivelAcademico: NivelAcademico!
+  modalidad: Modalidad!
+  duracionAnios: Int!
+  vigencia: Vigencia!
+  area: Area
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Estudio {
+  id: Int!
+  expedienteId: Int!
+  nivelEstudioId: Int!
+  casaEstudioId: Int!
+  titulo: String!
+  fecha: Date!
+  imgDocumento: String!
+  notas: [NotaEstudio]
+  estatus: EstatusDocumento!
+  expediente: Expediente
+  nivelEstudio: NivelEstudio
+  casaEstudio: CasaEstudio
+}
+
+type TipoDocumento {
+  id: Int!
+  nombre: String!
+  vigencia: Vigencia!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Documento {
+  id: Int!
+  tipoDocumentoId: Int!
+  expedienteId: Int!
+  url: String!
+  estatus: EstatusDocumento!
+  tipoDocumento: TipoDocumento
+  expediente: Expediente
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type CasaEstudio {
+  id: Int!
+  nombre: String!
+  estudio: [Estudio]
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type NotaEstudio {
+  id: Int!
+  estudioId: Int!
+  url: String!
+  numeroPagina: Int!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Redirect {
+  id: Int!
+  usuarioId: Int!
+  datosPersonales: Boolean!
+  createdAt: Date!
+  updatedAt: Date!
+  usuario: Usuario
+}

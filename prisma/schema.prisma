@@ -117,6 +117,12 @@ enum AccionesBitacora {
   OBTENER_DATOS_PERSONALES
 }
 
+enum ResponseType {
+  SUCCESS
+  ERROR
+  WARNING
+}
+
 // ========================================
 // MODELOS - ORDENADOS POR DEPENDENCIAS
 // ========================================

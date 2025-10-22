@@ -1,0 +1,144 @@
+##############################################
+# Tipos de respuesta y metadatos
+##############################################
+
+type UsuarioResponse {
+  type: String!
+  message: String!
+  data: Usuario
+}
+
+type UsuariosResponse {
+  type: String!
+  message: String!
+  data: [Usuario]!
+  meta: Meta
+}
+
+type NotificacionResponse {
+  type: String!
+  message: String!
+}
+
+type EstadoPaisResponse {
+  type: String!
+  message: String!
+  data: EstadoPais
+}
+
+type EstadosPaisResponse {
+  type: String!
+  message: String!
+  data: [EstadoPais]
+}
+
+type ZonaUrbanizacionResponse {
+  type: String!
+  message: String!
+  data: ZonaUrbanizacion
+}
+
+type ZonasUrbanizacionResponse {
+  type: String!
+  message: String!
+  data: [ZonaUrbanizacion]
+}
+
+type EstudioResponse {
+  type: String!
+  message: String!
+  data: Estudio
+}
+
+type EstudiosResponse {
+  type: String!
+  message: String!
+  data: [Estudio]
+}
+
+type TipoDocumentoResponse {
+  type: String!
+  message: String!
+  data: TipoDocumento
+}
+
+type TiposDocumentoResponse {
+  type: String!
+  message: String!
+  data: [TipoDocumento]
+}
+
+type DocumentoResponse {
+  type: String!
+  message: String!
+  data: Documento
+}
+
+type DocumentosResponse {
+  type: String!
+  message: String!
+  data: [Documento]
+}
+
+type CasaEstudioResponse {
+  type: String!
+  message: String!
+  data: CasaEstudio
+}
+
+type CasasEstudioResponse {
+  type: String!
+  message: String!
+  data: [CasaEstudio]
+}
+
+type DatosPersonalesResponse {
+  type: String!
+  message: String!
+  data: DatosPersonales
+}
+
+type CampusResponse {
+  type: String!
+  message: String!
+  data: Campus
+}
+
+type CampusesResponse {
+  type: String!
+  message: String!
+  data: [Campus]!
+  meta: Meta
+}
+
+type AreaResponse {
+  type: String!
+  message: String!
+  data: Area
+}
+
+type AreasResponse {
+  type: String!
+  message: String!
+  data: [Area]!
+  meta: Meta
+}
+
+type ProgramaResponse {
+  type: String!
+  message: String!
+  data: Programa
+}
+
+type ProgramasResponse {
+  type: String!
+  message: String!
+  data: [Programa]!
+  meta: Meta
+}
+
+type RedirectResponse {
+  type: String!
+  message: String!
+  data: Redirect
+}

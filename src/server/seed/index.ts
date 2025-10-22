@@ -1,5 +1,5 @@
 import { prisma, log } from "@fn";
-import seedUsers from "./seedUsers";
+import seedUsers from "./usuario/seedUsers";
 import seedDocentes from "./seedDocentes";
 import seedCedulasAutorizadas from "./seedCedulasAutorizadas"
 import seedZonasUrbanizaciones from "./seedZonasUrbanizaciones"

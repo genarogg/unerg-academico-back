@@ -1,0 +1,246 @@
+##############################################
+# Inputs
+##############################################
+input DocumentoInput {
+  tipoDocumento: String!
+  archivo: String!
+}
+
+input DireccionInput {
+  estadoId: String!
+  zonaId: String!
+  calle: String!
+  numeroCasa: String!
+  codigoPostal: Int!
+}
+
+input ExpedienteInput {
+  documentos: [DocumentoInput!]!
+}
+
+input DatosPersonalesInput {
+  primerNombre: String!
+  segundoNombre: String
+  tercerNombre: String
+  primerApellido: String!
+  segundoApellido: String
+  numeroCedula: String!
+  numeroBancario: String!
+  telefono: String!
+  fechaNacimiento: Date!
+  sexo: Sex!
+  direccion: DireccionInput!
+  expediente: ExpedienteInput!
+}
+
+
+##############################################
+# Query y Mutation
+##############################################
+
+type Query {
+  hello: String!
+  generatePDF(template: String!, data: String!): String
+  validarSesion(token: String!): UsuarioResponse!
+  getUsuarios(token: String!, filtro: String, page: Int, limit: Int): UsuariosResponse!
+  getUsuario(token: String!, id: Int): UsuarioResponse!
+
+  obtenerEstados(
+    token: String!
+  ): EstadosPaisResponse!
+
+  obtenerZonasUrbanizacion(
+    token: String!
+    estadoId: Int
+  ): ZonasUrbanizacionResponse!
+
+  obtenerTipoDocumento(
+    token: String!
+    id: Int
+  ): TiposDocumentoResponse!
+
+  obtenerDocumentos(
+    token: String!
+    documentoId: Int
+  ): DocumentosResponse!
+
+  obtenerCasaEstudio(
+    token: String!
+    id: Int
+  ): CasasEstudioResponse!
+
+  obtenerEstudios(
+    token: String!
+    id: Int
+    expedienteId: Int
+  ): EstudiosResponse!
+
+  obtenerDatosPersonales(
+    token: String!
+  ): DatosPersonalesResponse!
+
+  obtenerCampuses(token: String!): CampusesResponse!
+  obtenerAreas(token: String!): AreasResponse!
+
+  obtenerRedirect(token: String!): RedirectResponse!
+}
+
+type Mutation {
+  registerUsuario(
+    email: String!
+    password: String!
+    cedula: Int!
+    captchaToken: String
+  ): UsuarioResponse!
+
+  loginUsuario(
+    email: String!,
+    password: String!,
+    captchaToken: String
+  ): UsuarioResponse!
+
+  resetPassword(email: String!): NotificacionResponse!
+
+  resetPassWithToken(token: String!, nuevaContrasena: String!): UsuarioResponse!
+
+  crearDatosPersonales(
+    token: String!,
+    primerNombre: String!,
+    segundoNombre: String,
+    tercerNombre: String,
+    primerApellido: String!,
+    segundoApellido: String,
+    sexo: Sex!,
+    fechaNacimiento: Date!,
+    numeroCedula: Int!,
+    numeroBancario: String,
+    telefono: String!,
+    zonaUrbanizacionId: Int!,
+    calle: String!,
+    numeroCasa: Int!
+  ): DatosPersonalesResponse!
+
+  actualizarDatosPersonales(
+    token: String!,
+    primerNombre: String,
+    segundoNombre: String,
+    tercerNombre: String,
+    primerApellido: String,
+    segundoApellido: String,
+    sexo: Sex,
+    fechaNacimiento: Date,
+    numeroCedula: Int,
+    numeroBancario: String,
+    telefono: String,
+    zonaUrbanizacionId: Int,
+    calle: String,
+    numeroCasa: Int
+  ): DatosPersonalesResponse!
+
+  crearEstadoPais(
+    token: String!,
+    estado: String!
+  ): EstadoPaisResponse!
+
+  actualizarEstadoPais(
+    token: String!,
+    id: Int!,
+    estado: String!,
+    vigencia: Vigencia!
+  ): EstadoPaisResponse!
+
+  crearZonaUrbanizacion(
+    token: String!,
+    estadoPaisId: Int!,
+    codigoPostal: Int!,
+    zona: String!,
+  ): ZonaUrbanizacionResponse!
+
+  actualizarZonaUrbanizacion(
+    token: String!,
+    id: Int!,
+    estadoPaisId: Int,
+    codigoPostal: Int,
+    zona: String,
+    vigencia: Vigencia
+  ): ZonaUrbanizacionResponse!
+
+  crearTipoDocumento(
+    token: String!,
+    nombre: String!
+  ): TipoDocumentoResponse!
+
+  actualizarTipoDocumento(
+    token: String!,
+    id: Int!,
+    nombre: String,
+    vigencia: String
+  ): TipoDocumentoResponse!
+
+  crearDocumento(
+    token: String!,
+    tipoDocumentoId: Int!,
+    expedienteId: Int!,
+    url: String!
+  ): DocumentoResponse!
+
+  actualizarDocumento(
+    token: String!,
+    documentoId: Int!,
+    tipoDocumentoId: Int,
+    url: String,
+    estatus: String
+  ): DocumentoResponse!
+
+  crearCasaEstudio(
+    token: String!,
+    nombre: String!
+  ): CasaEstudioResponse!
+
+  actualizarCasaEstudio(
+    token: String!,
+    id: Int!,
+    nombre: String!
+  ): CasaEstudioResponse!
+
+  crearEstudio(
+    token: String!
+    expedienteId: Int!
+    nivelEstudioId: Int!
+    casaEstudioId: Int!
+    titulo: String!
+    fecha: Date!
+    imgDocumento: String!
+    notas: String
+  ): EstudioResponse!
+
+  actualizarEstudio(
+    token: String!
+    id: Int!
+    expedienteId: Int
+    nivelEstudioId: Int
+    casaEstudioId: Int
+    titulo: String
+    fecha: Date
+    imgDocumento: String
+    notas: String
+    estatus: String
+  ): EstudioResponse!
+
+  crearRedirect(
+    token: String!
+    usuarioId: Int!
+    datosPersonales: Boolean!
+  ): RedirectResponse!
+
+  actualizarRedirect(
+    token: String!
+    id: Int!
+    datosPersonales: Boolean
+  ): RedirectResponse!
+
+  registroDatosArranque(
+    token: String!
+    datosPersonales: DatosPersonalesInput!
+  ): UsuarioResponse!
+}
