@@ -1,7 +1,7 @@
 import { buildSchema } from 'graphql';
 
-import schemas from './schemas';
-import enums from './enums';
+import schemas from './schema/schemas';
+import enums from './schema/enums';
 
 const schema = buildSchema(`
   ${enums},
